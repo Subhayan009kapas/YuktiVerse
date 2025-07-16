@@ -9,6 +9,7 @@ function App() {
   return (
     <>
       <><h1>YuktiVerse</h1></>
+      <p>Coming Soon...</p>
        
     </>
   )

@@ -1,13 +1,36 @@
-const express = require("express")
-const app = express()
+import express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import connectDB from './config/db.js';
 
-const PORT = 3000 ; 
+dotenv.config();
+const app = express();
 
-app.get('/' , (req,res)=> {
-    res.send("hello")
-})
+app.use(cors());
+app.use(express.json());
 
-app.listen(PORT , ()=>{
-    console.log('listning at port ',  PORT);
-    
-})
+connectDB();
+
+//checking server 
+app.get('/', (req, res) => res.send('YuktiVerse Backend Running ✅'));
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🌐 Server running on http://localhost:${PORT}`);
+});
+
+
+// for gemini Reponse 
+import { getGeminiResponse } from './utils/geminiClient.js';
+
+app.get('/test-gemini', async (req, res) => {
+  const result = await getGeminiResponse("how india ");
+  res.send(result);
+});
+
+
+// routes for pdf summrizer
+import pdfRoutes from './routes/pdfRoutes.js';
+
+app.use('/api/pdf', pdfRoutes);
+
