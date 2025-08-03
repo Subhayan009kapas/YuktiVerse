@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
 import ResumeAnalyzer from './features/resume-analyzer/ResumeAnalyzer';
+import Pdf_main from './features/pdf-summarizer/Pdf_main';
 
 
 const App = () => {
@@ -15,7 +16,7 @@ const App = () => {
         {/* Resume Analyzer Page */}
         <Route path="/ResumeAnalyzer" element={<ResumeAnalyzer />} />
         {/* PDF Processor Page */}
-        {/* <Route path="/PDFProcessor" element={<PDFProcessor />} /> */}
+        <Route path="/Pdf_summarizer" element={<Pdf_main/>} />
       </Routes>
     </Router>
   );

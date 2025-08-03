@@ -1,0 +1,46 @@
+.pdf-history {
+  padding: 20px;
+  color: #edf2f7;
+  background-color: #1a202c;
+}
+
+.pdf-history__title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.pdf-history__card {
+  border: 1px solid #2d3748;
+  background: #2d3748;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 6px;
+}
+
+.pdf-history__mcqs {
+  margin-top: 10px;
+}
+
+.pdf-history__mcqs ul {
+  padding-left: 16px;
+  list-style: disc;
+}
+
+.pdf-history__loading {
+  padding: 20px;
+  color: white;
+}
+.pdf-history__delete-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.pdf-history__delete-btn:hover {
+  background-color: #c82333;
+}

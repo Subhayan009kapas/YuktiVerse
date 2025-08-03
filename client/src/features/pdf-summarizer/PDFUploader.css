@@ -1,0 +1,28 @@
+.pdf-uploader {
+  padding: 20px;
+  border: 2px dashed #bbb;
+  text-align: center;
+  background-color: #2c2d33;
+  border-radius: 10px;
+}
+
+.pdf-uploader__title {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.pdf-uploader__input {
+  margin: 10px 0;
+}
+
+.pdf-uploader__btn {
+  background-color: #2196f3;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.pdf-uploader__btn:hover {
+  background-color: #1976d2;
+}

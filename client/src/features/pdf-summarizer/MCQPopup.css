@@ -1,0 +1,63 @@
+.mcq-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.mcq-popup__content {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 600px;
+  text-align: center;
+}
+
+.mcq-popup__title {
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+.mcq-popup__btn,
+.mcq-popup__option,
+.mcq-popup__save-btn,
+.mcq-popup__close-btn {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.mcq-popup__btn {
+  background-color: #2196f3;
+  color: white;
+}
+
+.mcq-popup__option {
+  background-color: #fbc02d;
+  color: #000;
+}
+
+.mcq-popup__option--disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+.mcq-popup__save-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.mcq-popup__close-btn {
+  background-color: #f44336;
+  color: white;
+}

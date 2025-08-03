@@ -64,3 +64,56 @@ ${summaryText}
     res.status(500).json({ error: 'Failed to generate MCQs' });
   }
 };
+
+
+//get all datta from databse
+
+import PDFDocument from '../models/PDFDocument.js';
+import MCQ from '../models/MCQ.js';
+
+export const getAllPDFHistory = async (req, res) => {
+  try {
+    const pdfs = await PDFDocument.find().sort({ createdAt: -1 });
+
+    const fullData = await Promise.all(
+      pdfs.map(async (pdf) => {
+        const mcqs = await MCQ.find({ pdfDocument: pdf._id });
+        return {
+          _id: pdf._id,
+          title: pdf.title,
+          summary: pdf.summary,
+          cloudinaryUrl: pdf.cloudinaryUrl,
+          createdAt: pdf.createdAt,
+          mcqs,
+        };
+      })
+    );
+
+    res.status(200).json(fullData);
+  } catch (err) {
+    console.error('Error fetching PDF history:', err.message);
+    res.status(500).json({ error: 'Failed to fetch PDF history' });
+  }
+};
+
+// Delete PDF and its MCQs
+
+
+export const deletePdfById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Delete all related MCQs first
+    await MCQ.deleteMany({ pdfDocument: id });
+
+    // Delete the PDF document
+    await PDFDocument.findByIdAndDelete(id);
+
+    res.status(200).json({ message: 'PDF and related MCQs deleted successfully' });
+  } catch (error) {
+    console.error('Delete PDF Error:', error.message);
+    res.status(500).json({ error: 'Failed to delete PDF document' });
+  }
+};
+
+

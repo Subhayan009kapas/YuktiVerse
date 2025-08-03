@@ -1,0 +1,22 @@
+/* Pdf_main.css */
+
+.analyzer-container {
+  display: flex;
+  background-color: #1a202c;
+  height: 100vh;
+  width: 100%;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  background-color: #1a202c;
+  color: #edf2f7;
+}

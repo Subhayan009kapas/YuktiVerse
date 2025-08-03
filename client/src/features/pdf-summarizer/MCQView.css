@@ -1,0 +1,39 @@
+.mcq-view {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.mcq-view__title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.mcq-view__item {
+  background-color: #261e3e;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-left: 4px solid #2196f3;
+}
+
+.mcq-view__question {
+  font-weight: 600;
+}
+
+.mcq-view__options {
+  margin: 8px 0;
+}
+
+.mcq-view__option {
+  margin-left: 10px;
+}
+
+.mcq-view__answer {
+  font-weight: bold;
+  color: #4caf50;
+}
+.mcq-view__explanation {
+  font-style: italic;
+  color: #757575;
+  margin-top: 5px;
+}

@@ -1,0 +1,77 @@
+/* MCQTest.css */
+
+.mcq-test__container {
+  background-color: #2d3748;
+  padding: 20px;
+  border-radius: 8px;
+  color: #edf2f7;
+  max-width: 750px;
+  margin: 30px auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+}
+
+.mcq-test__title {
+  font-size: 24px;
+  margin-bottom: 16px;
+  color: #f6ad55;
+}
+
+.mcq-test__question-box {
+  margin-bottom: 24px;
+}
+
+.mcq-test__question {
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.mcq-test__options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mcq-test__option {
+  background-color: #4a5568;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.mcq-test__option input {
+  margin-right: 10px;
+}
+
+.mcq-test__option--selected {
+  background-color: #2b6cb0;
+}
+
+.mcq-test__option--correct {
+  background-color: #38a169;
+}
+
+.mcq-test__option--wrong {
+  background-color: #e53e3e;
+}
+
+.mcq-test__submit-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #3182ce;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.mcq-test__submit-btn:hover {
+  background-color: #2b6cb0;
+}
+
+.mcq-test__score {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #90cdf4;
+}
