@@ -12,12 +12,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "axios": "^1.10.0",
+    "cloudinary": "^2.7.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
+    "mammoth": "^1.9.1",
     "mongoose": "^8.16.3",
-    "multer": "^2.0.1",
+    "multer": "^2.0.2",
     "pdf-parse": "^1.1.1"
   },
   "devDependencies": {

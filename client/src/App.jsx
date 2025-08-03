@@ -1,18 +1,24 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// App.jsx
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-function App() {
-  const [count, setCount] = useState(0)
 
+import ResumeAnalyzer from './features/resume-analyzer/ResumeAnalyzer';
+
+
+const App = () => {
   return (
-    <>
-      <><h1>YuktiVerse</h1></>
-      <p>Coming Soon...</p>
+    <Router>
+      <Routes>
        
-    </>
-  )
-}
 
-export default App
+        {/* Resume Analyzer Page */}
+        <Route path="/ResumeAnalyzer" element={<ResumeAnalyzer />} />
+        {/* PDF Processor Page */}
+        {/* <Route path="/PDFProcessor" element={<PDFProcessor />} /> */}
+      </Routes>
+    </Router>
+  );
+};
+
+export default App;

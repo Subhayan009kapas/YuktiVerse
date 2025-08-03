@@ -1,0 +1,143 @@
+/* ResumeSidebar.css */
+
+.resume-sidebar {
+  background-color: #1a202c;
+  color: #edf2f7;
+  padding: 0;
+  min-height: 100vh;
+  width: 260px;
+  border-right: 1px solid #2d3748;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.sidebar-header {
+  padding: 24px 20px;
+  border-bottom: 1px solid #2d3748;
+}
+
+.sidebar-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #edf2f7;
+  margin: 0;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 20px 0;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  margin: 4px 0;
+  cursor: pointer;
+  color: #a0aec0;
+  transition: all 0.2s ease;
+  position: relative;
+  background-color: transparent;
+}
+
+.nav-item:hover {
+  background-color: transparent; /* remove hover bg */
+  color: #68d391;
+}
+
+.nav-item.active {
+  color: #68d391;
+  background-color: transparent;
+}
+
+.nav-item.active .active-indicator {
+  width: 4px;
+  height: 80%;
+  background-color: #68d391;
+  position: absolute;
+  left: 0;
+  border-radius: 0 2px 2px 0;
+}
+
+.nav-icon {
+  margin-right: 12px;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* This removes background on icon hover if it's being targeted */
+.nav-icon:hover,
+.nav-item:hover .nav-icon {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.nav-label {
+  font-size: 16px;
+  font-weight: 700;
+  background-color: transparent;
+}
+
+.sidebar-footer {
+  padding: 16px 20px;
+  border-top: 1px solid #2d3748;
+  font-size: 12px;
+  color: #a0aec0;
+}
+
+/* Animation for fade-in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.nav-item {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.nav-item:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.nav-item:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.nav-item:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.nav-item:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .resume-sidebar {
+    width: 220px;
+    position: fixed;
+    z-index: 100;
+    transform: translateX(-100%);
+  }
+
+  .resume-sidebar.open {
+    transform: translateX(0);
+  }
+}

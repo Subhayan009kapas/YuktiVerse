@@ -1,0 +1,19 @@
+.skill-roadmap-container {
+  background-color: #1a202c;
+  color: #edf2f7;
+  padding: 25px;
+}
+
+.skill-roadmap-list {
+  list-style: none;
+  padding: 0;
+}
+
+.skill-roadmap-item {
+  padding: 8px 0;
+  border-bottom: 1px solid #2d3748;
+}
+
+.skill-roadmap-empty {
+  color: #a0aec0;
+}

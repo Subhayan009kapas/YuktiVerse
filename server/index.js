@@ -34,3 +34,11 @@ import pdfRoutes from './routes/pdfRoutes.js';
 
 app.use('/api/pdf', pdfRoutes);
 
+// resume analysis
+
+// const resumeRoutes = require('./routes/resumeRoutes');
+import resumeRoutes from './routes/resumeRoutes.js';
+
+app.use('/api/resume', resumeRoutes);
+
+
