@@ -1,101 +1,61 @@
-// import React, { useState } from 'react';
-// import axios from 'axios';
-// import MCQPopup from './MCQPopup';
-// import './SummarySection.css';
-// const SummarySection = ({ summary, pdfFile, onSaveSuccess, pdfId }) => {
-//   const [showMCQPopup, setShowMCQPopup] = useState(false);
-
-//   const handleSave = async () => {
-//     const formData = new FormData();
-//     formData.append('pdf', pdfFile);
-//     formData.append('summaryText', summary);
-
-//     try {
-//       const res = await axios.post('/api/pdf/save-pdf', formData);
-//       alert('PDF and Summary saved.');
-//       onSaveSuccess(res.data.pdfId);
-//     } catch (err) {
-//       console.error('Save Error:', err);
-//       alert('Failed to save');
-//     }
-//   };
-
-//   return (
-//     <div className="summary-section">
-//       <h3 className="summary-section__title">Summary</h3>
-//       <pre className="summary-section__text">{summary}</pre>
-
-//       {!pdfId && (
-//         <button onClick={handleSave} className="summary-section__save-btn">
-//           Save to Database
-//         </button>
-//       )}
-
-//       {pdfId && (
-//         <button
-//           onClick={() => setShowMCQPopup(true)}
-//           className="summary-section__mcq-btn"
-//         >
-//           Generate MCQs
-//         </button>
-//       )}
-
-//       {showMCQPopup && (
-//         <MCQPopup summaryText={summary} pdfId={pdfId} onClose={() => setShowMCQPopup(false)} />
-//       )}
-//     </div>
-//   );
-// };
-
-// export default SummarySection;
-
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import axios from "axios";
 import MCQView from "./MCQView";
-
 import "./SummarySection.css";
-// import { ReactComponent as PdfIcon } from './pdf-icon.svg';
 
-const SummarySection = ({ summary, pdfFile, onSaveSuccess }) => {
+const SummarySection = ({ summary, pdfFile, onSaveSuccess, pdfId }) => {
   const [mcqs, setMcqs] = useState([]);
   const [generating, setGenerating] = useState(false);
   const [saving, setSaving] = useState(false);
-  
   const [showMCQs, setShowMCQs] = useState(false);
-  const [activeAccordion, setActiveAccordion] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedTopicIndex, setSelectedTopicIndex] = useState(0);
   const summaryRef = useRef(null);
 
- function cleanSummaryString(summary) {
-  if (!summary) return "";
+  // Parse the summary string into an array of topics
+  const parsedSummary = useMemo(() => {
+    function cleanSummaryString(summary) {
+      if (!summary) return "";
 
-  // Remove code block markers
-  const noCodeBlock = summary
-    .replace(/^```json/, "")
-    .replace(/^```/, "")
-    .replace(/```$/, "")
-    .trim();
+      const noCodeBlock = summary
+        .replace(/^```json/, "")
+        .replace(/^```/, "")
+        .replace(/```$/, "")
+        .trim();
 
-  // Try to extract the first valid JSON array from the text
-  const match = noCodeBlock.match(/\[\s*{[\s\S]*?}\s*]/);
+      const match = noCodeBlock.match(/\[\s*{[\s\S]*?}\s*]/);
+      return match ? match[0] : "";
+    }
 
-  return match ? match[0] : "";
-}
+    try {
+      const cleanedSummary = cleanSummaryString(summary);
+      return cleanedSummary ? JSON.parse(cleanedSummary) : [];
+    } catch (e) {
+      console.error("Error parsing summary", e);
+      return [];
+    }
+  }, [summary]);
 
+  // Filter topics based on search term
+  const filteredTopics = useMemo(() => {
+    return parsedSummary
+      .map((topic, index) => ({ ...topic, originalIndex: index }))
+      .filter(topic => 
+        topic.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        topic.content.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+  }, [parsedSummary, searchTerm]);
 
-let parsedSummary = [];
-try {
-  const cleanedSummary = cleanSummaryString(summary);
-  parsedSummary = cleanedSummary ? JSON.parse(cleanedSummary) : [];
-} catch (e) {
-  console.error("Error parsing summary", e);
-}
-
-
+  // Set initial selected topic
+  useEffect(() => {
+    if (filteredTopics.length > 0) {
+      setSelectedTopicIndex(filteredTopics[0].originalIndex);
+    }
+  }, [filteredTopics]);
 
   const generateMCQs = async () => {
     setGenerating(true);
     try {
-      // Reconstruct raw text from parsed JSON
       const rawTextSummary = parsedSummary.map(item => 
         `${item.title}\n${item.content}`
       ).join('\n\n');
@@ -140,69 +100,120 @@ try {
     }
   };
 
-  const toggleAccordion = (index) => {
-    setActiveAccordion(activeAccordion === index ? null : index);
+  const handleTopicSelect = (index) => {
+    setSelectedTopicIndex(index);
   };
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  // Get current topic to display
+  const currentTopic = parsedSummary[selectedTopicIndex] || 
+    (parsedSummary.length > 0 ? parsedSummary[0] : null);
 
   return (
     <div className="summary-section" ref={summaryRef}>
-      {/* PDF Header */}
-      <div className="pdf-header">
-        <div className="pdf-icon-title">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path
-              fill="#68d391"
-              d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"
-            />
-            <path fill="#81e6d9" d="M14 3v5h5M12 18v-6m-3 3h6" />
+      <div className="section-header">
+        <h1 className="section-title">Document Summary</h1>
+        <p className="section-subtitle">Comprehensive overview of key concepts</p>
+      </div>
+
+      <div className="search-container">
+        <div className="search-bar">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
           </svg>
-          <div>
-            <h3 className="pdf-filename">{pdfFile.name}</h3>
-            <p className="pdf-generated-time">Generated just now</p>
-          </div>
+          <input
+            type="text"
+            placeholder="Search topics..."
+            value={searchTerm}
+            onChange={handleSearch}
+          />
         </div>
       </div>
 
-      {/* Summary Accordions */}
-      <div className="accordions-container">
-        {parsedSummary.map((item, index) => (
-          <div
-            key={index}
-            className={`accordion ${activeAccordion === index ? "active" : ""}`}
-          >
-            <div
-              className="accordion-header"
-              onClick={() => toggleAccordion(index)}
-            >
-              <h4>{item.title}</h4>
-              <span className="accordion-icon">
-                {activeAccordion === index ? "−" : "+"}
-              </span>
+      <div className="layout-container">
+        {/* Sidebar */}
+        <div className="sidebar">
+          <div className="sidebar-header">
+            <h3>Topics</h3>
+          </div>
+          
+          <div className="topics-list">
+            {filteredTopics.map((topic) => (
+              <div 
+                key={topic.originalIndex} 
+                className={`topic-item ${selectedTopicIndex === topic.originalIndex ? 'active-topic' : ''}`}
+                onClick={() => handleTopicSelect(topic.originalIndex)}
+              >
+                <div className="topic-number">{topic.originalIndex + 1}</div>
+                <div className="topic-title">{topic.title}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="main-content">
+          <div className="content-header">
+            <div className="header-left">
+              <h2>Document Summary</h2>
+              <p>AI-generated key points from your document</p>
             </div>
-            <div className="accordion-content">
-              <p>{item.content}</p>
+            
+            <div className="action-buttons">
+              <button className="copy-btn" onClick={copyToClipboard}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                  <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                </svg>
+                Copy Summary
+              </button>
+              <button
+                onClick={generateMCQs}
+                disabled={generating}
+                className="mcq-btn"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+                  <path d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 8zm0 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5z"/>
+                </svg>
+                {generating ? "Generating..." : "Generate MCQs"}
+              </button>
             </div>
           </div>
-        ))}
+          
+          {/* Topic View */}
+          {currentTopic ? (
+            <div className="topic-view">
+              <div className="topic-header">
+                <div className="topic-badge">{selectedTopicIndex + 1}</div>
+                <h3 className="topic-title">{currentTopic.title}</h3>
+              </div>
+             <div className="topic-content">
+  {currentTopic.content.split('\n').map((line, i) => (
+    <p key={i}>{line}</p>
+  ))}
+</div>
+
+            </div>
+          ) : (
+            <div className="no-topics">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+              </svg>
+              <h3>No topics available</h3>
+              <p>Please upload a document to generate a summary</p>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Action Buttons */}
-      <div className="action-buttons">
-        <button className="copy-btn" onClick={copyToClipboard}>
-          Copy Summary
-        </button>
-        <button
-          onClick={generateMCQs}
-          disabled={generating}
-          className="mcq-btn"
-        >
-          {generating ? "Generating..." : "Generate MCQs"}
-        </button>
-      </div>
-
-      {/* MCQs Modal */}
       {showMCQs && (
         <div className="modal-overlay">
+          <div className="overlay-pattern"></div>
           <div className="modal">
             <button className="modal-close" onClick={() => setShowMCQs(false)}>
               &times;
@@ -211,31 +222,14 @@ try {
               mcqs={mcqs}
               onSave={handleSaveAll}
               saving={saving}
-              onTestStart={() => {
-                setShowMCQs(false);
-                setShowTest(true);
-              }}
             />
           </div>
         </div>
       )}
-
-      {/* Test Modal */}
-      {/* {showTest && (
-        <div className="modal-overlay">
-          <div className="modal test-modal">
-            <button className="modal-close" onClick={() => setShowTest(false)}>
-              &times;
-            </button>
-            <MCQTest mcqs={mcqs} />
-          </div>
-        </div>
-      )} */}
     </div>
   );
 };
 
-// Helper to parse Gemini MCQ output
 function parseMCQs(mcqText) {
   const mcqs = [];
   const blocks = mcqText.split(/Q\d+\./g).filter(Boolean);

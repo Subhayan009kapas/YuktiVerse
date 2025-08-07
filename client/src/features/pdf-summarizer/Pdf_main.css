@@ -2,7 +2,7 @@
 
 .analyzer-container {
   display: flex;
-  background-color: #1a202c;
+  background-color: var(--dark-bg); /* #1a202c -> --dark-bg */
   height: 100vh;
   width: 100%;
 }
@@ -17,6 +17,6 @@
   flex: 1;
   overflow-y: auto;
   padding: 20px;
-  background-color: #1a202c;
-  color: #edf2f7;
+  background-color: var(--dark-bg); /* #1a202c -> --dark-bg */
+  color: var(--text-primary); /* #edf2f7 -> --text-primary */
 }

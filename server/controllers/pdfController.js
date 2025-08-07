@@ -9,32 +9,35 @@ export const summarizePDF = async (req, res) => {
     const text = data.text;
 
     const prompt = `
-You are an AI summarizer designed to help users understand documents quickly. 
+You are an AI summarizer designed to help users understand documents quickly in a frontend UI with collapsible accordions.
 
 Analyze the following PDF content and generate a **clean, structured summary**. Break the content into **distinct key points**, where:
 
-- Each **key point** represents a topic, concept, or section heading (this will be the accordion title).
-- Under each key point, provide a **short paragraph** that explains the idea in simple, clear terms (this will be shown when the accordion is opened).
+- Each key point will be shown as a clickable accordion section in the UI.
+- The **title** represents the topic heading.
+- The **content** is a clear, 2–4 sentence explanation of the topic.
+- (Optional) Include a "tags" field with relevant keywords if the topic fits clearly into known categories (e.g., ["SQL", "Database"]).
 
-### Output Format:
+### Output Format (JSON only):
 [
   {
-    "title": "Short summary point or topic (e.g., 'OSI Model', 'SQL Basics')",
-    "content": "2–4 sentence explanation of the topic that gives users a clear understanding."
+    "title": "Topic Title",
+    "content": "Clear explanation here...",
+    "tags": ["optional", "keywords"]
   },
   ...
 ]
 
 Instructions:
-- Identify the most important and informative points from the text.
-- Group and name each key idea clearly.
 - Use a teaching tone that's clear, compact, and user-friendly.
-- Focus on clarity and avoid overwhelming detail.
+- Group and name each key idea clearly.
+- Do not include markdown or code block syntax (no backticks).
+- If the document is very long, limit to the **top 20–25 most informative points**.
 
 ### PDF Content:
 ${text}
-
 `;
+
 
     const summary = await getGeminiResponse(prompt);
 

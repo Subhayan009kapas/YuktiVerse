@@ -2,10 +2,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #1a202c;
-  color: #edf2f7;
+  background-color: var(--dark-bg);         /* #1a202c */
+  color: var(--text-primary);              /* #edf2f7 */
   padding: 13px 20px;
-  border-bottom: 1px solid #2d3748;
+  border-bottom: 1px solid var(--dark-border); /* #2d3748 */
+  height: 5.5vh;
 }
 
 .pdf-summarizer-topbar-title {
@@ -15,5 +16,5 @@
 
 .pdf-summarizer-avatar {
   border-radius: 50%;
-  border: 2px solid #68d391;
+  border: 2px solid var(--success);        /* #68d391 */
 }

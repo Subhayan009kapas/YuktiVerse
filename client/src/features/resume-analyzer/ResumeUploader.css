@@ -1,4 +1,3 @@
-/* ResumeUploader.css */
 :root {
   --accent-primary: #68d391;
   --secondary-accent: #81e6d9;
@@ -9,6 +8,44 @@
   --success: #48bb78;
   --card-bg: #1a202c;
   --header-bg: #2d3748;
+  
+  /* New variables for previously hardcoded colors */
+  --upload-drop-bg: rgba(30, 41, 59, 0.5);
+  --upload-drop-hover: rgba(104, 211, 145, 0.05);
+  --success-bg: rgba(72, 187, 120, 0.05);
+  --file-status-bg: rgba(45, 55, 72, 0.7);
+  --clear-btn-hover: rgba(245, 101, 101, 0.1);
+  --feature-card-bg: rgba(45, 55, 72, 0.7);
+  --new-upload-btn-bg: rgba(45, 55, 72, 0.7);
+  --new-upload-btn-hover: rgba(45, 55, 72, 1);
+  --success-popup-bg: rgba(0, 0, 0, 0.6);
+  --popup-bg: linear-gradient(135deg, var(--card-bg), var(--header-bg));
+  --popup-border: rgba(104, 211, 145, 0.2);
+  --popup-shimmer: linear-gradient(90deg, var(--accent-primary), var(--secondary-accent), var(--accent-primary));
+  --text-light: #e2e8f0;
+  --popup-file-bg: rgba(104, 211, 145, 0.1);
+  --popup-file-border: rgba(104, 211, 145, 0.2);
+  --database-overlay: rgba(0, 0, 0, 0.75);
+  --database-popup-bg: linear-gradient(135deg, var(--card-bg), var(--header-bg));
+  --database-popup-border: rgba(104, 211, 145, 0.3);
+  --database-shimmer: linear-gradient(90deg, #10B981, #34D399, #68D391);
+  --database-radial: radial-gradient(circle at center, rgba(104, 211, 145, 0.1) 0%, transparent 70%);
+  --popup-close-bg: rgba(255, 255, 255, 0.1);
+  --popup-close-hover: rgba(255, 255, 255, 0.2);
+  --spinner-border: rgba(26, 32, 44, 0.2);
+  --spinner-top: #1a202c;
+  --white: #ffffff;
+  --black: #000000;
+  
+  /* RGB versions for rgba usage */
+  --card-bg-rgb: 26, 32, 44;
+  --header-bg-rgb: 45, 55, 72;
+  --accent-primary-rgb: 104, 211, 145;
+  --secondary-accent-rgb: 129, 230, 217;
+  --danger-rgb: 245, 101, 101;
+  --success-rgb: 72, 187, 120;
+  --white-rgb: 255, 255, 255;
+  --black-rgb: 0, 0, 0;
 }
 
 .resume-upload-container {
@@ -39,7 +76,7 @@
   background: var(--card-bg);
   padding: 25px;
   border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 30px rgba(var(--black-rgb), 0.3);
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -55,12 +92,12 @@
   left: 0;
   width: 100%;
   height: 4px;
-  background: linear-gradient(90deg, var(--accent-primary), var(--secondary-accent));
+  background: var(--header-gradient);
 }
 
 .upload-box.drag-active {
   border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px rgba(104, 211, 145, 0.3);
+  box-shadow: 0 0 0 3px var(--search-focus);
 }
 
 .upload-box.error {
@@ -74,7 +111,7 @@
 .upload-header h1 {
   font-size: 1.6rem;
   margin-bottom: 6px;
-  background: linear-gradient(90deg, var(--accent-primary), var(--secondary-accent));
+  background: var(--header-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -86,7 +123,7 @@
 }
 
 .upload-drop-area {
-  background: rgba(30, 41, 59, 0.5);
+  background: var(--upload-drop-bg);
   border: 2px dashed var(--border-divider);
   border-radius: 8px;
   padding: 18px 15px;
@@ -98,13 +135,13 @@
 
 .upload-drop-area:hover {
   border-color: var(--accent-primary);
-  background: rgba(104, 211, 145, 0.05);
+  background: var(--upload-drop-hover);
 }
 
 .upload-drop-area.file-added {
   animation: pulse 0.8s;
   border-color: var(--success);
-  background: rgba(72, 187, 120, 0.05);
+  background: var(--success-bg);
 }
 
 .upload-drop-area.shake {
@@ -118,7 +155,7 @@
 .upload-icon-bg {
   width: 55px;
   height: 55px;
-  background: rgba(104, 211, 145, 0.1);
+  background: var(--popup-file-bg);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -167,7 +204,7 @@
 
 .browse-btn {
   background: var(--accent-primary);
-  color: #1a202c;
+  color: var(--card-bg);
   padding: 8px 16px;
   border-radius: 6px;
   font-weight: 600;
@@ -175,14 +212,14 @@
   transition: all 0.3s ease;
   display: inline-block;
   font-size: 0.9rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(var(--black-rgb), 0.1);
   margin-top: 4px;
 }
 
 .browse-btn:hover {
-  background: #56b67d;
+  background: var(--accent-primary-dark);
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 12px rgba(var(--black-rgb), 0.15);
 }
 
 .browse-btn input[type="file"] {
@@ -193,7 +230,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(45, 55, 72, 0.7);
+  background: var(--file-status-bg);
   border-radius: 8px;
   padding: 10px 12px;
   margin: 15px 0;
@@ -211,7 +248,7 @@
   color: var(--accent-primary);
   width: 32px;
   height: 32px;
-  background: rgba(104, 211, 145, 0.1);
+  background: var(--popup-file-bg);
   border-radius: 6px;
   display: flex;
   align-items: center;
@@ -244,7 +281,7 @@
 }
 
 .clear-btn:hover {
-  background: rgba(245, 101, 101, 0.1);
+  background: var(--clear-btn-hover);
 }
 
 .clear-btn svg {
@@ -255,8 +292,8 @@
 .upload-btn {
   width: 100%;
   padding: 10px;
-  background: linear-gradient(135deg, var(--accent-primary), var(--secondary-accent));
-  color: #1a202c;
+  background: var(--header-gradient);
+  color: var(--card-bg);
   border: none;
   border-radius: 8px;
   font-weight: 600;
@@ -267,12 +304,12 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 6px 12px rgba(104, 211, 145, 0.2);
+  box-shadow: 0 6px 12px rgba(var(--accent-primary-rgb), 0.2);
 }
 
 .upload-btn:hover:not(:disabled) {
   transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(104, 211, 145, 0.3);
+  box-shadow: 0 10px 20px rgba(var(--accent-primary-rgb), 0.3);
 }
 
 .upload-btn:disabled {
@@ -295,8 +332,8 @@
 .upload-spinner {
   width: 20px;
   height: 20px;
-  border: 3px solid rgba(26, 32, 44, 0.2);
-  border-top-color: #1a202c;
+  border: 3px solid var(--spinner-border);
+  border-top-color: var(--spinner-top);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -313,19 +350,18 @@
 }
 
 .feature-card {
-  background: rgba(45, 55, 72, 0.7);
+  background: var(--feature-card-bg);
   border-radius: 10px;
   padding: 18px;
   text-align: center;
   width: 300px;
   transition: all 0.3s ease;
   border: 1px solid var(--border-divider);
-  
 }
 
 .feature-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 20px rgba(var(--black-rgb), 0.2);
   border-color: var(--accent-primary);
 }
 
@@ -350,7 +386,7 @@
 
 /* New Upload Button */
 .new-upload-btn {
-  background: rgba(45, 55, 72, 0.7);
+  background: var(--new-upload-btn-bg);
   color: var(--secondary-accent);
   border: 1px solid var(--border-divider);
   padding: 10px 20px;
@@ -368,7 +404,7 @@
 }
 
 .new-upload-btn:hover {
-  background: rgba(45, 55, 72, 1);
+  background: var(--new-upload-btn-hover);
   border-color: var(--secondary-accent);
   transform: translateY(-2px);
 }
@@ -385,7 +421,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--success-popup-bg);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   display: flex;
@@ -396,14 +432,14 @@
 }
 
 .popup-content {
-  background: linear-gradient(135deg, #1a202c, #2d3748);
-  border: 1px solid rgba(104, 211, 145, 0.2);
+  background: var(--popup-bg);
+  border: 1px solid var(--popup-border);
   border-radius: 20px;
   padding: 40px 50px;
   text-align: center;
   max-width: 550px;
   width: 90%;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 20px 60px rgba(var(--black-rgb), 0.5);
   position: relative;
   overflow: hidden;
   animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -417,7 +453,7 @@
   left: 0;
   width: 100%;
   height: 3px;
-  background: linear-gradient(90deg, #68d391, #81e6d9, #68d391);
+  background: var(--popup-shimmer);
   animation: shimmer 2s ease-in-out infinite;
 }
 
@@ -430,11 +466,11 @@
   width: 80px;
   height: 80px;
   margin: 0 auto;
-  filter: drop-shadow(0 8px 16px rgba(104, 211, 145, 0.3));
+  filter: drop-shadow(0 8px 16px rgba(var(--accent-primary-rgb), 0.3));
 }
 
 .analysis-checkmark .circle {
-  stroke: #68d391;
+  stroke: var(--accent-primary);
   stroke-width: 2;
   stroke-dasharray: 157;
   stroke-dashoffset: 157;
@@ -442,7 +478,7 @@
 }
 
 .analysis-checkmark .check {
-  stroke: #68d391;
+  stroke: var(--accent-primary);
   stroke-width: 3;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -452,7 +488,7 @@
 }
 
 .analysis-checkmark .analysis-icon {
-  stroke: #81e6d9;
+  stroke: var(--secondary-accent);
   stroke-width: 1.5;
   stroke-dasharray: 100;
   stroke-dashoffset: 100;
@@ -460,7 +496,7 @@
 }
 
 .analysis-checkmark .analysis-dots {
-  stroke: #68d391;
+  stroke: var(--accent-primary);
   stroke-width: 2;
   stroke-dasharray: 30;
   stroke-dashoffset: 30;
@@ -470,9 +506,9 @@
 .popup-content h3 {
   font-size: 2rem;
   margin: 0 0 15px 0;
-  color: #e2e8f0;
+  color: var(--text-light);
   font-weight: 700;
-  background: linear-gradient(135deg, #68d391, #81e6d9);
+  background: var(--header-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -486,9 +522,9 @@
   gap: 10px;
   margin: 20px 0;
   padding: 12px 20px;
-  background: rgba(104, 211, 145, 0.1);
+  background: var(--popup-file-bg);
   border-radius: 12px;
-  border: 1px solid rgba(104, 211, 145, 0.2);
+  border: 1px solid var(--popup-file-border);
   animation: fadeInUp 0.6s ease-out 0.5s both;
 }
 
@@ -497,7 +533,7 @@
 }
 
 .popup-content p {
-  color: #a0aec0;
+  color: var(--text-secondary);
   margin: 0;
   font-size: 1.1rem;
   line-height: 1.6;
@@ -511,7 +547,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.75);
+  background: var(--database-overlay);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   display: flex;
@@ -524,14 +560,14 @@
 }
 
 .database-success-popup {
-  background: linear-gradient(135deg, #1a202c, #2d3748);
+  background: var(--database-popup-bg);
   border-radius: 20px;
   padding: 50px 40px;
   text-align: center;
   max-width: 450px;
   width: 90%;
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(104, 211, 145, 0.3);
+  box-shadow: 0 25px 80px rgba(var(--black-rgb), 0.6);
+  border: 1px solid var(--database-popup-border);
   position: relative;
   overflow: hidden;
   animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -546,7 +582,7 @@
   left: 0;
   width: 100%;
   height: 4px;
-  background: linear-gradient(90deg, #10B981, #34D399, #68D391);
+  background: var(--database-shimmer);
   animation: shimmer 2s ease-in-out infinite;
 }
 
@@ -557,7 +593,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(circle at center, rgba(104, 211, 145, 0.1) 0%, transparent 70%);
+  background: var(--database-radial);
   pointer-events: none;
 }
 
@@ -675,7 +711,7 @@
 .database-success-popup h3 {
   font-size: 1.8rem;
   margin: 0 0 15px 0;
-  color: #e2e8f0;
+  color: var(--text-light);
   font-weight: 700;
   position: relative;
   z-index: 1;
@@ -686,7 +722,7 @@
 }
 
 .database-success-popup p {
-  color: #a0aec0;
+  color: var(--text-secondary);
   margin: 0;
   font-size: 1.1rem;
   line-height: 1.6;
@@ -699,7 +735,7 @@
   position: absolute;
   top: 20px;
   right: 20px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--popup-close-bg);
   border: none;
   border-radius: 50%;
   width: 40px;
@@ -714,19 +750,19 @@
 }
 
 .database-success-popup .popup-close:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--popup-close-hover);
   transform: scale(1.1);
 }
 
 .database-success-popup .popup-close svg {
   width: 20px;
   height: 20px;
-  color: #a0aec0;
+  color: var(--text-secondary);
   transition: color 0.3s ease;
 }
 
 .database-success-popup .popup-close:hover svg {
-  color: #e2e8f0;
+  color: var(--text-light);
 }
 
 /* Animations */
@@ -750,15 +786,15 @@
 @keyframes pulse {
   0% {
     transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(104, 211, 145, 0.4);
+    box-shadow: 0 0 0 0 rgba(var(--accent-primary-rgb), 0.4);
   }
   70% {
     transform: scale(1.02);
-    box-shadow: 0 0 0 15px rgba(104, 211, 145, 0);
+    box-shadow: 0 0 0 15px rgba(var(--accent-primary-rgb), 0);
   }
   100% {
     transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(104, 211, 145, 0);
+    box-shadow: 0 0 0 0 rgba(var(--accent-primary-rgb), 0);
   }
 }
 
