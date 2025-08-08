@@ -1,5 +1,5 @@
-:root {
-  /* Base Colors */
+/* :root {
+ 
   --color-background: #1a202c;
   --color-surface: #2d3748;
   --color-surface-light: rgba(45, 55, 72, 0.6);
@@ -7,32 +7,32 @@
   --color-surface-darker: rgba(26, 32, 44, 0.95);
   --color-surface-list: rgba(31, 41, 55, 0.6);
   
-  /* Text Colors */
+
   --color-text-primary: #edf2f7;
   --color-text-secondary: #a0aec0;
   --color-text-tertiary: #9ca3af;
   
-  /* Accent Colors */
+ 
   --color-accent-primary: #68d391;
   --color-accent-secondary: #81e6d9;
   
-  /* State Colors */
+ 
   --color-success: #10b981;
   --color-error: #ef4444;
   
-  /* Borders */
+
   --color-border-primary: #2d3748;
   --color-border-secondary: #374151;
   --color-border-tertiary: #4a5568;
   
-  /* Gradients */
+
   --gradient-accent: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-secondary));
   
-  /* Shadows */
+
   --shadow-primary: 0 4px 32px rgba(0,0,0,0.18);
   --shadow-secondary: 0 4px 20px rgba(0,0,0,0.4);
   --shadow-button: 0 4px 16px rgba(104, 211, 145, 0.3);
-}
+} */
 
 /* Enhanced ResumeFeedback.css */
 .resume-feedback-container {

@@ -1,4 +1,4 @@
-:root {
+/* :root {
   --accent-primary: #68d391;
   --secondary-accent: #81e6d9;
   --text-primary: #edf2f7;
@@ -36,7 +36,7 @@
   --white: #ffffff;
   --black: #000000;
   --card-icon-bg: rgba(30, 41, 59, 0.5);
-}
+} */
 
 
 * {
@@ -107,7 +107,7 @@ body {
 }
 
 .card-icon {
-  background: var(--card-icon-bg);
+  background:var(--color-surface-dark);
   height: 160px;
   display: flex;
   align-items: center;
@@ -1061,7 +1061,7 @@ h3 {
 }
 
 .summary-modal {
-  background: var(--modal-bg);
+  background: var(--color-surface-dark);
   border-radius: 18px;
   width: 90%;
   max-width: 800px;
@@ -1139,6 +1139,7 @@ h3 {
 .close-btn:hover {
   background: var(--danger);
   transform: rotate(90deg);
+  color: aliceblue;
 }
 
 .summary-modal-body {

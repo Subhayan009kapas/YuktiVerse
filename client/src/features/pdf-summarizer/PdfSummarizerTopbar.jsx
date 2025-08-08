@@ -13,6 +13,7 @@ const PdfSummarizerTopbar = () => {
         />
       </div>
     </div>
+    
   );
 };
 

@@ -1,54 +1,186 @@
-/* Global CSS Variables */
 :root {
-  --accent-primary: #68d391;
-  --secondary-accent: #81e6d9;
+  /* ==================== */
+  /* Base Colors          */
+  /* ==================== */
+  --color-background: #1a202c;
+  --color-surface: #2d3748;
+  --color-surface-light: rgba(45, 55, 72, 0.6);
+  --color-surface-dark: rgba(15, 23, 42, 0.95);
+  --color-surface-darker: rgba(26, 32, 44, 0.95);
+  --color-surface-list: rgba(31, 41, 55, 0.6);
+  --color-overlay: rgba(0, 0, 0, 0.6);
+  --white: #ffffff;
+  --black: #000000;
+
+  /* ==================== */
+  /* Text Colors          */
+  /* ==================== */
   --text-primary: #edf2f7;
   --text-secondary: #a0aec0;
-  --border-divider: #2d3748;
-  --danger: #f56565;
+  --text-tertiary: #9ca3af;
+  --text-dark: #1a202c;
+  --text-muted-dark: rgba(26, 32, 44, 0.7);
+  --text-muted: #4a5568;
+  --text-light: #e2e8f0;
+  --text-on-primary: #fff;
+  --content-text: #ddd;
+
+  /* ==================== */
+  /* Accent Colors        */
+  /* ==================== */
+  --accent-primary: #68d391;
+  --secondary-accent: #81e6d9;
+  --color-accent-info: #2196f3;
+  --color-accent-highlight: #fbc02d;
+  --summary-key: #38a169;
+  --shimmer-1: #10B981;
+  --shimmer-2: #34D399;
+  --shimmer-3: #68D391;
+
+  /* ==================== */
+  /* State Colors         */
+  /* ==================== */
   --success: #48bb78;
+  --danger: #f56565;
+  --color-success: #10b981;
+  --color-error: #ef4444;
+  --issues-color: #f6ad55;
+  --strengths-color: var(--success);
+
+  /* ==================== */
+  /* Backgrounds          */
+  /* ==================== */
   --card-bg: #1a202c;
   --header-bg: #2d3748;
-  --overlay-bg: rgba(0, 0, 0, 0.75);
-  --dark-border:#2d3748;
-  
-}
+  --row-bg: #1e293b;
+  --sidebar-bg: rgba(26, 32, 44, 0.85);
+  --category-bg: rgba(45, 55, 72, 0.5);
+  --upload-bg: rgba(104, 211, 145, 0.1);
+  --file-status-bg: rgba(45, 55, 72, 0.7);
+  --feature-card-bg: rgba(45, 55, 72, 0.7);
+  --no-topic-bg: rgba(45, 55, 72, 0.3);
+  --popup-bg: linear-gradient(135deg, var(--card-bg), var(--header-bg));
+  --database-overlay: rgba(0, 0, 0, 0.75);
+  --body-bg: #0f172a;
+  --empty-bg: rgba(26, 32, 44, 0.7);
+  --list-header-bg: rgba(45, 55, 72, 0.7);
+  --row-expanded-bg: rgba(30, 41, 59, 0.8);
+  --file-icon-bg: rgba(104, 211, 145, 0.1);
+  --loader-bg: #e2e8f0;
+  --spinner-top: #1a202c;
 
-/* Global Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+  /* ==================== */
+  /* Borders & Dividers   */
+  /* ==================== */
+  --border-divider: #2d3748;
+  --color-border-primary: #2d3748;
+  --color-border-secondary: #374151;
+  --color-border-tertiary: #4a5568;
+  --border-light: rgba(255, 255, 255, 0.08);
+  --border-popup: rgba(255, 255, 255, 0.1);
+  --border-accent: rgba(104, 211, 145, 0.3);
+  --border-score: rgba(104, 211, 145, 0.2);
+  --card-border: rgba(255, 255, 255, 0.05);
+  --search-border: rgba(255, 255, 255, 0.08);
+  --item-border: rgba(255, 255, 255, 0.05);
+  --no-topic-border: rgba(255, 255, 255, 0.1);
+  --modal-border: rgba(104, 211, 145, 0.15);
+  --popup-border: rgba(104, 211, 145, 0.2);
+  --error-border: rgba(245, 101, 101, 0.2);
+  --database-popup-border: rgba(104, 211, 145, 0.3);
 
-body {
-  height: 100vh;
-  width: 100%;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background: #1a202c;
-  color: var(--text-primary);
-  overflow-x: hidden;
-}
+  /* ==================== */
+  /* Gradients            */
+  /* ==================== */
+  --gradient-accent: linear-gradient(135deg, var(--accent-primary), var(--secondary-accent));
+  --bg-submit-gradient: linear-gradient(135deg, var(--accent-primary), var(--success));
+  --bg-review-gradient: linear-gradient(135deg, var(--secondary-accent), #38b2ac);
+  --bg-score-circle: linear-gradient(135deg, var(--accent-primary), var(--secondary-accent));
+  --bg-popup: linear-gradient(135deg, rgba(26, 32, 44, 0.95), rgba(16, 22, 34, 0.95));
+  --header-gradient: linear-gradient(to right, var(--accent-primary), var(--secondary-accent));
+  --skeleton-gradient: linear-gradient(90deg, var(--border-divider) 25%, #364153 50%, var(--border-divider) 75%);
+  --topic-gradient: linear-gradient(90deg, rgba(45, 55, 72, 0.6), rgba(26, 32, 44, 0.8));
+  --modal-gradient: linear-gradient(135deg, rgba(104, 211, 145, 0.1) 0%, transparent 50%);
+  --delete-modal-bg: linear-gradient(135deg, #1a202c, #2d3748);
+  --success-border: linear-gradient(135deg, #4CAF50, #45a049);
+  --error-border: linear-gradient(135deg, #f44336, #d32f2f);
+  --popup-shimmer: linear-gradient(90deg, var(--accent-primary), var(--secondary-accent), var(--accent-primary));
+  --database-shimmer: linear-gradient(90deg, #10B981, #34D399, #68D391);
 
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
-}
+  /* ==================== */
+  /* Shadows              */
+  /* ==================== */
+  --shadow-primary: 0 4px 32px rgba(0,0,0,0.18);
+  --shadow-secondary: 0 4px 20px rgba(0,0,0,0.4);
+  --shadow-button: 0 4px 16px rgba(104, 211, 145, 0.3);
+  --shadow-submit: 0 4px 15px rgba(104, 211, 145, 0.3);
+  --shadow-submit-hover: 0 6px 20px rgba(104, 211, 145, 0.4);
+  --shadow-score-circle: 0 15px 40px rgba(104, 211, 145, 0.4);
+  --shadow-popup: 0 30px 60px rgba(0, 0, 0, 0.6);
+  --shadow-popup-border: 0 0 0 1px var(--border-score);
+  --shadow-retry-hover: 0 4px 8px rgba(0, 0, 0, 0.3);
+  --shadow-review-hover: 0 4px 15px rgba(129, 230, 217, 0.4);
+  --sidebar-shadow: rgba(0, 0, 0, 0.1);
+  --card-shadow: rgba(0, 0, 0, 0.25);
+  --row-expanded-shadow: rgba(104, 211, 145, 0.1);
+  --start-btn-shadow: rgba(104, 211, 145, 0.4);
+  --modal-shadow: rgba(0, 0, 0, 0.5);
+  --toast-shadow: rgba(0, 0, 0, 0.2);
+  --btn-shadow: rgba(0, 0, 0, 0.3);
+  --pdf-close-hover: rgba(233, 239, 235, 0.5);
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
+  /* ==================== */
+  /* Special Effects      */
+  /* ==================== */
+  --radial-light-green: radial-gradient(circle at 20% 30%, rgba(104, 211, 145, 0.08) 0%, transparent 30%);
+  --radial-light-cyan: radial-gradient(circle at 80% 70%, rgba(129, 230, 217, 0.08) 0%, transparent 30%);
+  --overlay-pattern: radial-gradient(circle at 15% 50%, rgba(104, 211, 145, 0.03) 0%, transparent 25%),
+                     radial-gradient(circle at 85% 30%, rgba(129, 230, 217, 0.03) 0%, transparent 25%);
+  --database-radial: radial-gradient(circle at center, rgba(104, 211, 145, 0.1) 0%, transparent 70%);
+  --success-pulse: rgba(72, 187, 120, 0.4);
 
-::-webkit-scrollbar-track {
-  background: var(--card-bg);
-}
+  /* ==================== */
+  /* Component States     */
+  /* ==================== */
+  --category-active: rgba(104, 211, 145, 0.15);
+  --topic-active: rgba(104, 211, 145, 0.25);
+  --row-hover: #2d3748;
+  --card-hover: #2d3748;
+  --upload-drop-hover: rgba(104, 211, 145, 0.05);
+  --success-bg: rgba(72, 187, 120, 0.05);
+  --correct-bg: rgba(72, 187, 120, 0.1);
+  --keyword-tag-bg: rgba(129, 230, 217, 0.15);
+  --icon-bg-hover: rgba(104, 211, 145, 0.05);
+  --option-hover: #4a5568;
+  --btn-hover: rgba(45, 55, 72, 1);
+  --view-btn-hover: rgba(104, 211, 145, 0.25);
+  --delete-btn-hover: rgba(245, 101, 101, 0.25);
+  --expand-btn-hover: rgba(129, 230, 217, 0.25);
+  --new-upload-btn-hover: rgba(45, 55, 72, 1);
+  --popup-close-hover: rgba(255, 255, 255, 0.2);
+  --bg-option-hover: rgba(45, 55, 72, 0.9);
+  --bg-review-score-btn-hover: rgba(104, 211, 145, 0.25);
+  --bg-close-score-hover: rgba(45, 55, 72, 0.5);
+  --bg-retry-btn-hover: rgba(45, 55, 72, 1);
+  --icon-overlay: rgba(0, 0, 0, 0.4);
+  --clear-btn-hover: rgba(245, 101, 101, 0.1);
+  --active-bg: rgba(104, 211, 145, 0.08);
+  --header-hover: rgba(45, 55, 72, 0.4);
+  --active-header-bg: rgba(45, 55, 72, 0.3);
 
-::-webkit-scrollbar-thumb {
-  background: var(--border-divider);
-  border-radius: 4px;
-}
+  /* ==================== */
+  /* RGB Versions         */
+  /* ==================== */
+  --card-bg-rgb: 26, 32, 44;
+  --header-bg-rgb: 45, 55, 72;
+  --accent-primary-rgb: 104, 211, 145;
+  --secondary-accent-rgb: 129, 230, 217;
+  --danger-rgb: 245, 101, 101;
+  --success-rgb: 72, 187, 120;
+  --white-rgb: 255, 255, 255;
+  --black-rgb: 0, 0, 0;
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-primary);
+
+   --sidebar-scrollbar-track: #0c0a1f;
+  --sidebar-scrollbar-thumb: #68d391;
 }

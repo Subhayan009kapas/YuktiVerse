@@ -1,4 +1,4 @@
-:root {
+/* :root {
   --accent-primary: #68d391;
   --secondary-accent: #81e6d9;
   --text-primary: #edf2f7;
@@ -9,7 +9,7 @@
   --card-bg: #1a202c;
   --header-bg: #2d3748;
   
-  /* New variables for previously hardcoded colors */
+
   --upload-drop-bg: rgba(30, 41, 59, 0.5);
   --upload-drop-hover: rgba(104, 211, 145, 0.05);
   --success-bg: rgba(72, 187, 120, 0.05);
@@ -37,7 +37,7 @@
   --white: #ffffff;
   --black: #000000;
   
-  /* RGB versions for rgba usage */
+
   --card-bg-rgb: 26, 32, 44;
   --header-bg-rgb: 45, 55, 72;
   --accent-primary-rgb: 104, 211, 145;
@@ -46,7 +46,7 @@
   --success-rgb: 72, 187, 120;
   --white-rgb: 255, 255, 255;
   --black-rgb: 0, 0, 0;
-}
+} */
 
 .resume-upload-container {
   color: var(--text-primary);
@@ -203,7 +203,7 @@
 }
 
 .browse-btn {
-  background: var(--accent-primary);
+  background: var(--accent-secondary);
   color: var(--card-bg);
   padding: 8px 16px;
   border-radius: 6px;
@@ -217,7 +217,7 @@
 }
 
 .browse-btn:hover {
-  background: var(--accent-primary-dark);
+  background: var(--secondary-accent);
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(var(--black-rgb), 0.15);
 }

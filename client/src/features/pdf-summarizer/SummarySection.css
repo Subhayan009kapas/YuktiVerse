@@ -1,4 +1,4 @@
-:root {
+/* :root {
   --card-bg: #1a202c;
   --header-bg: rgba(26, 32, 44, 0.95);
   --text-primary: #e2e8f0;
@@ -15,7 +15,7 @@
   --topic-bg: rgba(26, 32, 44, 0.8);
   --topic-border: rgba(104, 211, 145, 0.15);
   
-  /* New variables for previously hardcoded colors */
+
   --card-border: rgba(255, 255, 255, 0.08);
   --card-shadow: rgba(0, 0, 0, 0.35);
   --search-bg: rgba(45, 55, 72, 0.7);
@@ -37,7 +37,7 @@
   --close-bg: rgba(255, 255, 255, 0.1);
   --close-hover: rgba(255, 255, 255, 0.2);
   
-  /* RGB versions for rgba usage */
+
   --card-bg-rgb: 26, 32, 44;
   --header-bg-rgb: 45, 55, 72;
   --accent-primary-rgb: 104, 211, 145;
@@ -46,7 +46,7 @@
   --success-rgb: 72, 187, 120;
   --white-rgb: 255, 255, 255;
   --black-rgb: 0, 0, 0;
-}
+} */
 
 .summary-section {
   position: absolute;
@@ -96,10 +96,13 @@
 .search-bar {
   display: flex;
   align-items: center;
+  justify-content: center;
   background: var(--search-bg);
   border-radius: 10px;
   padding: 12px 16px;
-  border: 1px solid var(--search-border);
+  border: 1px solid var(--border-accent);
+  width: 30%;
+  
 }
 
 .search-bar svg {
@@ -135,6 +138,7 @@
   max-height: 70vh;
   overflow-y: auto;
   max-width: 30vw;
+  min-width: 30vw;
 }
 
 .sidebar-header {
@@ -195,7 +199,7 @@
 }
 
 .topic-title {
-  font-size: 1rem;
+  font-size: 0.5rem;
   font-weight: 500;
   line-height: 1.4;
   color: var(--text-primary);
@@ -265,8 +269,9 @@
 }
 
 .mcq-btn {
-  background: var(--header-gradient);
+  background: var(--header-bg-rgb);
   color: var(--card-bg);
+  
 }
 
 .mcq-btn:hover {
@@ -411,7 +416,7 @@
 }
 
 .modal {
-  background: var(--modal-bg);
+  background:var(--color-surface-dark);
   border-radius: 18px;
   width: 100%;
   max-width: 950px;
@@ -521,4 +526,28 @@
     margin-right: 0;
     margin-bottom: 16px;
   }
+}
+
+
+/* Scrollbar for WebKit browsers (Chrome, Safari, Edge) */
+.sidebar::-webkit-scrollbar {
+  width: 8px; /* Scrollbar width */
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: var(--sidebar-scrollbar-track, #0c0a1f); /* Track color */
+  border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: var(--sidebar-scrollbar-thumb, #4f46e5); /* Thumb color */
+  border-radius: 10px;
+  border: 2px solid transparent; /* Padding space around thumb */
+  background-clip: content-box;
+}
+
+/* Scrollbar for Firefox */
+.sidebar {
+  scrollbar-width: thin; /* options: auto, thin, none */
+  scrollbar-color: var(--sidebar-scrollbar-thumb, #4f46e5) var(--sidebar-scrollbar-track, #0c0a1f);
 }

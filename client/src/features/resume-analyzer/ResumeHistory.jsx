@@ -448,7 +448,7 @@ View full analysis: ${resume.cloudinaryUrl}
 
                       <div className="quick-actions">
                         <button
-                          className="delete-btn"
+                          className="resume-delete-btn"
                           onClick={(e) => {
                             e.stopPropagation();
                             openDeleteModal(resume._id, resume.filename);

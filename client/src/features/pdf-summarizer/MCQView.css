@@ -1,5 +1,5 @@
-:root {
-  /* Accent and Theme Colors */
+/* :root {
+  
   --accent-primary: #68d391;
   --secondary-accent: #81e6d9;
   --text-primary: #edf2f7;
@@ -12,7 +12,7 @@
   --danger: #f56565;
   --success: #48bb78;
 
-  /* Additional Backgrounds & Effects */
+
   --scrollbar-track: rgba(45, 55, 72, 0.5);
   --scrollbar-thumb: var(--accent-primary);
   --transparent-card-bg: rgba(26, 32, 44, 0.7);
@@ -34,7 +34,7 @@
   --modal-close-bg: rgba(255, 255, 255, 0.1);
   --modal-close-hover-bg: rgba(255, 255, 255, 0.2);
   --toast-shadow: rgba(0, 0, 0, 0.2);
-}
+} */
 
 .mcq-view {
   padding: 15px;
@@ -85,7 +85,7 @@
 }
 
 .mcq-card {
-  background: var(--transparent-card-bg);
+  background: var(--color-surface-light);
   border-radius: 14px;
   padding: 24px;
   margin-bottom: 24px;
@@ -201,7 +201,7 @@
 .test-btn {
   background-color: var(--test-btn-bg);
   color: var(--text-primary);
-  border: 1px solid var(--test-btn-border);
+  border: 2px solid var(--border-accent);
 }
 
 .test-btn:hover {

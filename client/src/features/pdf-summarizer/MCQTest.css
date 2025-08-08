@@ -1,4 +1,4 @@
-:root {
+/* :root {
   
   --accent-primary: #68d391;
   --secondary-accent: #81e6d9;
@@ -51,7 +51,7 @@
   --radial-light-cyan: radial-gradient(circle at 80% 70%, rgba(129, 230, 217, 0.08) 0%, transparent 30%);
 
   --white: #ffffff;
-}
+} */
 
 .mcq-test {
   padding: 15px;
@@ -221,7 +221,7 @@
   width: 100%;
   padding: 18px;
   background: var(--bg-submit-gradient);
-  color: var(--text-dark);
+  color: var(--text-primary);
   border: none;
   border-radius: 12px;
   font-size: 1.2rem;
@@ -230,6 +230,7 @@
   transition: all 0.3s ease;
   margin-top: 10px;
   box-shadow: var(--shadow-submit);
+  
 }
 
 .mcq-test__submit-btn:hover {
@@ -242,6 +243,7 @@
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
+  border: 1px solid var(--border-light);
 }
 
 .score-display {

@@ -1,4 +1,4 @@
-:root {
+/* :root {
   --accent-primary: #68d391;
   --secondary-accent: #81e6d9;
   --text-primary: #edf2f7;
@@ -11,10 +11,10 @@
   --row-bg: #1e293b;
   --row-hover: #2d3748;
 
-  /* New variables used below */
+  
   --text-muted: #4a5568;
   --loader-bg: #e2e8f0;
-}
+} */
 .resume-loader-container {
   display: flex;
   flex-direction: column;

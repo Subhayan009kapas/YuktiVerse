@@ -5,8 +5,8 @@
   background-color: var(--dark-bg);         /* #1a202c */
   color: var(--text-primary);              /* #edf2f7 */
   padding: 13px 20px;
-  border-bottom: 1px solid var(--dark-border); /* #2d3748 */
-  height: 5.5vh;
+  border-bottom: 1px solid var(--color-border-tertiary); /* #2d3748 */
+  height: 5.8vh;
 }
 
 .pdf-summarizer-topbar-title {

@@ -1,4 +1,4 @@
-:root {
+/* :root {
  
   --color-overlay: rgba(0, 0, 0, 0.6);
   --color-surface-light: #fff;
@@ -16,7 +16,7 @@
   
   
   --color-state-disabled: #ddd;
-}
+} */
 
 .mcq-popup {
   position: fixed;
