@@ -143,3 +143,259 @@
     transform: translateX(0);
   }
 }
+
+
+
+/* Add these new styles to your existing PdfSummarizerSidebar.css */
+
+/* .pdf-summarizer-sidebar {
+  --sidebar-width: 280px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+  overflow: hidden;
+} */
+
+.pdf-summarizer-sidebar {
+  width: 280px;
+  transition: width 0.3s ease;
+  background-color: var(--card-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+
+.pdf-summarizer-sidebar.collapsed {
+  width: 0px;
+}
+
+.pdf-summarizer-sidebar-header {
+  padding: 20px 20px 15px;
+  position: relative;
+}
+
+.pdf-summarizer-sidebar-header h2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-light);
+}
+
+.title-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.title-text {
+ color:var(--accent-primary);
+}
+
+.collapse-button {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.collapse-button:hover {
+  color: var(--accent-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.collapse-icon {
+  transition: transform 0.3s ease;
+  font-size: 1.3rem;
+}
+
+.collapse-icon.rotated {
+  transform: rotate(180deg);
+}
+
+.divider {
+  border: none;
+  height: 1px;
+  background: var(--border-divider);
+  margin: 0 15px;
+}
+
+.pdf-summarizer-sidebar-nav {
+  flex: 1;
+  padding: 15px 10px;
+}
+
+.pdf-summarizer-sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  margin-bottom: 5px;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.nav-item:hover {
+  background: var(--upload-bg-hover);
+}
+
+.nav-item.active {
+  background: var(--upload-bg);
+}
+
+.nav-item.active .pdf-summarizer-nav-label {
+  color: var(--accent-primary);
+}
+
+.nav-item.active .pdf-summarizer-nav-icon {
+  color: var(--accent-primary);
+}
+
+.pdf-summarizer-nav-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
+
+.pdf-summarizer-nav-label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  transition: color 0.2s ease;
+}
+
+.pdf-summarizer-active-indicator {
+  position: absolute;
+  right: 15px;
+  width: 6px;
+  height: 24px;
+  background: var(--accent-primary);
+  border-radius: 3px;
+  opacity: 0;
+  transform: scaleY(0);
+  transition: all 0.2s ease;
+}
+
+.nav-item.active .pdf-summarizer-active-indicator {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+.pdf-summarizer-sidebar-footer {
+  padding: 15px 20px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border-divider);
+}
+
+.pdf-summarizer-sidebar-wrapper {
+  position: relative;
+  display: flex;
+  height: 100vh;
+  transition: width 0.3s ease;
+}
+
+.pdf-summarizer-sidebar-wrapper.collapsed .pdf-summarizer-sidebar {
+  width: 0;
+  overflow: hidden;
+}
+
+.collapse-toggle-btn {
+  position: absolute;
+  top: 20px;
+  right: -16px;
+ 
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--accent-primary);
+  background-color: var(--dark-border);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Subtle glow on hover */
+.collapse-toggle-btn:hover {
+  background-color: var(--primary-light);
+  transform: scale(1.1);
+  box-shadow: 0 0 10px var(--primary), 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Icon rotation on state toggle */
+.collapse-icon {
+  transition: transform 0.3s ease;
+}
+
+.collapse-icon.rotated {
+  transform: rotate(180deg);
+}
+
+/* Optional: Pulse animation when collapsed */
+.pdf-summarizer-sidebar-wrapper.collapsed .collapse-toggle-btn {
+  animation: pulseGlow 2s infinite ease-in-out;
+}
+
+/* Keyframe for pulsing glow */
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 6px var(--primary-light);
+  }
+  50% {
+    box-shadow: 0 0 12px var(--primary);
+  }
+  100% {
+    box-shadow: 0 0 6px var(--primary-light);
+  }
+}
+
+/* Optional: Tooltip on hover */
+.collapse-toggle-btn::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background-color: var(--dark-surface);
+  color: var(--text-secondary);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.collapse-toggle-btn:hover::after {
+  opacity: 1;
+}
+

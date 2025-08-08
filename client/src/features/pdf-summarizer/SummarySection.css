@@ -158,6 +158,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+    font-size: 16px;
 }
 
 .topic-item {
@@ -169,6 +170,7 @@
   transition: all 0.3s ease;
   background: var(--item-bg);
   border: 1px solid var(--item-border);
+
 }
 
 .topic-item:hover {
@@ -327,7 +329,7 @@
 
 .topic-title {
   margin: 0;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   font-weight: 600;
   line-height: 1.4;
   background: var(--header-gradient);
@@ -340,7 +342,7 @@
   padding: 16px 35px;
   line-height: 1.8;
   color: var(--content-text);
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   background: rgba(var(--black-rgb), 0.05);
   height: 50vh;
   text-align: left;

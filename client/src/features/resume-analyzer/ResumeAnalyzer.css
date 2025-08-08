@@ -1,21 +1,4 @@
 /* resume-analyzer/ResumeAnalyzer.css */
-/* 
-:root {
-  --accent-primary: #68d391;
-  --secondary-accent: #81e6d9;
-  --text-primary: #edf2f7;
-  --text-secondary: #a0aec0;
-  --border-divider: #2d3748;
-  --danger: #f56565;
-  --success: #48bb78;
-  --card-bg: #1a202c;
-  --header-bg: #2d3748;
-  --row-bg: #1e293b;
-  --row-hover: #2d3748;
-} */
-
-/* resume-analyzer/ResumeAnalyzer.css */
-
 .analyzer-container {
   display: flex;
   background-color: var(--card-bg);
@@ -23,10 +6,23 @@
   width: 100%;
 }
 
+.double-bar-container {
+  display: flex;
+}
+
+.fixed-bar {
+  /* Styles for main sidebar */
+}
+
+.collapse-bar {
+  margin-left: 5vw;
+}
+
 .main-content {
   flex: 1;
   display: flex;
   flex-direction: column;
+  transition: margin-left 0.3s ease;
 }
 
 .content-area {
@@ -35,4 +31,9 @@
   padding: 20px;
   background-color: var(--card-bg);
   color: var(--text-primary);
+}
+
+/* Add this for expanded content when sidebar is collapsed */
+.main-content.expanded {
+  margin-left: -5vw; /* Adjust this value based on your layout */
 }

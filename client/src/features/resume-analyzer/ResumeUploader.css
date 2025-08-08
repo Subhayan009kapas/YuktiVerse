@@ -124,7 +124,7 @@
 
 .upload-drop-area {
   background: var(--upload-drop-bg);
-  border: 2px dashed var(--border-divider);
+  border: 2px dashed var(--accent-primary);
   border-radius: 8px;
   padding: 18px 15px;
   text-align: center;

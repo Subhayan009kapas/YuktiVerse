@@ -971,7 +971,7 @@ h3 {
 
 .answer-header {
   display: flex;
-  justify-content: space-between;
+ gap: 12px;
   margin-bottom: 0.8rem;
   font-weight: 600;
   color: var(--text-secondary);

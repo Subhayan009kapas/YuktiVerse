@@ -237,9 +237,7 @@ const ResumeFeedback = ({ feedback, resumeFile, onDatabaseSaveSuccess }) => {
         
           
         </div>
-         <p className="header-subtitle">
-            Comprehensive feedback on your resume with actionable insights
-          </p>
+         
       </div>
      
 

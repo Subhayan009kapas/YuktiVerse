@@ -14,11 +14,13 @@
   color: var(--text-primary);
   padding: 13px 20px;
   border-bottom: 1px solid var(--border-divider);
+    height: 5.8vh;
 }
 
 .resume-topbar-title {
   font-size: 22px;
   font-weight: bold;
+  margin-left: 3.5vw;
 }
 
 .resume-avatar {
