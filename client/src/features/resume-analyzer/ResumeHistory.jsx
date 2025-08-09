@@ -7,13 +7,26 @@ const ResumeHistory = () => {
   const [loading, setLoading] = useState(true);
   const [expandedRow, setExpandedRow] = useState(null);
   const [viewingPdf, setViewingPdf] = useState(null); // New state for PDF modal
-  const [deleteModal, setDeleteModal] = useState({ show: false, resumeId: null, filename: "" });
-  const [notification, setNotification] = useState({ show: false, message: "", type: "" });
+  const [deleteModal, setDeleteModal] = useState({
+    show: false,
+    resumeId: null,
+    filename: "",
+  });
+  const [notification, setNotification] = useState({
+    show: false,
+    message: "",
+    type: "",
+  });
 
   const fetchResumes = async () => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 800));
-      const res = await axios.get("http://localhost:5000/api/resume/all");
+      const res = await axios.get("http://localhost:5000/api/resume/all", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`, // ✅ send JWT token
+        },
+      });
+
       setResumes(res.data.resumes || []);
     } catch (err) {
       console.error("Error fetching resumes:", err);
@@ -55,12 +68,20 @@ const ResumeHistory = () => {
 
   const handleDelete = async () => {
     const { resumeId } = deleteModal;
-    
+
     try {
-      await axios.delete(`http://localhost:5000/api/resume/delete/${resumeId}`);
+      await axios.delete(
+        `http://localhost:5000/api/resume/delete/${resumeId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // ✅ send JWT token
+          },
+        }
+      );
+
       setResumes(resumes.filter((resume) => resume._id !== resumeId));
       if (expandedRow === resumeId) setExpandedRow(null);
-      
+
       // Close modal and show success notification
       closeDeleteModal();
       showNotification("Resume deleted successfully!", "success");
@@ -88,9 +109,9 @@ const ResumeHistory = () => {
 
   // Download functionality
   const handleDownload = async (resume) => {
-    const button = event.target.closest('.download-btn');
+    const button = event.target.closest(".download-btn");
     if (!button) return;
-    
+
     try {
       // Add loading state
       button.disabled = true;
@@ -102,34 +123,34 @@ const ResumeHistory = () => {
           </svg>
         Downloading...
       `;
-      
+
       const response = await fetch(resume.cloudinaryUrl);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
+
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.download = resume.filename || 'resume.pdf';
+      link.download = resume.filename || "resume.pdf";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
-      
+
       // Success feedback
-      button.classList.add('success');
+      button.classList.add("success");
       button.innerHTML = `
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
         Downloaded!
       `;
-      
+
       setTimeout(() => {
         button.disabled = false;
-        button.classList.remove('success');
+        button.classList.remove("success");
         button.innerHTML = `
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -140,11 +161,10 @@ const ResumeHistory = () => {
           Download PDF
         `;
       }, 2000);
-      
     } catch (error) {
-      console.error('Error downloading file:', error);
-      alert('Failed to download the file. Please try again.');
-      
+      console.error("Error downloading file:", error);
+      alert("Failed to download the file. Please try again.");
+
       // Reset button state
       button.disabled = false;
       button.innerHTML = `
@@ -161,9 +181,9 @@ const ResumeHistory = () => {
 
   // Share functionality
   const handleShare = async (resume) => {
-    const button = event.target.closest('.share-btn');
+    const button = event.target.closest(".share-btn");
     if (!button) return;
-    
+
     try {
       // Add loading state
       button.disabled = true;
@@ -175,11 +195,13 @@ const ResumeHistory = () => {
           </svg>
         Sharing...
       `;
-      
+
       const shareData = {
         title: `Resume Analysis - ${resume.filename}`,
-        text: `Check out my resume analysis results! Analysis Score: ${Math.floor(Math.random() * 30 + 70)}%`,
-        url: resume.cloudinaryUrl
+        text: `Check out my resume analysis results! Analysis Score: ${Math.floor(
+          Math.random() * 30 + 70
+        )}%`,
+        url: resume.cloudinaryUrl,
       };
 
       // Try Web Share API first (mobile devices)
@@ -193,10 +215,21 @@ File: ${resume.filename}
 Analysis Score: ${Math.floor(Math.random() * 30 + 70)}%
 
 Key Strengths:
-${resume.analysisResult?.strengths?.slice(0, 3).map(item => `• ${item}`).join('\n') || '• Strong technical skills\n• Good communication\n• Leadership experience'}
+${
+  resume.analysisResult?.strengths
+    ?.slice(0, 3)
+    .map((item) => `• ${item}`)
+    .join("\n") ||
+  "• Strong technical skills\n• Good communication\n• Leadership experience"
+}
 
 Areas for Improvement:
-${resume.analysisResult?.issues?.slice(0, 2).map(item => `• ${item}`).join('\n') || '• Add more quantifiable achievements\n• Improve formatting'}
+${
+  resume.analysisResult?.issues
+    ?.slice(0, 2)
+    .map((item) => `• ${item}`)
+    .join("\n") || "• Add more quantifiable achievements\n• Improve formatting"
+}
 
 Top Keywords: Leadership, JavaScript, Project Management, Communication
 
@@ -205,19 +238,23 @@ View full analysis: ${resume.cloudinaryUrl}
 
         await navigator.clipboard.writeText(analysisText);
       }
-      
+
       // Success feedback
-      button.classList.add('success');
+      button.classList.add("success");
       button.innerHTML = `
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        ${navigator.share && navigator.canShare(shareData) ? 'Shared!' : 'Copied!'}
+        ${
+          navigator.share && navigator.canShare(shareData)
+            ? "Shared!"
+            : "Copied!"
+        }
       `;
-      
+
       setTimeout(() => {
         button.disabled = false;
-        button.classList.remove('success');
+        button.classList.remove("success");
         button.innerHTML = `
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -230,11 +267,10 @@ View full analysis: ${resume.cloudinaryUrl}
           Share Analysis
         `;
       }, 2000);
-      
     } catch (error) {
-      console.error('Error sharing:', error);
-      alert('Failed to share. Please try again.');
-      
+      console.error("Error sharing:", error);
+      alert("Failed to share. Please try again.");
+
       // Reset button state
       button.disabled = false;
       button.innerHTML = `
@@ -400,7 +436,7 @@ View full analysis: ${resume.cloudinaryUrl}
                 </div>
               </div>
 
-                       {expandedRow === resume._id && (
+              {expandedRow === resume._id && (
                 <div className="row-details">
                   <div className="analysis-section">
                     <div className="analysis-block">
@@ -475,8 +511,8 @@ View full analysis: ${resume.cloudinaryUrl}
                           </svg>{" "}
                           Delete
                         </button>
-                        <button 
-                          className="download-btn" 
+                        <button
+                          className="download-btn"
                           onClick={(e) => {
                             e.stopPropagation();
                             handleDownload(resume);
@@ -501,8 +537,8 @@ View full analysis: ${resume.cloudinaryUrl}
                           </svg>{" "}
                           Download PDF
                         </button>
-                        <button 
-                          className="share-btn" 
+                        <button
+                          className="share-btn"
                           onClick={(e) => {
                             e.stopPropagation();
                             handleShare(resume);
@@ -536,14 +572,16 @@ View full analysis: ${resume.cloudinaryUrl}
               )}
             </div>
           ))}
-         
         </div>
       )}
 
       {/* PDF Viewer Modal */}
       {viewingPdf && (
         <div className="pdf-modal-overlay" onClick={closePdfViewer}>
-          <div className="pdf-modal-content" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="pdf-modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="pdf-modal-header">
               <h3>Resume Preview</h3>
               <button className="pdf-close-btn" onClick={closePdfViewer}>
@@ -591,32 +629,119 @@ View full analysis: ${resume.cloudinaryUrl}
       {/* Delete Confirmation Modal */}
       {deleteModal.show && (
         <div className="delete-modal-overlay" onClick={closeDeleteModal}>
-          <div className="delete-modal-content" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="delete-modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="modal-icon">
-              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="10" stroke="#ff4757" strokeWidth="2" fill="none" className="delete-circle"/>
-                <path d="M8 8l8 8" stroke="#ff4757" strokeWidth="2" strokeLinecap="round" className="delete-line-1"/>
-                <path d="M16 8l-8 8" stroke="#ff4757" strokeWidth="2" strokeLinecap="round" className="delete-line-2"/>
-                <path d="M12 6v12" stroke="#ff4757" strokeWidth="2" strokeLinecap="round" className="delete-vertical"/>
-                <path d="M6 12h12" stroke="#ff4757" strokeWidth="2" strokeLinecap="round" className="delete-horizontal"/>
+              <svg
+                width="64"
+                height="64"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="#ff4757"
+                  strokeWidth="2"
+                  fill="none"
+                  className="delete-circle"
+                />
+                <path
+                  d="M8 8l8 8"
+                  stroke="#ff4757"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  className="delete-line-1"
+                />
+                <path
+                  d="M16 8l-8 8"
+                  stroke="#ff4757"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  className="delete-line-2"
+                />
+                <path
+                  d="M12 6v12"
+                  stroke="#ff4757"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  className="delete-vertical"
+                />
+                <path
+                  d="M6 12h12"
+                  stroke="#ff4757"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  className="delete-horizontal"
+                />
               </svg>
             </div>
             <h3>Delete Resume</h3>
-            <p>Are you sure you want to delete <strong>"{deleteModal.filename}"</strong>?  <p>This action cannot be undone.</p> </p>
-          
+            <p>
+              Are you sure you want to delete{" "}
+              <strong>"{deleteModal.filename}"</strong>?{" "}
+              <p>This action cannot be undone.</p>{" "}
+            </p>
+
             <div className="modal-actions">
               <button className="cancel-btn" onClick={closeDeleteModal}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M18 6L6 18"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M6 6l12 12"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
                 Cancel
               </button>
               <button className="confirm-btn" onClick={handleDelete}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M3 6h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M3 6h18"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
                 Delete
               </button>
@@ -632,28 +757,81 @@ View full analysis: ${resume.cloudinaryUrl}
           <div className="notification-content">
             <div className="notification-icon">
               {notification.type === "success" ? (
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="12" cy="12" r="10" fill="#4CAF50"/>
-                  <path d="M9 12l2 2 4-4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle cx="12" cy="12" r="10" fill="#4CAF50" />
+                  <path
+                    d="M9 12l2 2 4-4"
+                    stroke="white"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               ) : (
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="12" cy="12" r="10" fill="#f44336"/>
-                  <path d="M15 9l-6 6" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-                  <path d="M9 9l6 6" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle cx="12" cy="12" r="10" fill="#f44336" />
+                  <path
+                    d="M15 9l-6 6"
+                    stroke="white"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M9 9l6 6"
+                    stroke="white"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
                 </svg>
               )}
             </div>
             <div className="notification-text">
               <div className="notification-title">
-                {notification.type === "success" ? "Success message" : "Error message"}
+                {notification.type === "success"
+                  ? "Success message"
+                  : "Error message"}
               </div>
               <div className="notification-message">{notification.message}</div>
             </div>
-            <button className="notification-close" onClick={() => setNotification({ show: false, message: "", type: "" })}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <button
+              className="notification-close"
+              onClick={() =>
+                setNotification({ show: false, message: "", type: "" })
+              }
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M18 6L6 18"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M6 6l12 12"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </button>
           </div>

@@ -1,34 +1,52 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import MCQView from './MCQView';
-import MCQTest from './MCQTest';
-import './MCQPopup.css';
+import React, { useState } from "react";
+import axios from "axios";
+import MCQView from "./MCQView";
+import MCQTest from "./MCQTest";
+import "./MCQPopup.css";
 
 const MCQPopup = ({ summaryText, pdfId, onClose }) => {
   const [mcqs, setMcqs] = useState(null);
   const [showQA, setShowQA] = useState(false);
-  
+
   const generateMCQs = async () => {
     try {
-      const res = await axios.post('/api/pdf/mcq', { summaryText });
+      console.log(localStorage.getItem("token"));
+      const res = await axios.post(
+        "/api/pdf/mcq",
+        { summaryText },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
       const parsed = parseMCQs(res.data.mcqs);
       setMcqs(parsed);
     } catch (err) {
-      console.error('MCQ Error:', err);
-      alert('Failed to generate MCQs');
+      console.error("MCQ Error:", err);
+      alert("Failed to generate MCQs");
     }
   };
 
   const saveMCQs = async () => {
     try {
-      await axios.post('/api/pdf/save-mcqs', {
-        pdfId,
-        mcqs,
-      });
-      alert('MCQs saved successfully!');
+      await axios.post(
+        "/api/pdf/save-mcqs",
+        { pdfId, mcqs },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      alert("MCQs saved successfully!");
     } catch (err) {
-      console.error('Save MCQs Error:', err);
-      alert('Failed to save MCQs');
+      console.error("Save MCQs Error:", err);
+      alert("Failed to save MCQs");
     }
   };
 
@@ -41,19 +59,26 @@ const MCQPopup = ({ summaryText, pdfId, onClose }) => {
             <button onClick={generateMCQs} className="mcq-popup__btn">
               Generate Now
             </button>
-            <button onClick={onClose} className="mcq-popup__close-btn">Close</button>
+            <button onClick={onClose} className="mcq-popup__close-btn">
+              Close
+            </button>
           </>
         ) : (
           <>
-            <button onClick={() => setShowQA(true)} className="mcq-popup__option">
+            <button
+              onClick={() => setShowQA(true)}
+              className="mcq-popup__option"
+            >
               View Q&A
             </button>
-            
+
             {showQA && <MCQView mcqs={mcqs} />}
             <button onClick={saveMCQs} className="mcq-popup__save-btn">
               Save MCQs to Database
             </button>
-            <button onClick={onClose} className="mcq-popup__close-btn">Close</button>
+            <button onClick={onClose} className="mcq-popup__close-btn">
+              Close
+            </button>
           </>
         )}
       </div>
@@ -66,11 +91,11 @@ function parseMCQs(mcqText) {
   const blocks = mcqText.split(/Q\d+\./g).filter(Boolean);
 
   blocks.forEach((block) => {
-    const lines = block.trim().split('\n');
+    const lines = block.trim().split("\n");
     const question = lines[0];
-    const options = lines.slice(1, 5).map(line => line.slice(3).trim());
-    const answerLine = lines.find(line => line.startsWith('Answer:'));
-    const answer = answerLine?.split('Answer:')[1]?.trim();
+    const options = lines.slice(1, 5).map((line) => line.slice(3).trim());
+    const answerLine = lines.find((line) => line.startsWith("Answer:"));
+    const answer = answerLine?.split("Answer:")[1]?.trim();
 
     if (question && options.length === 4 && answer) {
       mcqs.push({ question, options, answer });

@@ -120,3 +120,9 @@
   background-color: var(--accent-primary);
   color: var(--card-bg);
 }
+.tuf-theme-option-active {
+  background: var(--accent-primary);
+  color: var(--color-background);
+  font-weight: bold;
+  border-radius: 4px;
+}

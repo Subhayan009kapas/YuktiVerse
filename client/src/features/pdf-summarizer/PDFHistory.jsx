@@ -1,4 +1,4 @@
-import React, { useEffect, useState , useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import {
   FiFile,
@@ -10,7 +10,6 @@ import {
   FiSearch,
 } from "react-icons/fi";
 import "./PDFHistory.css";
-
 
 const cleanAndParseSummary = (summary) => {
   try {
@@ -32,10 +31,6 @@ const cleanAndParseSummary = (summary) => {
     return [];
   }
 };
-
-
-
-
 
 // PDF Modal Component
 const PDFModal = ({ url, onClose }) => {
@@ -82,7 +77,7 @@ const SummaryModal = ({ summary, onClose }) => {
         onClose();
       }
     };
-    
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose]);
@@ -95,14 +90,16 @@ const SummaryModal = ({ summary, onClose }) => {
             <div className="accent-bar"></div>
             <h3>Document Summary</h3>
             <div className="section-count">
-              {Array.isArray(summary) ? `${summary.length} Sections` : "No Sections"}
+              {Array.isArray(summary)
+                ? `${summary.length} Sections`
+                : "No Sections"}
             </div>
           </div>
           <button className="close-btn" onClick={onClose}>
             <FiX size={24} />
           </button>
         </div>
-        
+
         <div className="summary-modal-body">
           {Array.isArray(summary) ? (
             <SummaryAccordion summary={summary} />
@@ -113,7 +110,7 @@ const SummaryModal = ({ summary, onClose }) => {
             </div>
           )}
         </div>
-        
+
         <div className="summary-modal-footer">
           <button className="done-btn" onClick={onClose}>
             Close Summary
@@ -126,7 +123,7 @@ const SummaryModal = ({ summary, onClose }) => {
 
 // MCQ Modal Component
 
-import {    FiCheckCircle } from 'react-icons/fi';
+import { FiCheckCircle } from "react-icons/fi";
 
 const MCQModal = ({ mcqs, onClose }) => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -148,16 +145,16 @@ const MCQModal = ({ mcqs, onClose }) => {
             <FiX size={24} />
           </button>
         </div>
-        
+
         <div className="mcq-modal-body">
           {mcqs.length > 0 ? (
             <div className="mcq-accordion">
               {mcqs.map((q, i) => (
-                <div 
-                  key={i} 
-                  className={`mcq-item ${activeIndex === i ? 'active' : ''}`}
+                <div
+                  key={i}
+                  className={`mcq-item ${activeIndex === i ? "active" : ""}`}
                 >
-                  <div 
+                  <div
                     className="mcq-question-header"
                     onClick={() => toggleQuestion(i)}
                   >
@@ -169,33 +166,35 @@ const MCQModal = ({ mcqs, onClose }) => {
                       {activeIndex === i ? <FiChevronUp /> : <FiChevronDown />}
                     </span>
                   </div>
-                  
-                  <div 
-                    className={`mcq-content ${activeIndex === i ? 'open' : ''}`}
-                    style={{ maxHeight: activeIndex === i ? '500px' : '0' }}
+
+                  <div
+                    className={`mcq-content ${activeIndex === i ? "open" : ""}`}
+                    style={{ maxHeight: activeIndex === i ? "500px" : "0" }}
                   >
                     <div className="options-container">
                       <ul className="mcq-options">
                         {q.options.map((opt, idx) => (
                           <li
                             key={idx}
-                            className={`option ${idx === q.answer ? "correct" : ""}`}
+                            className={`option ${
+                              idx === q.answer ? "correct" : ""
+                            }`}
                           >
                             <div className="option-letter">
                               {String.fromCharCode(65 + idx)}
-                              {idx === q.answer && <FiCheck className="correct-icon" />}
+                              {idx === q.answer && (
+                                <FiCheck className="correct-icon" />
+                              )}
                             </div>
                             <div className="option-text">{opt}</div>
                           </li>
                         ))}
                       </ul>
-                      
+
                       <div className="answer-explanation">
                         <div className="answer-header">
                           <span>Correct Answer</span>
-                          <span className="correct-answer">
-                            {q.answer}
-                          </span>
+                          <span className="correct-answer">{q.answer}</span>
                         </div>
                         {q.explanation && (
                           <div className="explanation">
@@ -215,16 +214,16 @@ const MCQModal = ({ mcqs, onClose }) => {
             </div>
           )}
         </div>
-        
+
         <div className="mcq-modal-footer">
-          <button className="done-btn" onClick={onClose}>Done</button>
+          <button className="done-btn" onClick={onClose}>
+            Done
+          </button>
         </div>
       </div>
     </div>
   );
 };
-
-
 
 // Notification Component
 const Notification = ({ message, type, onClose }) => {
@@ -255,7 +254,12 @@ const PDFHistory = () => {
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const res = await axios.get("/api/pdf/history");
+        const res = await axios.get("/api/pdf/history", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
         console.log("Fetched documents:", res.data);
         setDocuments(res.data);
       } catch (err) {
@@ -280,7 +284,12 @@ const PDFHistory = () => {
     if (!window.confirm("Are you sure you want to delete this PDF?")) return;
 
     try {
-      await axios.delete(`/api/pdf/delete/${id}`);
+      await axios.delete(`/api/pdf/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
       setDocuments((prev) => prev.filter((doc) => doc._id !== id));
       showNotification("PDF deleted successfully", "success");
     } catch (err) {
@@ -470,13 +479,11 @@ const PDFHistory = () => {
       )}
 
       {activeModal === "summary" && activeDoc && (
-  <SummaryModal
-    summary={cleanAndParseSummary(activeDoc.summary)}
-    onClose={closeModal}
-  />
-)}
-
-
+        <SummaryModal
+          summary={cleanAndParseSummary(activeDoc.summary)}
+          onClose={closeModal}
+        />
+      )}
 
       {activeModal === "mcq" && activeDoc && (
         <MCQModal mcqs={activeDoc.mcqs} onClose={closeModal} />

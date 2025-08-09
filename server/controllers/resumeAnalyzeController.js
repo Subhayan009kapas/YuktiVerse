@@ -74,6 +74,7 @@ ${extractedText}
     return res.status(200).json({
       message: "Analysis complete",
       analysis: parsedJson,
+      userId: req.user._id,
       fileInfo: {
         filename: file.originalname,
         buffer: file.buffer.toString('base64'),

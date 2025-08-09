@@ -35,7 +35,10 @@ const ResumeFeedback = ({ feedback, resumeFile, onDatabaseSaveSuccess }) => {
       // Make API call to save to database
       const response = await fetch("http://localhost:5000/api/resume/save", {
         method: "POST",
-        body: formData, // Don't set Content-Type header, let browser set it for FormData
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`, // ✅ send token
+        },
+        body: formData,
       });
 
       if (!response.ok) {
@@ -124,7 +127,6 @@ const ResumeFeedback = ({ feedback, resumeFile, onDatabaseSaveSuccess }) => {
         <div className="feedback-title">
           <h4>
             {" "}
-            
             {title}
             {icon}
           </h4>
@@ -232,14 +234,10 @@ const ResumeFeedback = ({ feedback, resumeFile, onDatabaseSaveSuccess }) => {
     <div className={`resume-feedback-container ${isVisible ? "fade-in" : ""}`}>
       {/* Header Section */}
       <div className="feedback-header">
-        <div className="header-content"  id="header-content">
+        <div className="header-content" id="header-content">
           <h2>Resume Analysis Results</h2>
-        
-          
         </div>
-         
       </div>
-     
 
       {/* Progress Section */}
       <div className="feedback-progress">

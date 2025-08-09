@@ -28,6 +28,9 @@ app.get('/test-gemini', async (req, res) => {
   res.send(result);
 });
 
+import authRoutes from "./routes/auth.js";
+app.use("/api/auth", authRoutes);
+
 
 // routes for pdf summrizer
 import pdfRoutes from './routes/pdfRoutes.js';

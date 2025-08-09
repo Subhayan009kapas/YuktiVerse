@@ -90,17 +90,9 @@
 //   }
 // };
 
-// // save to cloud 
+// // save to cloud
 
-
-
-
-
-
-
-
-// // for fetch all the resumes 
-
+// // for fetch all the resumes
 
 // import Resume from '../models/Resume.js';
 // import { v2 as cloudinary } from 'cloudinary';
@@ -116,7 +108,7 @@
 //   try {
 //     const { GoogleGenerativeAI } = await import("@google/generative-ai");
 //     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    
+
 //     const pdfParse = (await import("pdf-parse")).default;
 //     const mammoth = await import("mammoth");
 //     const path = await import("path");
@@ -144,8 +136,8 @@
 //    // In your controller:
 // const cloudinaryResult = await new Promise((resolve) => {
 //   const stream = cloudinary.uploader.upload_stream(
-//     { 
-//       resource_type: 'auto', 
+//     {
+//       resource_type: 'auto',
 //       folder: 'resumes',
 //       // Add format preservation for PDFs
 //       format: 'pdf',
@@ -160,7 +152,7 @@
 //       }
 //     }
 //   );
-  
+
 //   // Convert buffer to stream properly
 //   const bufferStream = new stream.PassThrough();
 //   bufferStream.end(file.buffer);
@@ -192,7 +184,7 @@
 // """
 // ${extractedText}
 // """`;
-    
+
 //     const model = genAI.getGenerativeModel({
 //       model: "models/gemini-1.5-flash",
 //     });
@@ -221,14 +213,14 @@
 //       cloudinaryUrl: cloudinaryResult?.secure_url || "",
 //       analysisResult: parsedJson
 //     });
-    
+
 //     await newResume.save();
 
 //     return res.status(200).json({
 //       analysis: parsedJson,
 //       cloudinaryUrl: cloudinaryResult?.secure_url || "Upload failed but analysis completed"
 //     });
-    
+
 //   } catch (err) {
 //     console.error("❌ Resume processing error:", err);
 //     return res.status(500).json({
@@ -238,24 +230,16 @@
 //   }
 // };
 
+//exprimentnal
 
-
-
-
-
-
-
-
-//exprimentnal  
-
-import { v2 as cloudinary } from 'cloudinary';
-import Resume from '../models/Resume.js';
-import { PassThrough } from 'stream';
+import { v2 as cloudinary } from "cloudinary";
+import Resume from "../models/Resume.js";
+import { PassThrough } from "stream";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 export const saveResumeToDB = async (req, res) => {
@@ -267,7 +251,9 @@ export const saveResumeToDB = async (req, res) => {
 
     // Validate inputs
     if (!file || !analysis) {
-      return res.status(400).json({ message: "Missing resume file or analysis" });
+      return res
+        .status(400)
+        .json({ message: "Missing resume file or analysis" });
     }
 
     // ✅ Parse analysis from string to JSON object
@@ -275,7 +261,9 @@ export const saveResumeToDB = async (req, res) => {
     try {
       parsedAnalysis = JSON.parse(analysis);
     } catch (err) {
-      return res.status(400).json({ message: "Invalid JSON in analysis", error: err.message });
+      return res
+        .status(400)
+        .json({ message: "Invalid JSON in analysis", error: err.message });
     }
 
     const ext = path.extname(file.originalname).toLowerCase();
@@ -284,10 +272,10 @@ export const saveResumeToDB = async (req, res) => {
     const cloudinaryUpload = await new Promise((resolve) => {
       const stream = cloudinary.uploader.upload_stream(
         {
-          resource_type: 'auto',
-          folder: 'resumes',
-          format: ext === ".pdf" ? 'pdf' : undefined,
-          type: 'upload'
+          resource_type: "auto",
+          folder: "resumes",
+          format: ext === ".pdf" ? "pdf" : undefined,
+          type: "upload",
         },
         (error, result) => {
           if (error) {
@@ -306,9 +294,10 @@ export const saveResumeToDB = async (req, res) => {
 
     // ✅ Save to MongoDB
     const newResume = new Resume({
+      userId: req.user.id, // ✅ Associate with logged-in user
       filename: file.originalname,
       cloudinaryUrl: cloudinaryUpload?.secure_url || "",
-      analysisResult: parsedAnalysis,  // ✅ Save as proper object
+      analysisResult: parsedAnalysis,
     });
 
     await newResume.save();
@@ -318,7 +307,6 @@ export const saveResumeToDB = async (req, res) => {
       analysis: parsedAnalysis,
       cloudinaryUrl: cloudinaryUpload?.secure_url || "Upload failed",
     });
-
   } catch (err) {
     console.error("❌ Save resume error:", err);
     return res.status(500).json({
@@ -328,36 +316,43 @@ export const saveResumeToDB = async (req, res) => {
   }
 };
 
-
 // fetch all resume  from backend
 // In resumeController.js
 
 const getAllResumes = async (req, res) => {
   try {
-    const resumes = await Resume.find().sort({ createdAt: -1 });
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const resumes = await Resume.find({
+      userId: req.user.id, // only current user's data
+    }).sort({ createdAt: -1 });
+
     res.status(200).json({ resumes });
   } catch (err) {
     res.status(500).json({ message: "Error fetching resumes", error: err });
   }
 };
 
+
 // Export using ES module style
 export { getAllResumes };
 
-
-// delete 
+// delete
 
 const deleteResume = async (req, res) => {
   try {
-    const deleted = await Resume.findByIdAndDelete(req.params.id);
-    if (!deleted) return res.status(404).json({ message: "Not found" });
+    const deleted = await Resume.findOneAndDelete({
+      _id: req.params.id,
+      userId: req.user._id
+    });
+    if (!deleted) return res.status(404).json({ message: "Not found or not authorized" });
     res.status(200).json({ message: "Resume deleted" });
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err });
   }
 };
 
-export {  deleteResume };
 
-
-
+export { deleteResume };

@@ -40,9 +40,10 @@ const SummarySection = ({ summary, pdfFile, onSaveSuccess, pdfId }) => {
   const filteredTopics = useMemo(() => {
     return parsedSummary
       .map((topic, index) => ({ ...topic, originalIndex: index }))
-      .filter(topic => 
-        topic.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        topic.content.toLowerCase().includes(searchTerm.toLowerCase())
+      .filter(
+        (topic) =>
+          topic.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          topic.content.toLowerCase().includes(searchTerm.toLowerCase())
       );
   }, [parsedSummary, searchTerm]);
 
@@ -56,11 +57,19 @@ const SummarySection = ({ summary, pdfFile, onSaveSuccess, pdfId }) => {
   const generateMCQs = async () => {
     setGenerating(true);
     try {
-      const rawTextSummary = parsedSummary.map(item => 
-        `${item.title}\n${item.content}`
-      ).join('\n\n');
-      
-      const res = await axios.post("/api/pdf/mcq", { summaryText: rawTextSummary });
+      const rawTextSummary = parsedSummary
+        .map((item) => `${item.title}\n${item.content}`)
+        .join("\n\n");
+
+      const res = await axios.post(
+        "/api/pdf/mcq",
+        { summaryText: rawTextSummary },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
       const parsed = parseMCQs(res.data.mcqs);
       setMcqs(parsed);
       setShowMCQs(true);
@@ -79,7 +88,22 @@ const SummarySection = ({ summary, pdfFile, onSaveSuccess, pdfId }) => {
     formData.append("mcqs", JSON.stringify(mcqs));
 
     try {
-      const res = await axios.post("/api/pdf/save-all", formData);
+      const token = localStorage.getItem("token");
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      console.log("Expires:", new Date(payload.exp * 1000));
+      console.log("Now:", new Date());
+
+      const res = await axios.post(
+        "http://localhost:5000/api/pdf/save-all",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
       alert("PDF, summary, and MCQs saved.");
       onSaveSuccess(res.data.pdfId);
     } catch (err) {
@@ -109,20 +133,29 @@ const SummarySection = ({ summary, pdfFile, onSaveSuccess, pdfId }) => {
   };
 
   // Get current topic to display
-  const currentTopic = parsedSummary[selectedTopicIndex] || 
+  const currentTopic =
+    parsedSummary[selectedTopicIndex] ||
     (parsedSummary.length > 0 ? parsedSummary[0] : null);
 
   return (
     <div className="summary-section" ref={summaryRef}>
       <div className="section-header">
         <h1 className="section-title">Document Summary</h1>
-        <p className="section-subtitle">Comprehensive overview of key concepts</p>
+        <p className="section-subtitle">
+          Comprehensive overview of key concepts
+        </p>
       </div>
 
       <div className="search-container">
         <div className="search-bar">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+          >
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
           </svg>
           <input
             type="text"
@@ -139,12 +172,16 @@ const SummarySection = ({ summary, pdfFile, onSaveSuccess, pdfId }) => {
           <div className="sidebar-header">
             <h3>Topics</h3>
           </div>
-          
+
           <div className="topics-list">
             {filteredTopics.map((topic) => (
-              <div 
-                key={topic.originalIndex} 
-                className={`topic-item ${selectedTopicIndex === topic.originalIndex ? 'active-topic' : ''}`}
+              <div
+                key={topic.originalIndex}
+                className={`topic-item ${
+                  selectedTopicIndex === topic.originalIndex
+                    ? "active-topic"
+                    : ""
+                }`}
                 onClick={() => handleTopicSelect(topic.originalIndex)}
               >
                 <div className="topic-number">{topic.originalIndex + 1}</div>
@@ -161,12 +198,18 @@ const SummarySection = ({ summary, pdfFile, onSaveSuccess, pdfId }) => {
               <h2>Document Summary</h2>
               <p>AI-generated key points from your document</p>
             </div>
-            
+
             <div className="action-buttons">
               <button className="copy-btn" onClick={copyToClipboard}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                  <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
-                  <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z" />
+                  <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z" />
                 </svg>
                 Copy Summary
               </button>
@@ -175,15 +218,21 @@ const SummarySection = ({ summary, pdfFile, onSaveSuccess, pdfId }) => {
                 disabled={generating}
                 className="mcq-btn"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                  <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
-                  <path d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 8zm0 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5z"/>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z" />
+                  <path d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 8zm0 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5z" />
                 </svg>
                 {generating ? "Generating..." : "Generate MCQs"}
               </button>
             </div>
           </div>
-          
+
           {/* Topic View */}
           {currentTopic ? (
             <div className="topic-view">
@@ -191,18 +240,23 @@ const SummarySection = ({ summary, pdfFile, onSaveSuccess, pdfId }) => {
                 <div className="topic-badge">{selectedTopicIndex + 1}</div>
                 <h3 className="topic-title">{currentTopic.title}</h3>
               </div>
-             <div className="topic-content">
-  {currentTopic.content.split('\n').map((line, i) => (
-    <p key={i}>{line}</p>
-  ))}
-</div>
-
+              <div className="topic-content">
+                {currentTopic.content.split("\n").map((line, i) => (
+                  <p key={i}>{line}</p>
+                ))}
+              </div>
             </div>
           ) : (
             <div className="no-topics">
-              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="48"
+                height="48"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z" />
               </svg>
               <h3>No topics available</h3>
               <p>Please upload a document to generate a summary</p>
@@ -218,11 +272,7 @@ const SummarySection = ({ summary, pdfFile, onSaveSuccess, pdfId }) => {
             <button className="modal-close" onClick={() => setShowMCQs(false)}>
               &times;
             </button>
-            <MCQView
-              mcqs={mcqs}
-              onSave={handleSaveAll}
-              saving={saving}
-            />
+            <MCQView mcqs={mcqs} onSave={handleSaveAll} saving={saving} />
           </div>
         </div>
       )}

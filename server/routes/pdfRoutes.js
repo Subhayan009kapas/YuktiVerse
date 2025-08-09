@@ -1,23 +1,25 @@
 import express from 'express';
 import multer from 'multer';
 import { summarizePDF, generateMCQs, getAllPDFHistory, deletePdfById } from '../controllers/pdfController.js';
-
 import { savePdfAllData } from '../controllers/savePdfAllData.js';
+import auth from '../middlewares/auth.js'; // ✅ Import authentication middleware
+
 const router = express.Router();
 const upload = multer();
 
-// Existing routes
-router.post('/summarize', upload.single('pdf'), summarizePDF);
-router.post('/mcq', generateMCQs);
+// ✅ Protected routes — user must be logged in
+router.post('/summarize', auth, upload.single('pdf'), summarizePDF);
+router.post('/mcq', auth, generateMCQs);
+
+// ✅ Save all PDF data linked to logged-in user
+router.post('/save-all', upload.single('pdf'), auth, savePdfAllData);
 
 
-// New route to save all PDF data
-router.post('/save-all', upload.single('pdf'), savePdfAllData);
 
-// New route to get all PDF history
-router.get('/history', getAllPDFHistory);
+// ✅ Get only the logged-in user's history
+router.get('/history', auth, getAllPDFHistory);
 
-// delete route for PDF by ID
-router.delete('/delete/:id', deletePdfById);
+// ✅ Delete only if it belongs to the logged-in user
+router.delete('/delete/:id', auth, deletePdfById);
 
 export default router;

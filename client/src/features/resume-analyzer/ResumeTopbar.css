@@ -26,4 +26,79 @@
 .resume-avatar {
   border-radius: 50%;
   border: 2px solid var(--accent-primary);
+   width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.resume-avatar-fallback{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--accent-primary);
+  color: var(--black);
+  font-weight: bold;
+}
+
+.resume-avatar-wrapper {
+  position: relative;
+}
+
+.resume-avatar-menu {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background: rgba(30, 30, 30, 0.95);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px;
+  min-width: 200px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  z-index: 100;
+  animation: fadeIn 0.15s ease-in-out;
+}
+
+.resume-avatar-menu p {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary, #ffffff);
+}
+
+.menu-divider {
+  margin: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.resume-avatar-menu button {
+  width: 100%;
+  background: transparent;
+  color: var(--color-danger, #ff4d4f);
+  font-weight: 500;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s ease;
+}
+
+.resume-avatar-menu button:hover {
+  background: rgba(255, 77, 79, 0.15);
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
