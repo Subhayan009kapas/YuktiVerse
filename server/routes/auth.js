@@ -86,4 +86,28 @@ router.get("/me", auth, async (req, res) => {
   }
 });
 
+
+// PUT /api/auth/update
+router.put("/update", auth, async (req, res) => {
+  try {
+    const { name, email, pic } = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      { name, email, pic },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(updatedUser);
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
 export default router;

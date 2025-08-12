@@ -1,4 +1,4 @@
-.login-page-container {
+.register-page-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -6,22 +6,21 @@
   background: var(--body-bg);
   background-image: var(--radial-light-green), var(--radial-light-cyan), var(--overlay-pattern);
   background-size: cover;
-  overflow: hidden;
 }
 
-.login-card {
+.register-card {
   background: var(--popup-bg);
   border: 1px solid var(--border-accent);
   box-shadow: var(--shadow-primary), var(--shadow-secondary);
   padding: 2rem;
   border-radius: 16px;
-  width: 360px;
+  width: 380px;
   text-align: center;
   backdrop-filter: blur(12px);
   animation: fadeIn 0.6s ease-in-out;
 }
 
-.login-title {
+.register-title {
   margin-bottom: 0.3rem;
   color: var(--accent-primary);
   font-size: 1.8rem;
@@ -31,19 +30,19 @@
   -webkit-text-fill-color: transparent;
 }
 
-.login-subtitle {
+.register-subtitle {
   margin-bottom: 1.5rem;
   color: var(--text-secondary);
   font-size: 0.95rem;
 }
 
-.login-form {
+.register-form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.login-input {
+.register-input {
   padding: 12px;
   background: var(--color-surface-light);
   border: 1px solid var(--search-border);
@@ -54,12 +53,12 @@
   transition: border 0.3s ease, box-shadow 0.3s ease;
 }
 
-.login-input:focus {
+.register-input:focus {
   border: 1px solid var(--accent-primary);
   box-shadow: 0 0 10px var(--accent-primary);
 }
 
-.login-btn {
+.register-btn {
   padding: 12px;
   background: var(--gradient-accent);
   color: var(--text-on-primary);
@@ -72,25 +71,25 @@
   transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
 
-.login-btn:hover {
+.register-btn:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-submit-hover);
 }
 
-.login-footer {
+.register-footer {
   margin-top: 1.5rem;
   font-size: 0.9rem;
   color: var(--text-secondary);
 }
 
-.login-register-link {
+.register-login-link {
   color: var(--accent-primary);
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s ease;
 }
 
-.login-register-link:hover {
+.register-login-link:hover {
   color: var(--secondary-accent);
   text-decoration: underline;
 }

@@ -6,27 +6,30 @@ import { useNavigate } from "react-router-dom";
 const ResumeTopbar = () => {
   const [user, setUser] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [editUser, setEditUser] = useState({});
   const menuRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) return;
-
-        const res = await axios.get("http://localhost:5000/api/auth/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        setUser(res.data);
-      } catch (err) {
-        console.error("Error fetching user data:", err);
-      }
-    };
-
     fetchUserData();
   }, []);
+
+  const fetchUserData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const res = await axios.get("http://localhost:5000/api/auth/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setUser(res.data);
+      setEditUser(res.data);
+    } catch (err) {
+      console.error("Error fetching user data:", err);
+    }
+  };
 
   // Close menu on outside click
   useEffect(() => {
@@ -44,11 +47,22 @@ const ResumeTopbar = () => {
     navigate("/login");
   };
 
+  const handleUpdate = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.put("http://localhost:5000/api/auth/update", editUser, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setUser(editUser);
+      setIsProfileOpen(false);
+    } catch (err) {
+      console.error("Error updating profile:", err);
+    }
+  };
+
   const getAvatarContent = () => {
     if (user?.pic) {
-      return (
-        <img src={user.pic} alt="User Avatar" className="resume-avatar" />
-      );
+      return <img src={user.pic} alt="User Avatar" className="resume-avatar" />;
     }
     if (user?.email) {
       return (
@@ -67,49 +81,93 @@ const ResumeTopbar = () => {
   };
 
   return (
-    <div className="resume-topbar">
-      <div className="resume-topbar-title">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="30"
-          height="30"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="icon icon-tabler icons-tabler-outline icon-tabler-brain"
-        >
-          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-          <path d="M15.5 13a3.5 3.5 0 0 0 -3.5 3.5v1a3.5 3.5 0 0 0 7 0v-1.8" />
-          <path d="M8.5 13a3.5 3.5 0 0 1 3.5 3.5v1a3.5 3.5 0 0 1 -7 0v-1.8" />
-          <path d="M17.5 16a3.5 3.5 0 0 0 0 -7h-.5" />
-          <path d="M19 9.3v-2.8a3.5 3.5 0 0 0 -7 0" />
-          <path d="M6.5 16a3.5 3.5 0 0 1 0 -7h.5" />
-          <path d="M5 9.3v-2.8a3.5 3.5 0 0 1 7 0v10" />
-        </svg>{" "}
-        YuktiVerse Resume Analyzer
-      </div>
-
-      {/* Avatar + Menu */}
-      <div className="resume-avatar-wrapper" ref={menuRef}>
-        <div
-          className="resume-topbar-avatar"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          {getAvatarContent()}
+    <>
+      <div className="resume-topbar">
+        <div className="resume-topbar-title">
+          {/* Icon */}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="30"
+            height="30"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="icon icon-tabler-brain"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M15.5 13a3.5 3.5 0 0 0 -3.5 3.5v1a3.5 3.5 0 0 0 7 0v-1.8" />
+            <path d="M8.5 13a3.5 3.5 0 0 1 3.5 3.5v1a3.5 3.5 0 0 1 -7 0v-1.8" />
+            <path d="M17.5 16a3.5 3.5 0 0 0 0 -7h-.5" />
+            <path d="M19 9.3v-2.8a3.5 3.5 0 0 0 -7 0" />
+            <path d="M6.5 16a3.5 3.5 0 0 1 0 -7h.5" />
+            <path d="M5 9.3v-2.8a3.5 3.5 0 0 1 7 0v10" />
+          </svg>{" "}
+          YuktiVerse Resume Analyzer
         </div>
 
-        {isMenuOpen && (
-          <div className="resume-avatar-menu">
-            <p>{user?.name || user?.email}</p>
-            <div className="menu-divider"></div>
-            <button onClick={handleLogout}>Logout</button>
+        {/* Avatar + Menu */}
+        <div className="resume-avatar-wrapper" ref={menuRef}>
+          <div
+            className="resume-topbar-avatar"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {getAvatarContent()}
           </div>
-        )}
+
+          {isMenuOpen && (
+            <div className="resume-avatar-menu">
+              <p
+                className="user-name-click"
+                onClick={() => {
+                  setIsProfileOpen(true);
+                  setIsMenuOpen(false);
+                }}
+              >
+                {user?.name || user?.email}
+              </p>
+              <div className="menu-divider"></div>
+              <button onClick={handleLogout}>Logout</button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Fullscreen Profile Popup */}
+      {isProfileOpen && (
+  <div className="profile-popup-overlay">
+    <div className="profile-popup-card">
+      <button
+        className="profile-popup-close"
+        onClick={() => setIsProfileOpen(false)}
+      >
+        ✕
+      </button>
+
+      <div className="profile-header">
+        <img
+          className="profile-avatar"
+          src={user?.pic || "https://i.pravatar.cc/150"}
+          alt="Avatar"
+        />
+        <div>
+          <h2 className="profile-name">{user?.name || "N/A"}</h2>
+          <p className="profile-email">{user?.email || "N/A"}</p>
+        </div>
+      </div>
+
+      <div className="profile-divider"></div>
+
+      <div className="profile-details">
+        <p><strong>Profile Picture URL:</strong> {user?.pic || "N/A"}</p>
       </div>
     </div>
+  </div>
+)}
+
+    </>
   );
 };
 

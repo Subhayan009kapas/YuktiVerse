@@ -39,9 +39,16 @@ app.use('/api/pdf', pdfRoutes);
 
 // resume analysis
 
+
+
 // const resumeRoutes = require('./routes/resumeRoutes');
 import resumeRoutes from './routes/resumeRoutes.js';
 
 app.use('/api/resume', resumeRoutes);
 
+
+import testRoutes from "./routes/testRoutes.js"; // <-- Path must be correct
+
+// ... after app = express()
+app.use("/api", testRoutes);
 

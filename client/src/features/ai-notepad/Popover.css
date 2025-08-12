@@ -1,0 +1,296 @@
+ :root { /* Additional modern variables */
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --shadow-dark: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 8px 32px rgba(0, 0, 0, 0.15);
+  --shadow-heavy: 0 16px 48px rgba(0, 0, 0, 0.2);
+  --blur: blur(16px);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+/* Modern Button Styles */
+.text-box-buttons {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.text-box-container:hover .text-box-buttons,
+.text-box-container.active .text-box-buttons {
+  opacity: 1;
+}
+
+.delete-button,
+.ai-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  transition: var(--transition);
+  backdrop-filter: var(--blur);
+  box-shadow: var(--shadow-dark);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Modern AI Button */
+.ai-button {
+  position: relative;
+  overflow: hidden;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary);
+  color: white;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow:
+    -2px -2px 4px rgba(255, 255, 255, 0.04),
+    2px 2px 8px rgba(0, 0, 0, 0.3),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.05),
+    inset 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Shine overlay for infinite animation */
+.ai-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.25),
+    transparent
+  );
+  animation: shine 2s infinite;
+}
+
+/* Slight breathing effect */
+.ai-button {
+  animation: pulseScale 4s infinite ease-in-out;
+}
+
+/* Shine animation keyframes */
+@keyframes shine {
+  0% {
+    left: -150%;
+  }
+  60% {
+    left: 100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Optional pulse effect for subtle life */
+@keyframes pulseScale {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+
+/* Modern Delete Button */
+.delete-button {
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+  font-size: 18px;
+  line-height: 1;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.delete-button:hover {
+  background: var(--danger);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Modern AI Popover Card */
+.ai-popover {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 12px;
+  width: 350px;
+  max-width: 90vw;
+  backdrop-filter: blur(10px);
+  background: var(--glass-bg);
+  border-radius: 20px;
+  box-shadow: var(--shadow-heavy);
+  border: 1px solid var(--dark-border);
+  z-index: 100;
+  opacity: 0;
+  transform: translateY(-10px) scale(0.95);
+  animation: popoverAppear 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  overflow: hidden;
+}
+
+@keyframes popoverAppear {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.ai-popover::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  right: 20px;
+  width: 16px;
+  height: 16px;
+  background: var(--dark-card);
+  border: 1px solid var(--dark-border);
+  border-bottom: none;
+  border-right: none;
+  transform: rotate(45deg);
+  z-index: -1;
+}
+
+.ai-popover-header {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+}
+
+.ai-icon {
+  width: 20px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.ai-popover-content {
+  padding: 20px;
+  color: var(--dark-text);
+  line-height: 1.6;
+}
+
+.ai-summary {
+  font-size: 14px;
+  /* margin-bottom: 16px; */
+  color: var(--dark-text);
+}
+
+.ai-insights {
+  background: var(--dark-bg);
+  border-radius: 12px;
+  padding: 16px;
+  border-left: 4px solid var(--primary);
+}
+
+.ai-insights-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.ai-insights-text {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.ai-popover-footer {
+  padding: 16px 20px;
+  background: var(--dark-bg);
+  border-top: 1px solid var(--dark-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ai-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.ai-action-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.ai-action-btn.primary {
+  background: var(--primary);
+  color: white;
+}
+
+.ai-action-btn.secondary {
+  background: var(--glass-border);
+  color: var(--dark-text);
+  border: 1px solid var(--dark-border);
+}
+
+.ai-action-btn:hover {
+  transform: translateY(-1px);
+}
+
+.ai-powered {
+  font-size: 10px;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ai-powered::before {
+  content: '✨';
+  font-size: 12px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ai-popover {
+    width: 320px;
+    right: -20px;
+  }
+  
+  .ai-popover::before {
+    right: 40px;
+  }
+}

@@ -1,0 +1,100 @@
+
+.rp-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.rp-modal {
+  background-color: var(--dark-card);
+  color: var(--dark-text);
+  border: 1px solid var(--dark-border);
+  border-radius: 8px;
+  padding: 24px;
+  width: 320px;
+  max-width: 90%;
+  position: relative;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark .rp-modal {
+  background-color: var(--dark-card);
+  color: var(--dark-text);
+  border-color: var(--dark-border);
+}
+
+.rp-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: inherit;
+}
+
+.rp-title {
+  margin: 0 0 16px;
+  font-size: 1.25rem;
+}
+
+.rp-input {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 1rem;
+  color: var(--dark-text);
+  border: 1px solid var(--dark-border);
+  border-radius: 4px;
+  margin-bottom: 20px;
+  transition: border-color 0.2s;
+}
+
+body.dark .rp-input {
+  background: var(--dark-card);
+  color: var(--dark-text);
+  border-color: var(--light-border);
+}
+
+.rp-input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.rp-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.rp-btn {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+}
+
+.rp-ok {
+  background-color: var(--primary);
+  color: white;
+}
+
+.rp-ok:hover {
+  background-color: var(--primary-light);
+}
+
+.rp-cancel {
+  background-color: var(--light-border);
+  color: var(--light-text);
+}
+
+.rp-cancel:hover {
+  background-color: var(--danger);
+  color: white;
+}

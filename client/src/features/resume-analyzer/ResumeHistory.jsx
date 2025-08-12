@@ -68,14 +68,14 @@ const ResumeHistory = () => {
 
   const handleDelete = async () => {
     const { resumeId } = deleteModal;
+    console.log("Resume ID:", resumeId);
 
     try {
+      console.log(localStorage.getItem("token"));
       await axios.delete(
         `http://localhost:5000/api/resume/delete/${resumeId}`,
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // ✅ send JWT token
-          },
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
 
@@ -87,6 +87,13 @@ const ResumeHistory = () => {
       showNotification("Resume deleted successfully!", "success");
     } catch (err) {
       closeDeleteModal();
+      console.error("Delete failed with details:", {
+      status: err.response?.status,
+      data: err.response?.data,
+      config: err.config,
+    });
+    
+    showNotification("Failed to delete resume. Please try again.", "error");
       showNotification("Failed to delete resume. Please try again.", "error");
       console.error(err);
     }
@@ -314,8 +321,10 @@ View full analysis: ${resume.cloudinaryUrl}
           </div>
 
           {resumes.map((resume) => (
+            
             <div
               key={resume._id}
+              
               className={`resume-row ${
                 expandedRow === resume._id ? "expanded" : ""
               }`}

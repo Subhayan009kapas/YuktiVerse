@@ -1,7 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-import "./Login.css"; // ✅ dedicated styling for login
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./Login.css";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -13,18 +15,31 @@ export default function Login() {
     try {
       const res = await axios.post("/api/auth/login", { email, password });
       localStorage.setItem("token", res.data.token);
-      alert("Logged in successfully");
-      navigate("/ResumeAnalyzer");
+
+      toast.success("✅ Logged in successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+        theme: "dark",
+      });
+
+      setTimeout(() => {
+        navigate("/ResumeAnalyzer");
+      }, 800);
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "Login failed");
+      toast.error(err.response?.data?.message || "❌ Login failed", {
+        position: "top-right",
+        autoClose: 3000,
+        theme: "dark",
+      });
     }
   };
 
   return (
     <div className="login-page-container">
       <div className="login-card">
-        <h2 className="login-title">Login</h2>
+        <h2 className="login-title">Welcome Back</h2>
+        <p className="login-subtitle">Sign in to continue</p>
         <form onSubmit={handleLogin} className="login-form">
           <input
             className="login-input"
@@ -42,7 +57,9 @@ export default function Login() {
             placeholder="Password"
             required
           />
-          <button type="submit" className="login-btn">Login</button>
+          <button type="submit" className="login-btn">
+            Login
+          </button>
         </form>
         <p className="login-footer">
           Don’t have an account?{" "}

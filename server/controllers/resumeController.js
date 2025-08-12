@@ -335,24 +335,35 @@ const getAllResumes = async (req, res) => {
   }
 };
 
-
 // Export using ES module style
 export { getAllResumes };
 
 // delete
 
-const deleteResume = async (req, res) => {
+// Update the deleteResume function
+// In resumeController.js
+// controllers/resumeController.js
+
+export const deleteResume = async (req, res) => {
+  console.log("🗑 Delete request for ID:", req.params.id);
+  console.log("🧍 Authenticated user ID:", req.user?._id);
+
   try {
     const deleted = await Resume.findOneAndDelete({
       _id: req.params.id,
       userId: req.user._id
     });
-    if (!deleted) return res.status(404).json({ message: "Not found or not authorized" });
-    res.status(200).json({ message: "Resume deleted" });
+
+    if (!deleted) {
+      console.log("⚠️ Resume not found for this user");
+      return res.status(404).json({ message: "Not found or not authorized" });
+    }
+
+    console.log("✅ Resume deleted:", deleted.filename);
+    res.status(200).json({ message: "Resume deleted successfully" });
   } catch (err) {
-    res.status(500).json({ message: "Server error", error: err });
+    console.error("❌ Delete error:", err);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
-
-export { deleteResume };

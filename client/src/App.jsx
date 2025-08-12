@@ -7,13 +7,22 @@ import Login from "./Authentication/Login";
 import Register from "./Authentication/Register";
 
 import ProtectedRoute from "./components/ProtectedRoute";
+import LandingPage from "./LandingPage/LandingPage";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const App = () => {
   return (
+    <>
+
     <Router>
       <Routes>
         {/* Redirect root to login */}
-        <Route path="/" element={<Navigate to="/login" />} />
+        {/* <Route path="/" element={<Navigate to="/login" />} /> */}
+        <Route path="/" element={<LandingPage />} />
+
+        {/* Public Routes */}
 
         {/* Auth Routes */}
         <Route path="/login" element={<Login />} />
@@ -41,6 +50,13 @@ const App = () => {
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>
+
+      <ToastContainer position="top-right" autoClose={3000}
+     
+       />
+    
+    </>
+    
   );
 };
 
