@@ -1,4 +1,4 @@
-// NewModal.jsx
+// AcademicUploader_Modal.jsx
 import React, { useState, useEffect } from "react";
 const backendURL = import.meta.env.VITE_BACKEND_URL;
 import {
@@ -12,26 +12,26 @@ import {
 } from "react-icons/fa";
 import FileUploader from "./FileUploader";
 import axios from "axios";
-import "./NewModal.css";
+import "./AcademicUploader_Modal.css";
 import { toast } from "react-toastify";
 
-export default function NewModal({
+export default function AcademicUploader_Modal({
   onClose,
-  onUploadFile,
+  // onUploadFile,
   onFilesUploaded,
   onCreateNotebook,
   // oncreated,
   selectedChapterId,
 }) {
   const [showNotebookForm, setShowNotebookForm] = useState(false);
-  const [showModal, setShowModal] = useState(true);
+  // const [showModal, setShowModal] = useState(true);
   const [notebookName, setNotebookName] = useState("");
   const [textBoxes, setTextBoxes] = useState([]);
   const [isSaving, setIsSaving] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [showUploader, setShowUploader] = useState(false);
-const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   // Animation effect on mount
   useEffect(() => {
     setIsVisible(true);
@@ -42,13 +42,24 @@ const token = localStorage.getItem('token');
     setTimeout(() => onClose(), 300);
   };
 
+  const handleBatchUpload = async (filesToUpload) => {
+    console.log("Uploading batch of files:", filesToUpload);
+    // Assuming onFilesUploaded can handle an array or you can loop here
+    // For now, let's pass them one-by-one using the existing prop
+    for (const fileData of filesToUpload) {
+      // The parent's prop is onFilesUploaded(file, title)
+      await onFilesUploaded(fileData.file, fileData.name);
+    }
+    toast.success(`${filesToUpload.length} file(s) uploaded successfully!`);
+  };
+
   const createNotebook = async () => {
     if (!notebookName.trim()) {
-      toast.warning("Enter a Name");
+      toast.warning("Enter a name");
       return;
     }
     if (!selectedChapterId) {
-      toast.warning("Enter a Name");
+      toast.warning("Please Select Chapter");
       return;
     }
 
@@ -72,11 +83,11 @@ const token = localStorage.getItem('token');
       );
       onCreateNotebook(newNotebook);
       setNotebookName("");
-      setTextBoxes([]);
+      // setTextBoxes([]);
 
       toast.success("Notebook Created");
       setShowNotebookForm(false);
-      setShowModal(false);
+      // setShowModal(false);
     } catch (err) {
       console.error(
         "Failed to create notebook:",
@@ -91,80 +102,61 @@ const token = localStorage.getItem('token');
     }
   };
 
-  const handleFileUpload = (file, title) => {
-    // onUploadFile(file, title );
-    onFilesUploaded(file, title);
-    handleClose();
-  };
+  // const handleFileUpload = (file, title) => {
+  //   // onUploadFile(file, title );
+  //   onFilesUploaded(file, title);
+  //   handleClose();
+  // };
 
   return (
     <>
-      {showModal && (
+      {/* {showModal && ( */}
         <div
-          className={`modal-backdrop ${isVisible ? "visible" : ""} ${
-            isClosing ? "closing" : ""
+          className={`acd-modal-backdrop ${isVisible ? "acd-visible" : ""} ${
+            isClosing ? "acd-closing" : ""
           }`}
-          onClick={handleClose}
+          onClick={() => !showUploader && handleClose()}
         >
           <div
-            className={`modal ${isVisible ? "visible" : ""}`}
+            className={`acd-modal ${isVisible ? "acd-visible" : ""}`}
             onClick={(e) => e.stopPropagation()}
           >
-            <button className="close-btn-mod" onClick={handleClose}>
-              <FaTimes />
-            </button>
+            {!showUploader && (
+              <button className="acd-close-btn-mod" onClick={handleClose}>
+                <FaTimes />
+              </button>
+            )}
 
-            <div className="modal-header"></div>
+            <div className="acd-modal-header"></div>
 
-            <div className="modal-actions">
+            <div className="acd-modal-actions">
               {/* <label className="action-card upload-card image"> */}
               <button
-                className="action-card upload-card"
+                className="acd-action-card acd-upload-card"
                 onClick={() => setShowUploader(true)}
               >
-                <div className="card-icon">
+                <div className="acd-card-icon">
                   <FaUpload />
                 </div>
-                <div className="card-content">
+                <div className="acd-card-content">
                   <h4>Advanced Uploader</h4>
                   <p>Use the drag & drop uploader</p>
                 </div>
-                <div className="card-arrow">→</div>
+                <div className="acd-card-arrow">→</div>
               </button>
-              {/* 
-              <button className="action-card upload-card image">
-                <div className="card-icon">
-                  <FaImage />
-                </div>
-                <div className="card-content">
-                  <h4>Upload Image</h4>
-                  <p>Add images to your collection</p>
-                </div>
-                <div className="card-arrow">→</div>
-                <input
-                  type="file"
-                  accept="image/*"
-                  // accept="application/pdf"
-                  hidden
-                  onChange={(e) =>
-                    handleFileUpload(e.target.files[0], e.target.value)
-                  }
-                />
-              </button> */}
-              {/* </label> */}
 
               <button
-                className="action-card notebook-card"
+                className="acd-action-card acd-notebook-card"
                 onClick={() => setShowNotebookForm(true)}
               >
-                <div className="card-icon">
+                <div className="acd-card-icon">
                   <FaStickyNote />
                 </div>
-                <div className="card-content">
+                <div className="acd-card-content">
                   <h4>New Notebook</h4>
                   <p>Create a blank notebook</p>
                 </div>
-                <div className="card-arrow">→</div>
+                <div className="acd-card-arrow">→</div>
               </button>
             </div>
           </div>
@@ -172,24 +164,24 @@ const token = localStorage.getItem('token');
           {/* Notebook Form Modal */}
           {showNotebookForm && (
             <div
-              className={`modal-overlay notebook-form-overlay ${
-                showNotebookForm ? "visible" : ""
+              className={`acd-modal-overlay acd-notebook-form-overlay ${
+                showNotebookForm ? "acd-visible" : ""
               }`}
               onClick={() => setShowNotebookForm(false)}
             >
               <div
-                className="modal-content notebook-form"
+                className="acd-modal-content acd-notebook-form"
                 onClick={(e) => e.stopPropagation()}
               >
                 <button
-                  className="close-btn-mod"
+                  className="acd-close-btn-mod"
                   onClick={() => setShowNotebookForm(false)}
                 >
                   <FaTimes />
                 </button>
 
-                <div className="form-content">
-                  <div className="input-group">
+                <div className="acd-form-content">
+                  <div className="acd-input-group">
                     <label>Notebook Name</label>
                     <input
                       type="text"
@@ -197,25 +189,25 @@ const token = localStorage.getItem('token');
                       value={notebookName}
                       onChange={(e) => setNotebookName(e.target.value)}
                       autoFocus
-                      className="modern-input"
+                      className="acd-modern-input"
                     />
                   </div>
 
-                  <div className="form-actions">
+                  <div className="acd-form-actions">
                     <button
-                      className="btn-secondary"
+                      className="acd-btn-secondary"
                       onClick={() => setShowNotebookForm(false)}
                     >
                       Cancel
                     </button>
                     <button
-                      className="btn-primary"
+                      className="acd-btn-primary"
                       onClick={createNotebook}
                       disabled={!notebookName.trim() || isSaving}
                     >
                       {isSaving ? (
                         <>
-                          <div className="spinner"></div>
+                          <div className="acd-spinner"></div>
                           Creating...
                         </>
                       ) : (
@@ -233,17 +225,14 @@ const token = localStorage.getItem('token');
 
           {showUploader && (
             <FileUploader
-              onFilesUploaded={(files) => {
-                files.forEach((fileData) => {
-                  onUploadFile(fileData.file, fileData.name, selectedChapterId); // or use custom title logic
-                });
-                setShowUploader(false);
-                handleClose(); // optionally close modal
+              onFilesUploaded={handleBatchUpload}
+              onClose={() => {
+                setShowUploader(false); // Hide the uploader
+                handleClose(); // Close the main modal
               }}
             />
           )}
         </div>
-      )}
     </>
   );
 }

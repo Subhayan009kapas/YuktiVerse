@@ -1,32 +1,43 @@
 import React, { useState } from "react";
 import { FaShare, FaCopy, FaCheck, FaSpinner } from "react-icons/fa";
 import axios from "axios";
-const backendURL = import.meta.env.VITE_BACKEND_URL;
 import "./ShareButton.css";
 
-const ShareButton = ({ notebookId, className = "", type = "notebook" , onShareLinkGenerated  }) => {
+const backendURL = import.meta.env.VITE_BACKEND_URL;
+
+const ShareButton = ({ notebookId, className = "", type = "notebook", onShareLinkGenerated }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [shareUrl, setShareUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const generateShareLink = async () => {
+    console.log("Generating share link for notebookId:", notebookId, "type:", type);
     try {
       setIsLoading(true);
+      const token = localStorage.getItem("token"); // ensure token exists
+
       const response = await axios.post(
         `${backendURL}/api/share/notebook/${notebookId}/generate`,
+        { type },
         {
-          type: type,
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         }
       );
-      setShareUrl(response.data.shareUrl);
-      console.log(response.data.shareId);
-         onShareLinkGenerated();
 
-      setShareUrl(`${__BASE_URL__}share/notebook/${response.data.shareId}`);
+      if (response.data?.shareUrl) {
+        setShareUrl(response.data.shareUrl); // directly use backend URL
+        console.log("Share link generated:", response.data.shareUrl);
+        if (onShareLinkGenerated) onShareLinkGenerated();
+      } else {
+        console.error("Backend did not return shareUrl");
+      }
+
     } catch (error) {
       console.error("Error generating share link:", error);
-      // Handle error - show toast or message
     } finally {
       setIsLoading(false);
     }
@@ -34,9 +45,7 @@ const ShareButton = ({ notebookId, className = "", type = "notebook" , onShareLi
 
   const handleShareClick = async () => {
     setIsOpen(true);
-    if (!shareUrl) {
-      await generateShareLink();
-    }
+    if (!shareUrl) await generateShareLink();
   };
 
   const handleCopyLink = async () => {
@@ -49,17 +58,11 @@ const ShareButton = ({ notebookId, className = "", type = "notebook" , onShareLi
     }
   };
 
-  const handleClose = () => {
-    setIsOpen(false);
-  };
+  const handleClose = () => setIsOpen(false);
 
   return (
     <>
-      <button
-        className={`share-button ${className}`}
-        onClick={handleShareClick}
-        title="Share notebook"
-      >
+      <button className={`share-button ${className}`} onClick={handleShareClick} title="Share notebook">
         <FaShare />
       </button>
 
@@ -68,9 +71,7 @@ const ShareButton = ({ notebookId, className = "", type = "notebook" , onShareLi
           <div className="share-modal" onClick={(e) => e.stopPropagation()}>
             <div className="share-modal-header">
               <h3>Share Notebook</h3>
-              <button className="close-modal" onClick={handleClose}>
-                ×
-              </button>
+              <button className="close-modal" onClick={handleClose}>×</button>
             </div>
 
             <div className="share-modal-content">
@@ -81,27 +82,14 @@ const ShareButton = ({ notebookId, className = "", type = "notebook" , onShareLi
                 </div>
               ) : shareUrl ? (
                 <div className="share-link-container">
-                  <p className="share-description">
-                    Anyone with this link can view your notebook
-                  </p>
+                  <p className="share-description">Anyone with this link can view your notebook</p>
                   <div className="share-link-input-group">
-                    <input
-                      type="text"
-                      value={shareUrl}
-                      readOnly
-                      className="share-link-input"
-                    />
-                    <button
-                      className="copy-button"
-                      onClick={handleCopyLink}
-                      title="Copy link"
-                    >
+                    <input type="text" value={shareUrl} readOnly className="share-link-input" />
+                    <button className="copy-button" onClick={handleCopyLink} title="Copy link">
                       {copied ? <FaCheck /> : <FaCopy />}
                     </button>
                   </div>
-                  {copied && (
-                    <p className="copy-success">Link copied to clipboard!</p>
-                  )}
+                  {copied && <p className="copy-success">Link copied to clipboard!</p>}
                 </div>
               ) : (
                 <div className="share-error">

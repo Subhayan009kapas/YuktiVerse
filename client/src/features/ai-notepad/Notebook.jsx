@@ -419,7 +419,7 @@ const token = localStorage.getItem('token');
                 </button>
 
                 <button
-                  className="save-button"
+                  className="note-save-button"
                   onClick={saveNotebook}
                   disabled={isSaving}
                 >
@@ -431,7 +431,7 @@ const token = localStorage.getItem('token');
                   className="share-notebook-btn"
                 />
                 <button
-                  className={`menu-button ${isImportant ? "important" : ""}`}
+                  className={`note-menu-button ${isImportant ? "important" : ""}`}
                   onClick={() => setShowMenu(!showMenu)}
                 >
                   &#8942;

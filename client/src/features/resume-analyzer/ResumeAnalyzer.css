@@ -6,9 +6,9 @@
   width: 100%;
 }
 
-.double-bar-container {
+/* .double-bar-container {
   display: flex;
-}
+} */
 
 .fixed-bar {
   /* Styles for main sidebar */
@@ -18,22 +18,42 @@
   margin-left: 5vw;
 }
 
-.main-content {
+.resume-main-content {
   flex: 1;
   display: flex;
   flex-direction: column;
   transition: margin-left 0.3s ease;
 }
 
-.content-area {
+.resume-content-area {
   flex: 1;
   overflow-y: auto;
   padding: 20px;
-  background-color: var(--card-bg);
+  background-color: var(--color-surface);
   color: var(--text-primary);
+
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-thumb) var(--scroll-track);
 }
 
-/* Add this for expanded content when sidebar is collapsed */
-.main-content.expanded {
-  margin-left: -5vw; /* Adjust this value based on your layout */
+/* Chrome, Edge, Safari */
+.resume-content-area::-webkit-scrollbar {
+  width: 8px;
+}
+
+.resume-content-area::-webkit-scrollbar-track {
+  background: var(--scroll-track);
+}
+
+.resume-content-area::-webkit-scrollbar-thumb {
+  background-color: var(--scroll-thumb);
+  border-radius: 4px;
+  border: 2px solid var(--scroll-track); /* adds subtle separation */
+}
+
+/* Theme-safe variables */
+:root {
+  --scroll-track: rgba(0, 0, 0, 0.08); /* light grey, works on both light & dark */
+  --scroll-thumb: rgba(100, 100, 100, 0.6); /* medium grey for good contrast */
 }

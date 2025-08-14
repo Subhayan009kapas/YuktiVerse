@@ -1,0 +1,466 @@
+/* =================================================================
+   NEUMORPHIC LOADERS - MATCHING SLIDING TABS THEME
+   Multiple loader variants with consistent styling
+   ================================================================= */
+
+/* CSS Variables matching the sliding tabs theme */
+:root {
+  --loader-bg: #1e293b;
+  --loader-border: #334155;
+  --loader-primary: #6366f1;
+  --loader-primary-light: #8b5cf6;
+  --loader-text: #94a3b8;
+  --loader-text-light: #cbd5e1;
+  --loader-surface: #334155;
+  --loader-shadow-dark: rgba(0, 0, 0, 0.4);
+  --loader-shadow-light: rgba(255, 255, 255, 0.03);
+  --loader-glow: rgba(99, 102, 241, 0.4);
+}
+
+/* Base loader container */
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 20px;
+}
+
+/* =================================================================
+   1. PULSING DOTS LOADER
+   ================================================================= */
+
+.loader-dots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.loader-dots .dot {
+  width: 12px;
+  height: 12px;
+  background: var(--loader-primary);
+  border-radius: 50%;
+  animation: dotPulse 1.4s ease-in-out infinite both;
+  /* Neumorphic effect */
+  box-shadow:
+    0 0 15px var(--loader-glow),
+    -3px -3px 6px rgba(255, 255, 255, 0.05),
+    3px 3px 6px var(--loader-shadow-dark),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.3),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.1);
+}
+
+.loader-dots .dot:nth-child(1) { animation-delay: -0.32s; }
+.loader-dots .dot:nth-child(2) { animation-delay: -0.16s; }
+.loader-dots .dot:nth-child(3) { animation-delay: 0s; }
+
+@keyframes dotPulse {
+  0%, 80%, 100% {
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+  40% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* =================================================================
+   2. SPINNING RING LOADER
+   ================================================================= */
+
+.loader-ring {
+  
+  width: 40px;
+  height: 40px;
+  background-color: transparent;
+  border: 3px solid var(--loader-surface);
+  border-top: 3px solid var(--loader-primary);
+  border-radius: 50%;
+  animation: ringSpin 1s linear infinite;
+  position: relative;
+  /* Neumorphic ring effect */
+  box-shadow:
+    0 0 20px var(--loader-glow),
+    -6px -6px 12px #0f172a,
+    /* 6px 6px 12px var(--loader-shadow-dark), */
+    inset -2px -2px 4px #0f172a,
+    inset 2px 2px 4px #0f172a
+}
+
+.loader-ring::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  border-radius: 50%;
+  /* background: linear-gradient(145deg, 
+    rgba(255, 255, 255, 0.1) 0%, 
+    rgba(0, 0, 0, 0.2) 100%); */
+  z-index: -1;
+}
+
+@keyframes ringSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* =================================================================
+   3. MORPHING SQUARES LOADER
+   ================================================================= */
+
+.loader-squares {
+  display: grid;
+  grid-template-columns: repeat(2, 16px);
+  grid-gap: 4px;
+  width: 36px;
+  height: 36px;
+}
+
+.loader-squares .square {
+  background: var(--loader-primary);
+  border-radius: 4px;
+  animation: squareMorph .9s ease-in-out infinite;
+  /* Neumorphic square effect */
+  box-shadow:
+    0 0 10px rgba(99, 102, 241, 0.3),
+    -2px -2px 4px rgba(255, 255, 255, 0.05),
+    2px 2px 4px var(--loader-shadow-dark),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.2),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.1);
+}
+
+.loader-squares .square:nth-child(1) { animation-delay: 0s; }
+.loader-squares .square:nth-child(2) { animation-delay: 0.1s; }
+.loader-squares .square:nth-child(3) { animation-delay: 0.2s; }
+.loader-squares .square:nth-child(4) { animation-delay: 0.3s; }
+
+@keyframes squareMorph {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    border-radius: 4px;
+  }
+  25% {
+    transform: scale(1.2) rotate(45deg);
+    border-radius: 8px;
+  }
+  50% {
+    transform: scale(0.8) rotate(90deg);
+    border-radius: 50%;
+  }
+  75% {
+    transform: scale(1.1) rotate(135deg);
+    border-radius: 2px;
+  }
+}
+
+/* =================================================================
+   4. WAVE BARS LOADER
+   ================================================================= */
+
+.loader-bars {
+  display: flex;
+  gap: 3px;
+  align-items: flex-end;
+  height: 32px;
+}
+
+.loader-bars .bar {
+  width: 4px;
+  background: var(--loader-primary);
+  border-radius: 2px;
+  animation: barWave 1s ease-in-out infinite;
+  /* Neumorphic bar effect */
+  box-shadow:
+    0 0 8px rgba(99, 102, 241, 0.3),
+    -1px -1px 2px rgba(255, 255, 255, 0.05),
+    1px 1px 2px var(--loader-shadow-dark),
+    inset -0.5px -0.5px 1px rgba(0, 0, 0, 0.2),
+    inset 0.5px 0.5px 1px rgba(255, 255, 255, 0.1);
+}
+
+.loader-bars .bar:nth-child(1) { animation-delay: 0s; }
+.loader-bars .bar:nth-child(2) { animation-delay: 0.1s; }
+.loader-bars .bar:nth-child(3) { animation-delay: 0.2s; }
+.loader-bars .bar:nth-child(4) { animation-delay: 0.3s; }
+.loader-bars .bar:nth-child(5) { animation-delay: 0.4s; }
+
+@keyframes barWave {
+  0%, 100% {
+    height: 8px;
+    opacity: 0.6;
+  }
+  50% {
+    height: 32px;
+    opacity: 1;
+  }
+}
+
+/* =================================================================
+   5. ORBITING PARTICLES LOADER
+   ================================================================= */
+
+.loader-orbit {
+  position: relative;
+  width: 48px;
+  height: 48px;
+}
+
+.loader-orbit .center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  background: var(--loader-primary);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  /* Neumorphic center */
+  box-shadow:
+    0 0 12px var(--loader-glow),
+    -2px -2px 4px rgba(255, 255, 255, 0.05),
+    2px 2px 4px var(--loader-shadow-dark);
+}
+
+.loader-orbit .particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: var(--loader-primary-light);
+  border-radius: 50%;
+  animation: orbit 2s linear infinite;
+  /* Neumorphic particles */
+  box-shadow:
+    0 0 8px rgba(139, 92, 246, 0.4),
+    -1px -1px 2px rgba(255, 255, 255, 0.05),
+    1px 1px 2px var(--loader-shadow-dark);
+}
+
+.loader-orbit .particle:nth-child(2) {
+  animation-delay: 0s;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.loader-orbit .particle:nth-child(3) {
+  animation-delay: -0.5s;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+.loader-orbit .particle:nth-child(4) {
+  animation-delay: -1s;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.loader-orbit .particle:nth-child(5) {
+  animation-delay: -1.5s;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+@keyframes orbit {
+  0% {
+    transform: rotate(0deg) translateX(20px) rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg) translateX(20px) rotate(-360deg);
+  }
+}
+
+/* =================================================================
+   6. GRADIENT PROGRESS LOADER
+   ================================================================= */
+
+.loader-progress {
+  width: 200px;
+  height: 6px;
+  background: var(--loader-surface);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+  /* Neumorphic track */
+  box-shadow:
+    inset -3px -3px 6px rgba(255, 255, 255, 0.02),
+    inset 3px 3px 6px var(--loader-shadow-dark);
+}
+
+.loader-progress::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    var(--loader-primary), 
+    var(--loader-primary-light),
+    transparent);
+  animation: progressSlide 1.5s ease-in-out infinite;
+  border-radius: inherit;
+  /* Progress bar glow */
+  box-shadow: 0 0 10px var(--loader-glow);
+}
+
+@keyframes progressSlide {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* =================================================================
+   7. HEXAGON PULSE LOADER
+   ================================================================= */
+
+.loader-hexagon {
+  width: 40px;
+  height: 40px;
+  position: relative;
+}
+
+.loader-hexagon .hex {
+  width: 100%;
+  height: 100%;
+  background: var(--loader-primary);
+  clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%);
+  animation: hexPulse 1.5s ease-in-out infinite;
+  /* Neumorphic hexagon */
+  filter: drop-shadow(0 0 15px var(--loader-glow))
+          drop-shadow(-3px -3px 6px rgba(255, 255, 255, 0.05))
+          drop-shadow(3px 3px 6px var(--loader-shadow-dark));
+}
+
+@keyframes hexPulse {
+  0%, 100% {
+    transform: scale(0.8) rotate(0deg);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.1) rotate(180deg);
+    opacity: 1;
+  }
+}
+
+/* =================================================================
+   LOADER TEXT STYLES
+   ================================================================= */
+
+.loader-text {
+  color: var(--loader-text);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+  margin-top: 8px;
+  /* Subtle text shadow for depth */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.loader-text.animated {
+  animation: textFade 2s ease-in-out infinite;
+}
+
+@keyframes textFade {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* =================================================================
+   SIZE VARIANTS
+   ================================================================= */
+
+.loader-small .loader-dots .dot { width: 8px; height: 8px; }
+.loader-small .loader-ring { width: 28px; height: 28px; }
+.loader-small .loader-squares { width: 24px; height: 24px; }
+.loader-small .loader-bars { height: 24px; }
+.loader-small .loader-orbit { width: 32px; height: 32px; }
+.loader-small .loader-progress { width: 120px; height: 4px; }
+.loader-small .loader-hexagon { width: 28px; height: 28px; }
+
+.loader-large .loader-dots .dot { width: 16px; height: 16px; }
+.loader-large .loader-ring { width: 56px; height: 56px; border-width: 4px; }
+.loader-large .loader-squares { width: 48px; height: 48px; }
+.loader-large .loader-bars { height: 48px; }
+.loader-large .loader-orbit { width: 64px; height: 64px; }
+.loader-large .loader-progress { width: 280px; height: 8px; }
+.loader-large .loader-hexagon { width: 56px; height: 56px; }
+
+/* =================================================================
+   OVERLAY LOADER (Full screen)
+   ================================================================= */
+
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(30, 41, 59, 0.95);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: overlayFadeIn 0.3s ease-out;
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+}
+
+/* =================================================================
+   INLINE LOADER (For buttons, cards, etc.)
+   ================================================================= */
+
+.loader-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  vertical-align: middle;
+}
+
+.loader-inline .loader-dots,
+.loader-inline .loader-ring,
+.loader-inline .loader-squares,
+.loader-inline .loader-bars,
+.loader-inline .loader-orbit,
+.loader-inline .loader-hexagon {
+  transform: scale(0.7);
+}
+
+/* =================================================================
+   THEME VARIANTS
+   ================================================================= */
+
+/* Light theme loader */
+.loader-theme-light {
+  --loader-bg: #f8fafc;
+  --loader-border: #e2e8f0;
+  --loader-primary: #6366f1;
+  --loader-primary-light: #8b5cf6;
+  --loader-text: #64748b;
+  --loader-text-light: #334155;
+  --loader-surface: #e2e8f0;
+  --loader-shadow-dark: rgba(0, 0, 0, 0.15);
+  --loader-shadow-light: rgba(255, 255, 255, 0.8);
+  --loader-glow: rgba(99, 102, 241, 0.3);
+}

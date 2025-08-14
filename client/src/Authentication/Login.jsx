@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Login.css";
@@ -9,12 +9,17 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // If no "from" is provided, default to Academic Organizer
+  const redirectPath = location.state?.from || "/feature/academic-org";
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const res = await axios.post("/api/auth/login", { email, password });
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("userId", res.data.user._id);
 
       toast.success("✅ Logged in successfully!", {
         position: "top-right",
@@ -23,7 +28,7 @@ export default function Login() {
       });
 
       setTimeout(() => {
-        navigate("/ResumeAnalyzer");
+        navigate(redirectPath, { replace: true }); // redirect to intended page
       }, 800);
     } catch (err) {
       console.error(err);

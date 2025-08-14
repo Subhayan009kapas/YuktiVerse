@@ -6,8 +6,8 @@ dotenv.config();
 export default function auth(req, res, next) {
   try {
     const authHeader = req.header('Authorization');
-    console.log('Auth Header:', authHeader);
-    console.log('Auth Header:', req.header('Authorization'));
+    // console.log('Auth Header:', authHeader);
+    // console.log('Auth Header:', req.header('Authorization'));
 
     if (!authHeader) {
       return res.status(401).json({ error: 'No token, authorization denied' });
@@ -17,6 +17,7 @@ export default function auth(req, res, next) {
 
     // ✅ Verify standard JWT
     const decodedUser = jwt.verify(token, process.env.JWT_SECRET);
+// console.log("after decoded ",decodedUser.id);
 
     req.user = decodedUser;
     next();

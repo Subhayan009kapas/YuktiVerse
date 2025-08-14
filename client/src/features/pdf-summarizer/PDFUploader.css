@@ -818,3 +818,8 @@
     max-height: 90vh;
   }
 }
+.pdf-summarizer-avatar-menu p:hover{
+  text-decoration: underline;
+
+}
+            

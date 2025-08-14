@@ -1,18 +1,21 @@
 /* PdfSidebar.css */
 
 .pdf-summarizer-sidebar {
-  background-color: var(--dark-bg);         /* #1a202c */
-  color: var(--text-primary);              /* #edf2f7 */
+  background-color: var(--dark-bg);       
+  color: var(--text-primary);              
   padding: 0;
+  margin-left: -.5rem;
   min-height: 100vh;
-  width: 260px;
-  border-right: 1px solid var(--dark-border); /* #2d3748 */
+  width: 300px;
+  border-right: 1px solid var(--dark-border);
   display: flex;
   flex-direction: column;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
-
+.sidebar-container{
+    background: var(--sidebar-bg) ;
+}
 .pdf-summarizer-sidebar-header {
   padding: 24px 20px;
   border-bottom: 1px solid var(--dark-border); /* #2d3748 */
@@ -160,9 +163,11 @@
 } */
 
 .pdf-summarizer-sidebar {
-  width: 280px;
+  width: 300px;
   transition: width 0.3s ease;
   background-color: var(--card-bg);
+  /* background-color: red; */
+  padding: 0 ;
   display: flex;
   flex-direction: column;
 }
@@ -316,6 +321,8 @@
   position: relative;
   display: flex;
   height: 100vh;
+  background-color: red;
+  /* width: 280px; */
   transition: width 0.3s ease;
 }
 
@@ -324,10 +331,10 @@
   overflow: hidden;
 }
 
-.collapse-toggle-btn {
+.collapse-toggle-btn-pdf {
   position: absolute;
-  top: 20px;
-  right: -16px;
+  top: 2.5rem;
+  right: -2rem;
  
   width: 36px;
   height: 36px;
@@ -344,7 +351,7 @@
 }
 
 /* Subtle glow on hover */
-.collapse-toggle-btn:hover {
+.collapse-toggle-btn-pdf:hover {
   background-color: var(--primary-light);
   transform: scale(1.1);
   box-shadow: 0 0 10px var(--primary), 0 0 20px rgba(0, 0, 0, 0.1);
@@ -360,7 +367,7 @@
 }
 
 /* Optional: Pulse animation when collapsed */
-.pdf-summarizer-sidebar-wrapper.collapsed .collapse-toggle-btn {
+.pdf-summarizer-sidebar-wrapper.collapsed .collapse-toggle-btn-pdf {
   animation: pulseGlow 2s infinite ease-in-out;
 }
 
@@ -398,4 +405,3 @@
 .collapse-toggle-btn:hover::after {
   opacity: 1;
 }
-

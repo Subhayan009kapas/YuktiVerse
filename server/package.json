@@ -25,9 +25,11 @@
     "mammoth": "^1.9.1",
     "mongoose": "^8.16.3",
     "multer": "^2.0.2",
+    "nanoid": "^5.1.5",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
-    "pdf-parse": "^1.1.1"
+    "pdf-parse": "^1.1.1",
+    "remove-markdown": "^0.6.2"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"

@@ -119,17 +119,21 @@ const ResumeTopbar = () => {
 
           {isMenuOpen && (
             <div className="resume-avatar-menu">
-              <p
-                className="user-name-click"
-                onClick={() => {
+             <div className="text-con">
+              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-user"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2a5 5 0 1 1 -5 5l.005 -.217a5 5 0 0 1 4.995 -4.783z" /><path d="M14 14a5 5 0 0 1 5 5v1a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-1a5 5 0 0 1 5 -5h4z" /></svg>
+
+               <p  onClick={() => {
                   setIsProfileOpen(true);
                   setIsMenuOpen(false);
-                }}
-              >
-                {user?.name || user?.email}
-              </p>
+                }}>{user?.name || user?.email}</p>
+            </div>
               <div className="menu-divider"></div>
-              <button onClick={handleLogout}>Logout</button>
+
+              <div className="out">
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-logout"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" /><path d="M9 12h12l-3 -3" /><path d="M18 15l3 -3" /></svg>
+                 <button onClick={handleLogout}>Logout</button>
+              </div>
+             
             </div>
           )}
         </div>
@@ -137,36 +141,37 @@ const ResumeTopbar = () => {
 
       {/* Fullscreen Profile Popup */}
       {isProfileOpen && (
-  <div className="profile-popup-overlay">
-    <div className="profile-popup-card">
-      <button
-        className="profile-popup-close"
-        onClick={() => setIsProfileOpen(false)}
-      >
-        ✕
-      </button>
+        <div className="profile-popup-overlay">
+          <div className="profile-popup-card">
+            <button
+              className="profile-popup-close"
+              onClick={() => setIsProfileOpen(false)}
+            >
+              ✕
+            </button>
 
-      <div className="profile-header">
-        <img
-          className="profile-avatar"
-          src={user?.pic || "https://i.pravatar.cc/150"}
-          alt="Avatar"
-        />
-        <div>
-          <h2 className="profile-name">{user?.name || "N/A"}</h2>
-          <p className="profile-email">{user?.email || "N/A"}</p>
+            <div className="profile-header">
+              <img
+                className="profile-avatar"
+                src={user?.pic || "https://i.pravatar.cc/150"}
+                alt="Avatar"
+              />
+              <div>
+                <h2 className="profile-name">{user?.name || "N/A"}</h2>
+                <p className="profile-email">{user?.email || "N/A"}</p>
+              </div>
+            </div>
+
+            <div className="profile-divider"></div>
+
+            <div className="profile-details">
+              <p>
+                <strong>Profile Picture URL:</strong> {user?.pic || "N/A"}
+              </p>
+            </div>
+          </div>
         </div>
-      </div>
-
-      <div className="profile-divider"></div>
-
-      <div className="profile-details">
-        <p><strong>Profile Picture URL:</strong> {user?.pic || "N/A"}</p>
-      </div>
-    </div>
-  </div>
-)}
-
+      )}
     </>
   );
 };

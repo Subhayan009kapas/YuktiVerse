@@ -302,7 +302,7 @@ View full analysis: ${resume.cloudinaryUrl}
       </div>
 
       {loading ? (
-        <div className="loading-container">
+        <div className="resume-loading-container">
           <div className="loading-spinner"></div>
           <p className="loading-text">Loading your resumes...</p>
         </div>

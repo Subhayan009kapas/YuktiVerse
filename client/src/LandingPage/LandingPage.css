@@ -58,6 +58,7 @@ top: 1vh; */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   letter-spacing: -0.5px;
+  cursor: pointer;
 }
 
 .landingpage-nav-links {

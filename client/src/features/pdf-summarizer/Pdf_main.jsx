@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import PDFUploader from "./PDFUploader";
 import PdfSummarizerSidebar from "./PdfSummarizerSidebar";
 import PdfSummarizerTopbar from "./PdfSummarizerTopbar";
-import PdfHistory from "./PdfHistory";
+import PdfHistory from "./PDFHistory";
 import "./Pdf_main.css";
-import Sidebar from "../../components/Sidebar";
+// import Sidebar from "../../components/Sidebar";
 
 function Pdf_main() {
   const [activeSection, setActiveSection] = useState("upload");
@@ -18,7 +18,7 @@ function Pdf_main() {
     <div className="analyzer-container">
       <div className="double-bar-container">
         <div className="fixed-bar">
-          <Sidebar />
+          {/* <Sidebar /> */}
         </div>
         <div className="collapse-bar">
           <PdfSummarizerSidebar
@@ -30,9 +30,9 @@ function Pdf_main() {
         </div>
       </div>
 
-      <div className={`main-content ${isCollapsed ? "expanded" : ""}`}>
+      <div className={`pdf-main-content ${isCollapsed ? "expanded" : ""}`}>
         <PdfSummarizerTopbar />
-        <div className="content-area">
+        <div className="pdf-content-area">
           {activeSection === "upload" && <PDFUploader />}
           {activeSection === "history" && <PdfHistory />}
         </div>

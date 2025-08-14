@@ -1,0 +1,413 @@
+/* AcademicUploader_Modal.css -- Updated with New Theme Variables */
+
+/* Modal Backdrop */
+.acd-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--color-overlay); /* Replaced hardcoded color */
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.acd-modal-backdrop.acd-visible {
+  opacity: 1;
+}
+
+.acd-modal-backdrop.closing {
+  opacity: 0;
+}
+
+/* Main Modal */
+.acd-modal {
+  background: var(--card-bg); /* Replaced --dark-card */
+  color: var(--text-primary); /* Replaced --dark-text */
+  border: 1px solid var(--color-border-primary); /* Replaced --dark-border */
+  border-radius: 20px;
+  padding: 0;
+  width: 480px;
+  max-width: 90vw;
+  max-height: 90vh;
+  box-shadow: var(--shadow-popup); /* Replaced hardcoded shadow */
+  position: relative;
+  overflow: hidden;
+  transform: scale(0.7) translateY(50px);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.acd-modal.acd-visible {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+/* Modal Header */
+.acd-modal-header {
+  text-align: center;
+  padding: 32px 32px 24px;
+  border-bottom: 1px solid var(--color-border-primary); /* Replaced --dark-border */
+  position: relative;
+}
+
+.acd-modal-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--header-gradient); 
+}
+
+/* ... (omitting header icon/text rules as they seem to be for a different design) */
+
+/* Close Button */
+.acd-close-btn-mod {
+  position: absolute;
+  top: 8px;
+  right: 25px;
+  width: 36px;
+  height: 36px;
+  background: rgba(var(--white-rgb), 0.1); /* Use RGB variable */
+  border: none;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-primary); /* Replaced --dark-text */
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+  z-index: 1200;
+  padding: 0rem;
+}
+
+.acd-close-btn-mod:hover {
+  background: rgba(var(--danger-rgb), 0.2); /* Use RGB variable */
+  color: var(--danger); /* Use danger variable */
+  transform: scale(1.1);
+}
+
+/* Modal Actions */
+.acd-modal-actions {
+  padding: 24px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Action Cards */
+.acd-action-card {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background: rgba(var(--white-rgb), 0.02); /* Use RGB variable */
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid transparent; /* Add base border for smooth transition */
+}
+
+.acd-action-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(var(--white-rgb), 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.acd-action-card:hover::before {
+  left: 100%;
+}
+
+.acd-action-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(var(--black-rgb), 0.2); /* Use RGB variable */
+}
+
+/* Upload Card (was missing but defined in JSX) */
+.acd-action-card.acd-upload-card {
+  background: linear-gradient(135deg, rgba(var(--secondary-accent-rgb), 0.1), rgba(var(--secondary-accent-rgb), 0.05));
+  border-color: var(--secondary-accent);
+}
+.acd-action-card.acd-upload-card:hover {
+    background: linear-gradient(135deg, rgba(var(--secondary-accent-rgb), 0.15), rgba(var(--secondary-accent-rgb), 0.08));
+    border-color: var(--secondary-accent);
+}
+
+/* Notebook Card */
+.acd-action-card.acd-notebook-card {
+  background: linear-gradient(135deg, rgba(var(--accent-primary-rgb), 0.1), rgba(var(--accent-primary-rgb), 0.05));
+  border-color: var(--accent-primary);
+}
+.acd-action-card.acd-notebook-card:hover {
+  background: linear-gradient(135deg, rgba(var(--accent-primary-rgb), 0.15), rgba(var(--accent-primary-rgb), 0.08));
+  border-color: var(--accent-primary);
+}
+
+/* Card Icon */
+.acd-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin-right: 16px;
+  flex-shrink: 0;
+  color: var(--text-on-primary);
+}
+
+.acd-upload-card .acd-card-icon {
+  background: var(--gradient-accent); /* Updated */
+}
+
+.acd-notebook-card .acd-card-icon {
+  background: var(--gradient-accent); /* Updated */
+}
+
+/* Card Content */
+.acd-card-content h4 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.acd-card-content p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-secondary); /* Use secondary text color */
+}
+
+/* Card Arrow */
+.acd-card-arrow {
+  font-size: 18px;
+  color: var(--text-tertiary); /* Use tertiary text color */
+  opacity: 0.5;
+  transition: all 0.2s ease;
+}
+
+.acd-action-card:hover .acd-card-arrow {
+  opacity: 1;
+  transform: translateX(4px);
+}
+
+/* Notebook Form Overlay */
+.acd-modal-overlay.acd-notebook-form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(var(--black-rgb), 0.7); /* Use RGB variable */
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.acd-modal-overlay.acd-notebook-form-overlay.acd-visible {
+  opacity: 1;
+}
+
+/* Notebook Form Modal */
+.modal-content.acd-notebook-form {
+  color: var(--text-primary);
+  border-radius: 20px;
+  width: 420px;
+  max-width: 90vw;
+  overflow: hidden;
+  box-shadow: var(--shadow-popup); /* Use variable */
+  transform: scale(0.9) translateY(20px);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.acd-notebook-form-overlay.acd-visible .acd-notebook-form {
+  transform: scale(1) translateY(0);
+}
+
+/* Form Content */
+.acd-form-content {
+  min-width: 400px;
+  padding: 24px 32px 32px;
+  background: var(--card-bg);
+  border-radius: 1rem;
+  border: 1px solid var(--color-border-primary);
+}
+
+.acd-input-group {
+  margin-bottom: 24px;
+}
+
+.acd-input-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.acd-modern-input {
+  width: 100%;
+  padding: 14px 18px;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-primary);
+  background: rgba(var(--white-rgb), 0.05);
+  border: 1px solid var(--color-border-secondary);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 10px rgba(var(--black-rgb), 0.2);
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.acd-modern-input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+.acd-modern-input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  background: rgba(var(--white-rgb), 0.1);
+  box-shadow: 
+    0 4px 10px rgba(var(--black-rgb), 0.2),
+    0 0 0 3px rgba(var(--accent-primary-rgb), 0.2);
+}
+
+/* Form Actions */
+.acd-form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  /* Remove width: 90% for better alignment */
+}
+
+.acd-btn-secondary {
+  padding: 12px 24px;
+  background: var(--color-surface-light);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 10px;
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.acd-btn-secondary:hover {
+  background: var(--color-surface);
+  border-color: var(--accent-primary);
+}
+
+.acd-btn-primary {
+  padding: 12px 24px;
+  background: var(--bg-submit-gradient); /* Use specific gradient */
+  border: none;
+  border-radius: 10px;
+  color: var(--text-on-primary);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--shadow-submit); /* Use variable */
+}
+
+.acd-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-submit-hover); /* Use variable */
+}
+
+.acd-btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Spinner */
+.acd-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(var(--white-rgb), 0.3);
+  border-top: 2px solid var(--white);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .acd-modal {
+    width: 95vw;
+    margin: 16px;
+  }
+  
+  .acd-modal-header, .acd-modal-actions, .acd-form-content {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  
+  .acd-action-card {
+    padding: 16px;
+  }
+  
+  .acd-card-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    margin-right: 12px;
+  }
+  
+  .acd-form-actions {
+    flex-direction: column;
+  }
+  
+  .acd-btn-secondary, .acd-btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Light mode support */
+/* No specific light mode overrides are needed if the themes are applied to the :root or body element. 
+   The variables will automatically update when the theme changes. 
+   The body.acd-light class can be removed if you apply themes globally.
+   However, if you keep it for specificity, here's the updated version: */
+
+body.acd-light .acd-close-btn-mod {
+  background: rgba(var(--black-rgb), 0.05);
+  color: var(--text-primary);
+}
+
+body.acd-light .acd-close-btn-mod:hover {
+    background: rgba(var(--danger-rgb), 0.1);
+    color: var(--danger);
+}

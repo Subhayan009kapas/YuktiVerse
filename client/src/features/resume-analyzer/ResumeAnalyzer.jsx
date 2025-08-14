@@ -6,7 +6,7 @@ import ResumeUploader from "./ResumeUploader";
 import ResumeFeedback from "./ResumeFeedback";
 import ResumeHistory from "./ResumeHistory";
 import "./ResumeAnalyzer.css";
-import Sidebar from "../../components/Sidebar";
+// import Sidebar from "../../components/Sidebar";
 
 const ResumeAnalyzer = () => {
   const [activeSection, setActiveSection] = useState("upload");
@@ -22,7 +22,7 @@ const ResumeAnalyzer = () => {
     <div className="analyzer-container">
       <div className="double-bar-container">
         <div className="fixed-bar">
-          <Sidebar />
+          {/* <Sidebar /> */}
         </div>
         <div className="collapse-bar">
           <ResumeSidebar
@@ -34,9 +34,9 @@ const ResumeAnalyzer = () => {
         </div>
       </div>
 
-      <div className={`main-content ${isCollapsed ? "expanded" : ""}`}>
+      <div className={`resume-main-content ${isCollapsed ? "expanded" : ""}`}>
         <ResumeTopbar />
-        <div className="content-area">
+        <div className="resume-content-area">
           {activeSection === "upload" && (
             <ResumeUploader
               onSuccess={(data) => setExtractedData(data)}
