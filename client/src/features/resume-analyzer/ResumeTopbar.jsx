@@ -20,7 +20,7 @@ const ResumeTopbar = () => {
       const token = localStorage.getItem("token");
       if (!token) return;
 
-      const res = await axios.get("https://yuktiverse-mgqi.onrender.com/api/auth/me", {
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/auth/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

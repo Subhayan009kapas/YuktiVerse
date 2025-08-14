@@ -21,7 +21,7 @@ const ResumeHistory = () => {
   const fetchResumes = async () => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 800));
-      const res = await axios.get("https://yuktiverse-mgqi.onrender.com/api/resume/all", {
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/resume/all`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`, // ✅ send JWT token
         },

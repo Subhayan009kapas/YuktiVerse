@@ -12,7 +12,7 @@ const MCQPopup = ({ summaryText, pdfId, onClose }) => {
     try {
       console.log(localStorage.getItem("token"));
       const res = await axios.post(
-        "https://yuktiverse-mgqi.onrender.com/api/pdf/mcq",
+        `${import.meta.env.VITE_BACKEND_URL}/api/pdf/mcq`,
         { summaryText },
         {
           headers: {
