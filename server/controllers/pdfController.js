@@ -151,7 +151,7 @@
 
 
 // summarizePDF.js
-import pdfParse from 'pdf-parse';
+
 import { getGeminiResponse } from '../utils/geminiClient.js';
 import PDFDocument from '../models/PDFDocument.js';
 import MCQ from '../models/MCQ.js';
@@ -159,6 +159,7 @@ import MCQ from '../models/MCQ.js';
 // ✅ Summarize and link to user (optional saving logic can be added later if needed)
 export const summarizePDF = async (req, res) => {
   try {
+    const pdfParse = (await import('pdf-parse')).default;
     const pdfBuffer = req.file.buffer;
     const data = await pdfParse(pdfBuffer);
     const text = data.text;
