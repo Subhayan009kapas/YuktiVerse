@@ -28,6 +28,7 @@
     "nanoid": "^5.1.5",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
+    "patch-package": "^8.0.0",
     "pdf-parse": "^1.1.1",
     "remove-markdown": "^0.6.2"
   },

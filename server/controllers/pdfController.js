@@ -151,77 +151,17 @@
 
 
 // summarizePDF.js
-
+import pdfParse from 'pdf-parse';
 import { getGeminiResponse } from '../utils/geminiClient.js';
 import PDFDocument from '../models/PDFDocument.js';
 import MCQ from '../models/MCQ.js';
 
 // ✅ Summarize and link to user (optional saving logic can be added later if needed)
-// export const summarizePDF = async (req, res) => {
-//   try {
-//     const pdfParse = (await import('pdf-parse')).default;
-//     const pdfBuffer = req.file.buffer;
-//     const data = await pdfParse(pdfBuffer);
-//     const text = data.text;
-
-//     const prompt = `
-// You are an AI summarizer designed to help users understand documents quickly in a frontend UI with collapsible accordions.
-
-// Analyze the following PDF content and generate a **clean, structured summary**. Break the content into **distinct key points**, where:
-
-// - Each key point will be shown as a clickable accordion section in the UI.
-// - The **title** represents the topic heading.
-// - The **content** is a clear, 2–4 sentence explanation of the topic.
-// - (Optional) Include a "tags" field with relevant keywords if the topic fits clearly into known categories (e.g., ["SQL", "Database"]).
-
-// ### Output Format (JSON only):
-// [
-//   {
-//     "title": "Topic Title",
-//     "content": "Clear explanation here...",
-//     "tags": ["optional", "keywords"]
-//   }
-// ]
-
-// Instructions:
-// - Use a teaching tone that's clear, compact, and user-friendly.
-// - Group and name each key idea clearly.
-// - Do not include markdown or code block syntax (no backticks).
-// - If the document is very long, limit to the **top 20–25 most informative points**.
-
-// ### PDF Content:
-// ${text}
-// `;
-
-//     const summary = await getGeminiResponse(prompt);
-
-//     res.json({ summary });
-//   } catch (error) {
-//     console.error('PDF Summary Error:', error.message);
-//     res.status(500).json({ error: 'Failed to summarize PDF' });
-//   }
-// };
-
-
 export const summarizePDF = async (req, res) => {
   try {
-    // ✅ Safe import, avoids test file reference issue
-    const { default: pdfParse } = await import('pdf-parse');
-
-    if (!req.file) {
-      return res.status(400).json({ error: 'No file uploaded' });
-    }
-
     const pdfBuffer = req.file.buffer;
-    let text = '';
-
-    try {
-      const data = await pdfParse(pdfBuffer);
-      text = data.text;
-    } catch (parseErr) {
-      console.error('PDF parsing error:', parseErr);
-      return res.status(500).json({ error: 'Failed to parse PDF', details: parseErr.message });
-    }
+    const data = await pdfParse(pdfBuffer);
+    const text = data.text;
 
     const prompt = `
 You are an AI summarizer designed to help users understand documents quickly in a frontend UI with collapsible accordions.
@@ -257,10 +197,9 @@ ${text}
     res.json({ summary });
   } catch (error) {
     console.error('PDF Summary Error:', error.message);
-    res.status(500).json({ error: 'Failed to summarize PDF', details: error.message });
+    res.status(500).json({ error: 'Failed to summarize PDF' });
   }
 };
-
 
 // ✅ Generate MCQs (No change — but protected by auth in routes)
 export const generateMCQs = async (req, res) => {
