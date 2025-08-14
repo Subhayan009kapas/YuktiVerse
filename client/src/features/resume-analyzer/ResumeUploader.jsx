@@ -76,7 +76,7 @@ const ResumeUploader = () => {
     try {
       setLoading(true);
       const res = await axios.post(
-        "http://localhost:5000/api/resume/analyze",
+        "https://yuktiverse-mgqi.onrender.com/api/resume/analyze",
         formData,
         {
           headers: {

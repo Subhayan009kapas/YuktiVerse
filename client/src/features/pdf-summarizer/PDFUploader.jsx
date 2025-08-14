@@ -70,7 +70,7 @@ const PDFUploader = () => {
     try {
       setLoading(true);
       setError("");
-      const res = await axios.post("/api/pdf/summarize", formData, {
+      const res = await axios.post("https://yuktiverse-mgqi.onrender.com/api/pdf/summarize", formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "multipart/form-data",

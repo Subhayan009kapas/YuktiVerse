@@ -16,7 +16,7 @@ const PdfSummarizerTopbar = () => {
         const token = localStorage.getItem("token");
         if (!token) return;
 
-        const res = await axios.get("http://localhost:5000/api/auth/me", {
+        const res = await axios.get("https://yuktiverse-mgqi.onrender.com/api/auth/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
 

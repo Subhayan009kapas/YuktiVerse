@@ -33,7 +33,7 @@ const ResumeFeedback = ({ feedback, resumeFile, onDatabaseSaveSuccess }) => {
       formData.append("analysis", JSON.stringify(feedback));
 
       // Make API call to save to database
-      const response = await fetch("http://localhost:5000/api/resume/save", {
+      const response = await fetch("https://yuktiverse-mgqi.onrender.com/api/resume/save", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`, // ✅ send token

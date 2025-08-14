@@ -254,7 +254,7 @@ const PDFHistory = () => {
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const res = await axios.get("/api/pdf/history", {
+        const res = await axios.get("https://yuktiverse-mgqi.onrender.com/api/pdf/history", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -284,7 +284,7 @@ const PDFHistory = () => {
     if (!window.confirm("Are you sure you want to delete this PDF?")) return;
 
     try {
-      await axios.delete(`/api/pdf/delete/${id}`, {
+      await axios.delete(`https://yuktiverse-mgqi.onrender.com/api/pdf/delete/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

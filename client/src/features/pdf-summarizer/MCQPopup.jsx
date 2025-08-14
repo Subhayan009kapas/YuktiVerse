@@ -12,7 +12,7 @@ const MCQPopup = ({ summaryText, pdfId, onClose }) => {
     try {
       console.log(localStorage.getItem("token"));
       const res = await axios.post(
-        "/api/pdf/mcq",
+        "https://yuktiverse-mgqi.onrender.com/api/pdf/mcq",
         { summaryText },
         {
           headers: {
@@ -33,7 +33,7 @@ const MCQPopup = ({ summaryText, pdfId, onClose }) => {
   const saveMCQs = async () => {
     try {
       await axios.post(
-        "/api/pdf/save-mcqs",
+        "https://yuktiverse-mgqi.onrender.com/api/pdf/save-mcqs",
         { pdfId, mcqs },
         {
           headers: {

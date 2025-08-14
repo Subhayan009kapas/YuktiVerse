@@ -62,7 +62,7 @@ const SummarySection = ({ summary, pdfFile, onSaveSuccess, pdfId }) => {
         .join("\n\n");
 
       const res = await axios.post(
-        "/api/pdf/mcq",
+        "https://yuktiverse-mgqi.onrender.com/api/pdf/mcq",
         { summaryText: rawTextSummary },
         {
           headers: {
@@ -94,7 +94,7 @@ const SummarySection = ({ summary, pdfFile, onSaveSuccess, pdfId }) => {
       console.log("Now:", new Date());
 
       const res = await axios.post(
-        "http://localhost:5000/api/pdf/save-all",
+        "https://yuktiverse-mgqi.onrender.com/api/pdf/save-all",
         formData,
         {
           headers: {

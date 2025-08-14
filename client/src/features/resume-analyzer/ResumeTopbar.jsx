@@ -20,7 +20,7 @@ const ResumeTopbar = () => {
       const token = localStorage.getItem("token");
       if (!token) return;
 
-      const res = await axios.get("http://localhost:5000/api/auth/me", {
+      const res = await axios.get("https://yuktiverse-mgqi.onrender.com/api/auth/me", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -50,7 +50,7 @@ const ResumeTopbar = () => {
   const handleUpdate = async () => {
     try {
       const token = localStorage.getItem("token");
-      await axios.put("http://localhost:5000/api/auth/update", editUser, {
+      await axios.put("https://yuktiverse-mgqi.onrender.com/api/auth/update", editUser, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUser(editUser);
