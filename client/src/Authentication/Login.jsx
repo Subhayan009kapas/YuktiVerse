@@ -17,7 +17,7 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("https://yuktiverse-mgqi.onrender.com/api/auth/login", { email, password });
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, { email, password });
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("userId", res.data.user._id);
 

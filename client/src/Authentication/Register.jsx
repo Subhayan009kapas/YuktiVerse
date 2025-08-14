@@ -25,7 +25,7 @@ export default function Register() {
     e.preventDefault();
 
     try {
-      const res = await axios.post("https://yuktiverse-mgqi.onrender.com/api/auth/register", formData);
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/register`, formData);
 
       if (res.status === 201 || res.status === 200) {
         toast.success("Registration successful! Please log in.", {
