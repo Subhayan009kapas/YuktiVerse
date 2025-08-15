@@ -3,7 +3,7 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: var(--body-bg);
+  background: var(--dark-bg);
   background-image: var(--radial-light-green), var(--radial-light-cyan), var(--overlay-pattern);
   background-size: cover;
   overflow: hidden;

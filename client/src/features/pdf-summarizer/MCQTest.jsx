@@ -126,7 +126,7 @@ const MCQTest = ({ mcqs }) => {
                       ${isWrong ? 'wrong' : ''}`}
                     onClick={() => !submitted && handleSelect(index, letter)}
                   >
-                    <div className="option-letter">{letter}.</div>
+                    <div className="option-letter">{letter}</div>
                     <div className="option-text">{opt}</div>
                     {isCorrect && (
                       <div className="feedback-icon correct-icon">

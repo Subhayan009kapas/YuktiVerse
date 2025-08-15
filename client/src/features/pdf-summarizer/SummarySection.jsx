@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import axios from "axios";
 import MCQView from "./MCQView";
+
+const backendURL = import.meta.env.VITE_BACKEND_URL;
 import "./SummarySection.css";
 
 const SummarySection = ({ summary, pdfFile, onSaveSuccess, pdfId }) => {
@@ -62,7 +64,7 @@ const SummarySection = ({ summary, pdfFile, onSaveSuccess, pdfId }) => {
         .join("\n\n");
 
       const res = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/pdf/mcq`,
+        `${backendURL}/api/pdf/mcq`,
         { summaryText: rawTextSummary },
         {
           headers: {
@@ -94,7 +96,7 @@ const SummarySection = ({ summary, pdfFile, onSaveSuccess, pdfId }) => {
       console.log("Now:", new Date());
 
       const res = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/pdf/save-all`,
+        `${backendURL}/api/pdf/save-all`,
         formData,
         {
           headers: {
@@ -138,12 +140,13 @@ const SummarySection = ({ summary, pdfFile, onSaveSuccess, pdfId }) => {
     (parsedSummary.length > 0 ? parsedSummary[0] : null);
 
   return (
-    <div className="summary-section" ref={summaryRef}>
-      <div className="section-header">
-        <h1 className="section-title">Document Summary</h1>
-        <p className="section-subtitle">
+    <div className="pdf-summary-section" ref={summaryRef}>
+              <p className="pdf-section-subtitle">
           Comprehensive overview of key concepts
         </p>
+      <div className="summary-section-header">
+        <h1 className="summary-section-title">Document Summary</h1>
+
       </div>
 
       <div className="search-container">
@@ -192,7 +195,7 @@ const SummarySection = ({ summary, pdfFile, onSaveSuccess, pdfId }) => {
         </div>
 
         {/* Main Content */}
-        <div className="main-content">
+        <div className="summer-main-content">
           <div className="content-header">
             <div className="header-left">
               <h2>Document Summary</h2>
@@ -200,7 +203,7 @@ const SummarySection = ({ summary, pdfFile, onSaveSuccess, pdfId }) => {
             </div>
 
             <div className="action-buttons">
-              <button className="copy-btn" onClick={copyToClipboard}>
+              <button className="summary-copy-btn" onClick={copyToClipboard}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -236,7 +239,7 @@ const SummarySection = ({ summary, pdfFile, onSaveSuccess, pdfId }) => {
           {/* Topic View */}
           {currentTopic ? (
             <div className="topic-view">
-              <div className="topic-header">
+              <div className="summary-topic-header">
                 <div className="topic-badge">{selectedTopicIndex + 1}</div>
                 <h3 className="topic-title">{currentTopic.title}</h3>
               </div>
