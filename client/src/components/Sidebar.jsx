@@ -237,7 +237,9 @@ const Sidebar = () => {
             <div
               key={themeName}
               onClick={() => applyTheme(themeName)}
-              className="theme-option"
+              className={`theme-option ${
+                activeTheme === themeName ? "active" : ""
+              }`}
             >
               {themeName}
             </div>
