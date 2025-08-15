@@ -6,15 +6,16 @@
   left: 0;
   width: 80px;
   height: 100vh;
-  background-color: var(--sidebar-bg, rgba(26, 32, 44, 0.85));
-  backdrop-filter: var(--blur, blur(10px));
+  /* background-color: var(--sidebar-bg, rgba(26, 32, 44, 0.85)); */
+  /* backdrop-filter: var(--blur, blur(10px)); */
+  background: var(--sidebar-bg) ;
   border-right: 1px solid var(--border-light, rgba(255, 255, 255, 0.08));
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 12px 0;
   transition: all 0.3s ease;
-  box-shadow: var(--sidebar-shadow, 2px 0 8px rgba(0, 0, 0, 0.3));
+  /* box-shadow: var(--sidebar-shadow, 2px 0 8px rgba(0, 0, 0, 0.3)); */
 }
 
 /* --- Sidebar Menu (Top section) --- */
@@ -33,12 +34,13 @@
   width: 5rem;
   object-fit: cover;
   border-radius: 50%;
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
 }
 
 /* --- Menu Item General Styles --- */
 .sidebar-menu-item {
   width: 100%;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -57,7 +59,7 @@
   justify-content: center;
   gap: 4px;
   width: 100%;
-  height: 56px;
+  height: 60px;
   padding: 8px 0;
   border-radius: 8px; /* Added for better hover effect visualization */
   transition: var(--transition-fast, all 0.15s ease);
@@ -66,17 +68,19 @@
 .sidebar-menu-item a:hover,
 .theme-toggle-button:hover {
   background-color: var(--icon-bg-hover, rgba(104, 211, 145, 0.05));
+  /* background-color: ; */
   color: var(--text-primary, #fff);
 }
 
 .sidebar-menu-item.active a {
-  background-color: var(--active-bg, rgba(104, 211, 145, 0.08));
+  /* background-color: var(--active-bg, rgba(104, 211, 145, 0.08)); */
+  background-color: var(--category-active);
   color: var(--accent-primary, #68d391);
 }
 
 /* --- Icons and Text --- */
 .menu-icon {
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   transition: transform 0.2s ease;
 }
 
@@ -96,7 +100,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1.5rem;
   padding-bottom: 1rem;
 }
 
@@ -142,6 +146,7 @@
 /* Positioning context for menus */
 .sidebar-menu-item {
   position: relative;
+
 }
 
 /* --- Profile Menu --- */
@@ -163,12 +168,12 @@
 .profile-menu {
   position: absolute;
   bottom: calc(100% + 0px); /* Position above the icon */
-  left: 700%;
+  left: 620%;
   transform: translateX(-50%);
   
-  width: auto;
+  width: 220px;
   background: var(--card-bg);
-  border: 1px solid var(--color-border-primary);
+  border: 1px solid var(--border-accent);
   border-radius: 12px;
   box-shadow: var(--shadow-popup);
   z-index: 101;
@@ -176,6 +181,7 @@
   padding: 8px;
   backdrop-filter: var(--blur);
 
+  /* background-color: red; */
   /* Animation */
   opacity: 0;
   transform: translateX(-50%) translateY(10px);
@@ -191,14 +197,23 @@
 
 .profile-menu-header {
   padding: 8px 12px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
   text-align: center;
 }
-
+.profile-image img{
+  
+  /* background-color: red; */
+  border-radius: 50%;
+  border: 2px solid var(--accent-primary);
+  height: 60px;
+}
 .profile-name {
   font-weight: 600;
   color: var(--text-primary);
   margin: 0;
-  font-size: .5rem;
+  font-size: 1rem;
 }
 
 .profile-email {
@@ -231,41 +246,4 @@
 
 .profile-menu button.logout-button:hover {
   background: var(--clear-btn-hover);
-}
-
-.theme-option {
-  padding: 8px 12px;
-  cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-.theme-option:hover {
-  background-color: var(--color-hover);
-}
-
-.theme-option.active {
-  background-color: var(--accent-primary);
-  color: white; /* makes sure text is readable */
-  border-radius: 4px;
-}
-.profile-menu-header {
-  padding: 8px 12px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  text-align: center;
-  gap: 10px;
-}
-.profile-image img{
-  
-  /* background-color: red; */
-  border-radius: 50%;
-  border: 2px solid var(--accent-primary);
-  height: 60px;
-}
-.profile-name {
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 0;
-  font-size: 1rem;
 }

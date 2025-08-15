@@ -1,5 +1,13 @@
-import React, { useState, useEffect,useRef  } from "react";
-import { FaBook, FaUserCircle, FaMoon, FaEdit, FaTrash, FaStar, FaSignOutAlt } from "react-icons/fa";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  FaBook,
+  FaUserCircle,
+  FaMoon,
+  FaEdit,
+  FaTrash,
+  FaStar,
+  FaSignOutAlt,
+} from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import "./Sidebar.css";
 import { themes } from "./theme"; // Assuming your themes object is in this file
@@ -13,17 +21,17 @@ const Sidebar = () => {
     localStorage.getItem("theme") || "Default" // Defaulting to your new 'Default' theme
   );
   const [showThemeMenu, setShowThemeMenu] = useState(false);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   // const location = useLocation();
-    const navigate = useNavigate();
- const themeMenuRef = useRef(null);
+  const navigate = useNavigate();
+  const themeMenuRef = useRef(null);
 
   const profileMenuRef = useRef(null);
 
   // This useEffect is fine, assuming axios is imported and backendURL is set
   useEffect(() => {
     const fetchUserData = async () => {
-       try {
+      try {
         const token = localStorage.getItem("token");
         if (!token) return;
 
@@ -43,7 +51,10 @@ const Sidebar = () => {
   // Clicks inside the menu will no longer close it.
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
+      if (
+        profileMenuRef.current &&
+        !profileMenuRef.current.contains(event.target)
+      ) {
         setIsMenuOpen(false);
       }
     };
@@ -57,8 +68,6 @@ const Sidebar = () => {
     localStorage.removeItem("userId");
     navigate("/login");
   };
-
-
 
   const applyTheme = (themeName) => {
     const theme = themes[themeName];
@@ -82,7 +91,10 @@ const Sidebar = () => {
   }, [activeTheme]); // Dependency array ensures this runs only when activeTheme changes
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (themeMenuRef.current && !themeMenuRef.current.contains(event.target)) {
+      if (
+        themeMenuRef.current &&
+        !themeMenuRef.current.contains(event.target)
+      ) {
         setShowThemeMenu(false);
       }
     };
@@ -102,10 +114,12 @@ const Sidebar = () => {
     <div className="sidebar-container">
       <ul className="sidebar-menu">
         <li className="sidebar-logo">
-          <img
-            src="https://i.ibb.co/5gzS19h7/Chat-GPT-Image-Aug-13-2025-12-04-20-AM-removebg-preview.png" alt="Chat-GPT-Image-Aug-13-2025-12-04-20-AM-removebg-preview"
-           
-          />
+          <Link to="/" title>
+            <img
+              src="https://i.ibb.co/5gzS19h7/Chat-GPT-Image-Aug-13-2025-12-04-20-AM-removebg-preview.png"
+              alt=""
+            />
+          </Link>
         </li>
 
         <li
@@ -202,7 +216,7 @@ const Sidebar = () => {
                       alt=""
                     />
                   </div>
-                 <div>
+                  <div>
                     <p className="profile-name">{user?.name || "User"}</p>
                     <p className="profile-email">{user?.email}</p>
                   </div>
@@ -214,22 +228,20 @@ const Sidebar = () => {
               </div>
             )}
           </div>
-
         </div>
       </div>
 
       {showThemeMenu && (
-        <div  ref={themeMenuRef} className="theme-menu">
+        <div ref={themeMenuRef} className="theme-menu">
           {Object.keys(themes).map((themeName) => (
-  <div
-    key={themeName}
-    onClick={() => applyTheme(themeName)}
-    className={`theme-option ${themeName === activeTheme ? "active" : ""}`}
-  >
-    {themeName}
-  </div>
-))}
-
+            <div
+              key={themeName}
+              onClick={() => applyTheme(themeName)}
+              className="theme-option"
+            >
+              {themeName}
+            </div>
+          ))}
         </div>
       )}
     </div>
