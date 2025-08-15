@@ -73,8 +73,7 @@ const Sidebar = () => {
     const theme = themes[themeName];
     if (!theme) {
       console.warn(`Theme "${themeName}" not found. Applying default.`);
-      applyTheme("Default");
-      return;
+      return applyTheme("Default");
     }
 
     Object.entries(theme).forEach(([key, value]) => {
@@ -83,7 +82,11 @@ const Sidebar = () => {
 
     localStorage.setItem("theme", themeName);
     setActiveTheme(themeName);
-    setShowThemeMenu(false); // Close dropdown after selecting
+
+    // Wait briefly so highlight renders before closing
+    setTimeout(() => {
+      setShowThemeMenu(false);
+    }, 150);
   };
 
   useEffect(() => {
