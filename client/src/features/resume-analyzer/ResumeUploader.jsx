@@ -76,7 +76,7 @@ const ResumeUploader = () => {
     try {
       setLoading(true);
       const res = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/resume/analyze`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/ai-help/resume-analysis`,
         formData,
         {
           headers: {
