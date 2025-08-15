@@ -10,8 +10,9 @@
 
 .smart-loader-container{
   /* height: 60%; */
-  /* margin-top: -20% ; */
-  transform: scale(2.2);
+  margin-top: -30% ;
+  transform: scale(1.8);
+  
 }
 .notebook-container {
   display: flex;
@@ -19,28 +20,31 @@
   justify-content: center;
   /* padding: 16px; */
 
-  margin-top: -6rem;
+  /* margin-top: -6rem; */
   position: relative;
   z-index: 10;
   width: 100%;
   min-height: 100vh;
   overflow: auto;
-  background: linear-gradient(135deg, #1a1a2e, #16213e);
-  background: var(--glass-bg);
+  /* background: linear-gradient(135deg, #1a1a2e, #16213e); */
+  /* background: var(--glass-bg); */
+  /* background-color: rgb(141, 90, 90); */
   font-family: 'Inter', sans-serif;
 }
 
 .notebook-canvas {
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   min-width: 800px;
-  min-height: 600px;
+  min-height: 1200px;
   background-color: var(--color-background);
   /* background-color: red; */
   border: 1px solid var(--border-light); 
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .grid-lines {
@@ -154,7 +158,7 @@
   justify-content: space-between;
   padding: 20px 30px;
   align-items: center;
-  /* background: rgba(15, 23, 42, 0.7); */
+  background: rgba(15, 23, 42, 0.7);
   background: var(--caard-bg);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--glass-border);
@@ -185,7 +189,7 @@
 
 .note-save-button {
   /* background: repeating-radial-gradient(circle , var(--primary-light) , var(--primary));  */
-  background: var(--bg-score-circle);
+  background: linear-gradient(135deg , var(--accent-primary) , var(--secondary-accent));
   color: white;
   border: none;
   padding: 10px 20px;
@@ -575,4 +579,3 @@ body.dragging {
 
 
 
-  

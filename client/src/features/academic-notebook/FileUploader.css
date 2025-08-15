@@ -6,24 +6,33 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  display: flex; /* Centering the uploader */
+  display: flex;
+  /* Centering the uploader */
   justify-content: center;
   align-items: center;
-  background-color: var(--color-overlay); /* Replaced hardcoded color */
-  backdrop-filter: blur(8px); /* Increased blur for better focus */
+  background-color: var(--color-overlay);
+  /* Replaced hardcoded color */
+  backdrop-filter: blur(8px);
+  /* Increased blur for better focus */
   padding: 1.5rem;
-  z-index: 1000; /* Ensure it's on top */
+  z-index: 1000;
+  /* Ensure it's on top */
 }
 
 .up-uploader-container {
-  background: var(--card-bg); /* Replaced --dark-card */
-  border: 1px solid var(--color-border-primary); /* Replaced --dark-border */
+  background: var(--card-bg);
+  /* Replaced --dark-card */
+  border: 1px solid var(--color-border-primary);
+  /* Replaced --dark-border */
   border-radius: 24px;
   overflow: hidden;
   position: relative;
-  width: 100%; /* More responsive */
-  max-width: 32rem; /* Increased max-width slightly */
-  box-shadow: var(--shadow-popup); /* Use variable */
+  width: 100%;
+  /* More responsive */
+  max-width: 32rem;
+  /* Increased max-width slightly */
+  box-shadow: var(--shadow-popup);
+  /* Use variable */
 }
 
 .up-uploader-container::before {
@@ -32,8 +41,10 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 3px; /* Increased height for prominence */
-  background: var(--gradient-accent); /* Replaced --primary-gradient */
+  height: 3px;
+  /* Increased height for prominence */
+  background: var(--gradient-accent);
+  /* Replaced --primary-gradient */
   z-index: 1;
 }
 
@@ -42,7 +53,8 @@
 }
 
 .up-uploader-header {
-  display: flex; /* For aligning title and close button */
+  display: flex;
+  /* For aligning title and close button */
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -53,7 +65,8 @@
 .up-uploader-title {
   font-size: 1.875rem;
   font-weight: 700;
-  background: var(--gradient-accent); /* Replaced --primary-gradient */
+  background: var(--gradient-accent);
+  /* Replaced --primary-gradient */
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -61,15 +74,19 @@
 }
 
 .up-uploader-subtitle {
-  color: var(--text-secondary); /* Replaced hardcoded color */
-  margin: 0; /* Centered with flex */
+  color: var(--text-secondary);
+  /* Replaced hardcoded color */
+  margin: 0;
+  /* Centered with flex */
 }
 
 /* Close button for the uploader modal */
 .up-close-btn {
   position: absolute;
-  top: -1.5rem; /* Aligned with top padding */
-  right: -1.5rem; /* Aligned with right padding */
+  top: -1.5rem;
+  /* Aligned with top padding */
+  right: -1.5rem;
+  /* Aligned with right padding */
   width: 36px;
   height: 36px;
   background: rgba(var(--white-rgb), 0.1);
@@ -90,10 +107,13 @@
 }
 
 .up-upload-zone {
-  border: 2px dashed var(--color-border-primary); /* Replaced --dark-border */
-  background: var(--upload-bg); /* Use theme variable */
+  border: 2px dashed var(--color-border-primary);
+  /* Replaced --dark-border */
+  background: var(--upload-bg);
+  /* Use theme variable */
   border-radius: 1rem;
-  padding: 3rem; /* Adjusted padding */
+  padding: 3rem;
+  /* Adjusted padding */
   text-align: center;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -101,13 +121,16 @@
 
 .up-upload-zone.up-drag-over {
   border-color: var(--accent-primary);
-  background: var(--upload-drop-hover); /* Use theme variable */
+  background: var(--upload-drop-hover);
+  /* Use theme variable */
   transform: scale(1.02);
 }
 
 .up-upload-zone:hover {
-  border-color: var(--secondary-accent); /* Use secondary accent for hover */
-  background: rgba(var(--accent-primary-rgb), 0.08); /* Use RGB variable */
+  border-color: var(--secondary-accent);
+  /* Use secondary accent for hover */
+  background: rgba(var(--accent-primary-rgb), 0.08);
+  /* Use RGB variable */
 }
 
 .up-upload-icon {
@@ -115,7 +138,8 @@
   height: 64px;
   margin: 0 auto 1.5rem;
   padding: 1rem;
-  background: var(--gradient-accent); /* Replaced --primary-gradient */
+  background: var(--gradient-accent);
+  /* Replaced --primary-gradient */
   border-radius: 1rem;
   display: flex;
   align-items: center;
@@ -124,32 +148,43 @@
 }
 
 @keyframes up-float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 .up-upload-zone-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--text-primary); /* Replaced hardcoded color */
+  color: var(--text-primary);
+  /* Replaced hardcoded color */
   margin-bottom: 0.5rem;
 }
 
 .up-browse-btn {
-  background: var(--bg-submit-gradient); /* Use specific gradient */
+  background: linear-gradient(135deg, var(--accent-primary), var(--secondary-accent));
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
-  color: var(--text-on-primary); /* Use variable */
+  color: var(--text-on-primary);
+  /* Use variable */
   font-weight: 500;
   border: none;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: var(--btn-shadow); /* Use variable */
+  box-shadow: var(--btn-shadow);
+  /* Use variable */
 }
 
 .up-browse-btn:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-button); /* Use variable */
+  box-shadow: var(--shadow-button);
+  /* Use variable */
 }
 
 .up-file-input {
@@ -163,7 +198,8 @@
 .up-files-header {
   font-size: 1.125rem;
   font-weight: 600;
-  color: var(--text-primary); /* Replaced hardcoded color */
+  color: var(--text-primary);
+  /* Replaced hardcoded color */
   margin-bottom: 1rem;
 }
 
@@ -173,13 +209,17 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  padding-right: 0.5rem; /* Add space for scrollbar */
+  padding-right: 0.5rem;
+  /* Add space for scrollbar */
 }
 
 .up-file-item-2 {
-  background: var(--row-expanded-bg); /* Use theme variable */
-  border: 1px solid var(--color-border-secondary); /* Use variable */
-  border-radius: 0.75rem; /* Softer radius */
+  background: var(--row-expanded-bg);
+  /* Use theme variable */
+  border: 1px solid var(--color-border-secondary);
+  /* Use variable */
+  border-radius: 0.75rem;
+  /* Softer radius */
   padding: 1rem;
   display: flex;
   align-items: center;
@@ -189,7 +229,8 @@
 
 .up-file-item-2:hover {
   border-color: var(--accent-primary);
-  background: var(--row-hover); /* Use variable */
+  background: var(--row-hover);
+  /* Use variable */
   transform: translateY(-1px);
 }
 
@@ -203,12 +244,14 @@
 .up-file-icon-container {
   width: 3rem;
   height: 3rem;
-  background: var(--file-icon-bg); /* Use variable */
+  background: var(--file-icon-bg);
+  /* Use variable */
   border-radius: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--accent-primary); /* Use variable */
+  color: var(--accent-primary);
+  /* Use variable */
 }
 
 .up-file-info {
@@ -218,7 +261,8 @@
 
 .up-file-name {
   font-weight: 500;
-  color: var(--text-primary); /* Replaced hardcoded color */
+  color: var(--text-primary);
+  /* Replaced hardcoded color */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -226,7 +270,8 @@
 
 .up-file-size {
   font-size: 0.875rem;
-  color: var(--text-secondary); /* Replaced hardcoded color */
+  color: var(--text-secondary);
+  /* Replaced hardcoded color */
 }
 
 .up-remove-btn {
@@ -244,7 +289,8 @@
 }
 
 .up-remove-btn:hover {
-  background: var(--color-error); /* Use variable */
+  background: var(--color-error);
+  /* Use variable */
   transform: scale(1.1);
 }
 
@@ -256,7 +302,8 @@
 
 .up-upload-btn {
   flex: 1;
-  background: var(--bg-submit-gradient); /* Use specific gradient */
+  background: var(--accent-primary);
+  /* Use specific gradient */
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
   color: var(--text-on-primary);
@@ -279,12 +326,14 @@
   opacity: 0.6;
   cursor: not-allowed;
   transform: none;
-  box-shadow: none; /* Remove shadow when disabled */
+  box-shadow: none;
+  /* Remove shadow when disabled */
 }
 
 .up-clear-btn {
   padding: 0.75rem 1.5rem;
-  border: 1px solid var(--color-border-tertiary); /* Use variable */
+  border: 1px solid var(--color-border-tertiary);
+  /* Use variable */
   border-radius: 0.5rem;
   color: var(--text-tertiary);
   background: transparent;
@@ -293,7 +342,8 @@
 }
 
 .up-clear-btn:hover {
-  background: var(--clear-btn-hover); /* Use variable */
+  background: var(--clear-btn-hover);
+  /* Use variable */
   color: var(--danger);
   border-color: var(--danger);
 }
@@ -301,14 +351,18 @@
 .up-loading-spinner {
   width: 1.25rem;
   height: 1.25rem;
-  border: 2px solid rgba(var(--white-rgb), 0.3); /* Use RGB variable */
-  border-top-color: var(--white); /* Use variable */
+  border: 2px solid rgba(var(--white-rgb), 0.3);
+  /* Use RGB variable */
+  border-top-color: var(--white);
+  /* Use variable */
   border-radius: 50%;
   animation: up-spin 1s linear infinite;
 }
 
 @keyframes up-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Not currently used, but themed for future use */
@@ -327,7 +381,16 @@
 }
 
 @keyframes up-loading {
-  0%   { transform: translateX(-100%); }
-  50%  { transform: translateX(150%); } /* Adjusted for better visual */
-  100% { transform: translateX(400%); }
+  0% {
+    transform: translateX(-100%);
+  }
+
+  50% {
+    transform: translateX(150%);
+  }
+
+  /* Adjusted for better visual */
+  100% {
+    transform: translateX(400%);
+  }
 }

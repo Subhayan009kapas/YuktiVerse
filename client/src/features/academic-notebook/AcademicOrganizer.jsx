@@ -29,25 +29,10 @@ import RenamePrompt from "./RenamePrompt";
 import Notebook from "../ai-notepad/Notebook";
 import ModernPDFViewer from "../ai-notepad/ModernPDFViewer";
 import axios from "axios";
-import {
-  DotsLoader,
-  RingLoader,
-  SquaresLoader,
-  BarsLoader,
-  OrbitLoader,
-  ProgressLoader,
-  HexagonLoader,
-  OverlayLoader,
-  InlineLoader,
-  SmartLoader,
-  useLoader,
-  withLoading,
-  LoaderShowcase,
-} from "../../components/Loader";
+import { SquaresLoader, InlineLoader } from "../../components/Loader";
 import AiHelpers from "../ai-notepad/AiHelpers";
 import { toast } from "react-toastify";
 
-const STORAGE_KEY = "academicOrganizerData";
 let userId = localStorage.getItem("userId");
 const token = localStorage.getItem("token");
 
@@ -67,7 +52,7 @@ const AcademicOrganizer = () => {
 
   const [showNewModal, setShowNewModal] = useState(false);
 
-  const [moving, setMoving] = useState(null);
+  // const [moving, setMoving] = useState(null);
   const [renaming, setRenaming] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [showSearchResults, setShowSearchResults] = useState(false);
@@ -101,37 +86,73 @@ const AcademicOrganizer = () => {
   const [editingSubjectId, setEditingSubjectId] = useState(null);
   const [editingChapterId, setEditingChapterId] = useState(null);
   const [showNotebookForm, setShowNotebookForm] = useState(false);
-  // const [notebookName, setNotebookName] = useState('');
-  // const [textBoxes, setTextBoxes] = useState([]);
-  // const [isSaving, setIsSaving] = useState(false);
 
   const [chatActive, setChatActive] = useState(false);
   const panelRef = useRef(null);
 
-  // inside AcademicOrganizer, just below your useState declarations:
-  const persistAllFiles = (newFiles) => {
-    console.log("[Cache] Persisting", newFiles.length, "files to localStorage");
-    setAllFiles(newFiles);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newFiles));
+  const [allFiles, setAllFiles] = useState([]);
+  const [filesLoading, setFilesLoading] = useState(false);
+  const [isFetchingAllFiles, setIsFetchingAllFiles] = useState(false);
+  const [allFilesFetched, setAllFilesFetched] = useState(false);
+  const [fetchAllFilesError, setFetchAllFilesError] = useState(null);
+  const [yearsLoading, setYearsLoading] = useState(true);
+  const [subjectsLoading, setSubjectsLoading] = useState(false);
+  const [chaptersLoading, setChaptersLoading] = useState(false);
+  const [fileLoading, setFileLoading] = useState(false);
+
+  // ✅ FIX 2: Clear all user-specific data when component mounts
+  const clearUserData = () => {
+    console.log("[Clear] Clearing all user-specific data");
+    setYears([]);
+    setSubjects([]);
+    setChapters([]);
+    setMaterials({ notebooks: [], handwrittenNotes: [] });
+    setAllFiles([]);
+    setRecentFiles([]);
+    setSharedNotebooks([]);
+    setSelectedYear(null);
+    setSelectedSubject(null);
+    setSelectedChapter(null);
+    setSelectedFile(null);
+    setSelectedYearId(null);
+    setSelectedSubjectId(null);
+    setSelectedChapterId(null);
+    setSelectedNotebook(null);
+    setViewerType(null);
+    setNotebookContent(null);
+    // setAllFilesFetched(false);
+    setSearchTerm("");
+    setShowSearchResults(false);
   };
 
-  useEffect(() => {
-    const cached = localStorage.getItem(STORAGE_KEY);
-    if (cached) {
-      console.log(
-        "[Cache] Found saved files, loading",
-        JSON.parse(cached).length,
-        "items"
-      );
+useEffect(() => {
+    const handleStorageChange = () => {
+      const newUserId = localStorage.getItem("userId");
+      const newToken = localStorage.getItem("token");
       
-console.log("User ID:", userId);
-      persistAllFiles(JSON.parse(cached));
-      setAllFilesFetched(true);
-    } else {
-      console.log("[Cache] No cache found, fetching from server");
-      fetchAllFiles(); // fetchAllFiles itself will call persistAllFiles
-    }
+
+      // If userId changed or user logged out
+      if (newUserId !== userId || !newUserId || !newToken) {
+        console.log(`[Auth] User changed from ${userId} to ${newUserId}`);
+        clearUserData();
+        
+        if (newUserId && newToken) {
+          // New user logged in, refetch data
+          userId = newUserId;
+          fetchYears();
+        } else {
+          setYearsLoading(false);
+        }
+      }
+    };
+    // Listen for storage changes (logout/login)
+    window.addEventListener('storage', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, []);
+
 
   // ✅ Close on click outside
   useEffect(() => {
@@ -157,27 +178,61 @@ console.log("User ID:", userId);
     setActiveTab("notes");
   };
 
-  const [allFiles, setAllFiles] = useState([]);
-  const [filesLoading, setFilesLoading] = useState(false);
+  // ✅ FIX: Add initial useEffect to fetch years and all files on component mount
+  useEffect(() => {
+    console.log("[Component Mount] AcademicOrganizer mounted");
+    
+    const currentUserId = localStorage.getItem("userId");
+    const currentToken = localStorage.getItem("token");
+    
+    if (currentUserId && currentToken) {
+      userId = currentUserId; // Update global variable
+      // fetchYears();
+      fetchAllFiles();
+    } else {
+      console.log("[Component Mount] No auth credentials found");
+      setYearsLoading(false);
+    }
+  }, []);
+
 
   useEffect(() => {
     const fetchYears = async () => {
+      const currentUserId = localStorage.getItem("userId");
+      const currentToken = localStorage.getItem("token");
+      
+      if (!currentUserId || !currentToken) {
+        console.log("[API] No auth credentials, skipping years fetch");
+              setYearsLoading(false);
+        return;
+      }
+      
       try {
-        console.log(token);
-
+              setYearsLoading(true);
         const res = await axios.get(`${backendURL}/years`, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${currentToken}`,
             "Content-Type": "application/json",
           },
         });
+        console.log(res);
+        
         setYears(res.data);
       } catch (err) {
         console.error("Error fetching years:", err);
+        if (err.response?.status === 401) {
+          // Token expired or invalid, clear auth data
+          localStorage.removeItem("token");
+          localStorage.removeItem("userId");
+          clearUserData();
+        }
+      }finally {
+        setYearsLoading(false);
       }
     };
     fetchYears();
   }, []);
+
 
   // sharing useeffect
   useEffect(() => {
@@ -191,7 +246,6 @@ console.log("User ID:", userId);
   }, [activeTab]);
 
   // Fetch subjects when year is selected
-  const [subjectsLoading, setSubjectsLoading] = useState(false);
   useEffect(() => {
     if (selectedYearId) {
       const fetchSubjects = async () => {
@@ -220,7 +274,7 @@ console.log("User ID:", userId);
   }, [selectedYearId]);
 
   // Fetch chapters when subject is selected
-  const [chaptersLoading, setChaptersLoading] = useState(false);
+
   useEffect(() => {
     if (selectedSubjectId) {
       const fetchChapters = async () => {
@@ -248,33 +302,42 @@ console.log("User ID:", userId);
     }
   }, [selectedSubjectId]);
 
+    useEffect(() => {
+    if (showSearchResults && searchTerm.trim() !== "" && allFiles.length === 0) {
+      fetchAllFiles();
+    }
+  }, [showSearchResults, searchTerm]);
   // shareing relaetd
- const fetchSharedNotebooks = async () => {
-  try {
-    setSharedLoading(true);
-    setSharedError(null);
+  const fetchSharedNotebooks = async () => {
+    
+    const currentUserId = localStorage.getItem("userId");
+    const currentToken = localStorage.getItem("token");
+        if (!currentUserId || !currentToken) return;
+    try {
+      setSharedLoading(true);
+      setSharedError(null);
 
-    const response = await axios.get(
-      `${backendURL}/api/share/user/notebooks/${userId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    setSharedNotebooks(response.data);
-    console.log("Shared Notebooks:", response.data);
-  } catch (err) {
-    console.error("Error fetching shared notebooks:", err);
-    setSharedError("Failed to load shared notebooks");
-  } finally {
-    setSharedLoading(false);
-  }
-};
+      const response = await axios.get(
+        `${backendURL}/api/share/user/notebooks/${currentUserId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${currentToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      // console.log(response);
 
+      setSharedNotebooks(response.data);
+    } catch (err) {
+      console.error("Error fetching shared notebooks:", err);
+      setSharedError("Failed to load shared notebooks");
+    } finally {
+      setSharedLoading(false);
+    }
+  };
   const handleShareLinkGenerated = () => {
-    fetchSharedNotebooks(); // reload shared notebooks on new share link
+    fetchSharedNotebooks();
   };
 
   const handleRevokeShare = async (shareId) => {
@@ -285,13 +348,14 @@ console.log("User ID:", userId);
     ) {
       return;
     }
-
+    const currentUserId = localStorage.getItem("userId");
+    const currentToken = localStorage.getToken("token");
     try {
       await axios.delete(
-        `${backendURL}/api/share/notebook/${userId}/${shareId}`,
+        `${backendURL}/api/share/notebook/${currentUserId}/${shareId}`,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${currentToken}`,
             "Content-Type": "application/json",
           },
         }
@@ -319,7 +383,7 @@ console.log("User ID:", userId);
   // Fetch materials when chapter is selected
   useEffect(() => {
     if (selectedChapterId) {
-      setLoading(true);
+      setFileLoading(true);
       // setChaptersLoading(true);
       setError(null);
       axios
@@ -335,12 +399,120 @@ console.log("User ID:", userId);
           setError("Failed to load materials");
         })
         .finally(() => {
-          setLoading(false);
+          // setLoading(false);
           setFileLoading(false);
         });
     }
   }, [selectedChapterId]);
+  // Fetch all files for search when needed
+  const fetchAllFiles = async () => {
+    const currentUserId = localStorage.getItem("userId");
+    const currentToken = localStorage.getItem("token");
+        
+    if (!currentUserId || !currentToken) {
+      console.log("[fetchAllFiles] No auth credentials available");
+      return;
+    }
 
+    setFilesLoading(true);
+    try {
+      const allFilesData = [];
+
+      const yearsRes = await axios.get(`${backendURL}/years`, {
+        headers: {
+          Authorization: `Bearer ${currentToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const years = yearsRes.data;
+
+      for (const year of years) {
+        const subjectsRes = await axios.get(
+          `${backendURL}/years/${year._id}/subjects`,
+          {
+            headers: {
+              Authorization: `Bearer ${currentToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const subjects = subjectsRes.data;
+
+        for (const subject of subjects) {
+          const chaptersRes = await axios.get(
+            `${backendURL}/years/subjects/${subject._id}/chapters`,
+            {
+              headers: {
+                Authorization: `Bearer ${currentToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const chapters = chaptersRes.data;
+
+          for (const chapter of chapters) {
+            try {
+              const materialsRes = await axios.get(
+                `${backendURL}/years/${chapter._id}/materials`,
+                {
+                  headers: {
+                    Authorization: `Bearer ${currentToken}`,
+                    "Content-Type": "application/json",
+                  },
+                }
+              );
+              const materials = materialsRes.data;
+
+              if (materials.notebooks) {
+                materials.notebooks.forEach((notebook) => {
+                  allFilesData.push({
+                    ...notebook,
+                    type: "notebook",
+                    yearId: year._id,
+                    yearTitle: year.title,
+                    subjectId: subject._id,
+                    subjectName: subject.name,
+                    chapterId: chapter._id,
+                    chapterTitle: chapter.title,
+                    fullPath: `${year.title} / ${subject.name} / ${chapter.title}`,
+                    searchableText: notebook.name.toLowerCase(),
+                  });
+                });
+              }
+
+              if (materials.handwrittenNotes) {
+                materials.handwrittenNotes.forEach((note) => {
+                  allFilesData.push({
+                    ...note,
+                    type: "handwritten",
+                    yearId: year._id,
+                    yearTitle: year.title,
+                    subjectId: subject._id,
+                    subjectName: subject.name,
+                    chapterId: chapter._id,
+                    chapterTitle: chapter.title,
+                    fullPath: `${year.title} / ${subject.name} / ${chapter.title}`,
+                    searchableText: note.title.toLowerCase(),
+                  });
+                });
+              }
+            } catch (chapterErr) {
+              console.warn(
+                `Failed to fetch materials for chapter ${chapter.title}:`,
+                chapterErr
+              );
+            }
+          }
+        }
+      }
+      console.log(`Loaded ${allFilesData.length} files for search for user ${currentUserId}`);
+      setAllFiles(allFilesData);
+    } catch (err) {
+      console.error("Error fetching all files:", err);
+    } finally {
+      setFilesLoading(false);
+    }
+  };
   const handleYearClick = (yearId) => {
     setSelectedFile(null); // ✅ close any open file
     setViewerType(null);
@@ -400,7 +572,6 @@ console.log("User ID:", userId);
     setSelectedNotebook(null);
   };
 
-  const [fileLoading, setFileLoading] = useState(false);
   const handleFileClick = async (file) => {
     // console.log(file._id);
     // /api/notebooks/_id
@@ -421,18 +592,22 @@ console.log("User ID:", userId);
             "Content-Type": "application/json",
           },
         });
+        // console.log(res)  ;
+        
         setNotebookContent(res.data);
         // setFileLoading(false);
         setViewerType("notebook");
       } catch (err) {
         console.error("Error loading notebook:", err);
       } finally {
-        // setFileLoading(false);
+        setFileLoading(false);
       }
     } else if (file.type === "handwritten") {
       setViewerType("pdf"); // we'll use file.fileUrl to view this
+          setFileLoading(false);
     } else {
       console.warn("Unknown file type");
+          setFileLoading(false);
     }
   };
 
@@ -440,6 +615,33 @@ console.log("User ID:", userId);
   const handleCloseFile = () => {
     setSelectedFile(null);
     setFileLoading(null);
+  };
+
+    // Function to load chapter context and open file from search results
+  const loadChapterAndOpenFile = async (file) => {
+    try {
+      console.log("Opening file from search:", file);
+      
+      // Set the hierarchy to navigate to the file's location
+      setSelectedYearId(file.yearId);
+      setSelectedYear(file.yearTitle);
+      setSelectedSubjectId(file.subjectId);
+      setSelectedSubject(file.subjectName);
+      setSelectedChapterId(file.chapterId);
+      setSelectedChapter(file.chapterTitle);
+
+      // Close search and switch to notes tab
+      setShowSearchResults(false);
+      setSearchTerm("");
+      setActiveTab("notes");
+
+      // Open the file after a brief delay to allow materials to load
+      setTimeout(() => {
+        handleFileClick(file);
+      }, 300);
+    } catch (err) {
+      console.error("Failed to navigate to file:", err);
+    }
   };
 
   const handleCreateYear = async (title) => {
@@ -520,12 +722,6 @@ console.log("User ID:", userId);
 
   // Delete function for the folders only
   const handleDeleteItem = async (type, id) => {
-    // if (
-    //   !window.confirm(
-    //     "Are you sure you want to delete this item and all its contents?"
-    //   )
-    // )
-    //   return;
     setDeleteTarget(true);
     try {
       if (type === "year") {
@@ -821,23 +1017,15 @@ console.log("User ID:", userId);
   };
 
   // Toggle important notebook
- const toggleImportantNotebook = async (noteId) => {
-  try {
-    await axios.patch(
-      `${backendURL}/api/notebooks/${noteId}/important`,
-      {}, // empty body
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-  } catch (error) {
-    console.error("Failed to toggle important:", error);
-  }
-};
+  const toggleImportantNotebook = async (noteId) => {
 
+    await axios.patch(`${backendURL}/api/notebooks/${noteId}/important`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+  };
 
   // Rename scanned note
   const renameScannedNote = async (noteId, newTitle) => {
@@ -960,274 +1148,6 @@ console.log("User ID:", userId);
     }
     return steps;
   };
-
-  const [isFetchingAllFiles, setIsFetchingAllFiles] = useState(false);
-  const [allFilesFetched, setAllFilesFetched] = useState(false);
-  const [fetchAllFilesError, setFetchAllFilesError] = useState(null);
-
-  const fetchAllFiles = async () => {
-    if (allFilesFetched) return;
-    setIsFetchingAllFiles(true);
-    setFetchAllFilesError(null);
-    setFilesLoading(true);
-    try {
-      const allFilesData = [];
-
-      const yearsRes = await axios.get(`${backendURL}/years`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-      const years = yearsRes.data;
-
-      for (const year of years) {
-        const subjectsRes = await axios.get(
-          `${backendURL}/years/${year._id}/subjects`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const subjects = subjectsRes.data;
-
-        for (const subject of subjects) {
-          const chaptersRes = await axios.get(
-            `${backendURL}/years/subjects/${subject._id}/chapters`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const chapters = chaptersRes.data;
-
-          for (const chapter of chapters) {
-            try {
-              const materialsRes = await axios.get(
-                `${backendURL}/years/${chapter._id}/materials`,
-                {
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                  },
-                }
-              );
-              const materials = materialsRes.data;
-
-              if (materials.notebooks) {
-                materials.notebooks.forEach((notebook) => {
-                  allFilesData.push({
-                    ...notebook,
-                    type: "notebook",
-                    yearId: year._id,
-                    yearTitle: year.title,
-                    subjectId: subject._id,
-                    subjectName: subject.name,
-                    chapterId: chapter._id,
-                    chapterTitle: chapter.title,
-                    fullPath: `${year.title} / ${subject.name} / ${chapter.title}`,
-                    searchableText: notebook.name.toLowerCase(), // for easier searching
-                  });
-                });
-              }
-
-              if (materials.handwrittenNotes) {
-                materials.handwrittenNotes.forEach((note) => {
-                  allFilesData.push({
-                    ...note,
-                    type: "handwritten",
-                    yearId: year._id,
-                    yearTitle: year.title,
-                    subjectId: subject._id,
-                    subjectName: subject.name,
-                    chapterId: chapter._id,
-                    chapterTitle: chapter.title,
-                    fullPath: `${year.title} / ${subject.name} / ${chapter.title}`,
-                    searchableText: note.title.toLowerCase(), // for easier searching
-                  });
-                });
-              }
-            } catch (chapterErr) {
-              console.warn(
-                `Failed to fetch materials for chapter ${chapter.title}:`,
-                chapterErr
-              );
-            }
-          }
-        }
-      }
-
-      console.log(`Loaded ${allFilesData.length} files for search`);
-      setAllFiles(allFilesData);
-      setAllFilesFetched(true);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(allFilesData));
-    } catch (err) {
-      console.error("Error fetching all files:", err);
-      setFetchAllFilesError("Failed to fetch all files.");
-    } finally {
-      setFilesLoading(false);
-      setIsFetchingAllFiles(false);
-    }
-  };
-  useEffect(() => {
-    if (
-      showSearchResults &&
-      searchTerm.trim() !== "" &&
-      !allFilesFetched &&
-      !isFetchingAllFiles
-    ) {
-      fetchAllFiles();
-    }
-  }, [showSearchResults, searchTerm, allFilesFetched, isFetchingAllFiles]);
-
-  const [yearsLoading, setYearsLoading] = useState(true);
-  useEffect(() => {
-    const fetchYears = async () => {
-      try {
-        setYearsLoading(true);
-        const res = await axios.get(`${backendURL}/years`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-        setYears(res.data);
-
-        // After years are loaded, fetch all files for search
-        fetchAllFiles();
-      } catch (err) {
-        console.error("Error fetching years:", err);
-      } finally {
-        setYearsLoading(false);
-      }
-    };
-    fetchYears();
-  }, []);
-  const updateAllFilesCache = (
-    chapterId,
-    updatedMaterials,
-    yearTitle,
-    subjectName,
-    chapterTitle,
-    yearId,
-    subjectId
-  ) => {
-    setAllFiles((prevFiles) => {
-      prevFiles.map((f) =>
-        f._id === f._id ? { ...f, important: !f.important } : f
-      );
-      // Re old files from this chapter
-      const filteredFiles = prevFiles.filter(
-        (file) => file.chapterId !== chapterId
-      );
-
-      // Add updated files
-      const newFiles = [];
-
-      // Add notebooks
-      if (updatedMaterials.notebooks) {
-        updatedMaterials.notebooks.forEach((notebook) => {
-          newFiles.push({
-            ...notebook,
-            type: "notebook",
-            yearId,
-            yearTitle,
-            subjectId,
-            subjectName,
-            chapterId,
-            chapterTitle,
-            fullPath: `${yearTitle} / ${subjectName} / ${chapterTitle}`,
-            searchableText: notebook.name.toLowerCase(),
-          });
-        });
-      }
-
-      // Add handwritten notes
-      if (updatedMaterials.handwrittenNotes) {
-        updatedMaterials.handwrittenNotes.forEach((note) => {
-          newFiles.push({
-            ...note,
-            type: "handwritten",
-            yearId,
-            yearTitle,
-            subjectId,
-            subjectName,
-            chapterId,
-            chapterTitle,
-            fullPath: `${yearTitle} / ${subjectName} / ${chapterTitle}`,
-            searchableText: note.title.toLowerCase(),
-          });
-        });
-      }
-
-      const merged = [...filteredFiles, ...newFiles];
-      console.log(
-        `[Cache] Updating cache for chapter ${chapterId}: now ${merged.length} total files`
-      );
-      persistAllFiles(merged);
-      return merged;
-
-      return [...filteredFiles, ...newFiles];
-    });
-  };
-
-  // Update the existing materials fetch effect to also update the cache
-  useEffect(() => {
-    if (selectedChapterId) {
-      // setLoading(true);
-      setFileLoading(true);
-      // setFileLoading(false)
-      setError(null);
-      axios
-        .get(`${backendURL}/years/${selectedChapterId}/materials`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        })
-        .then((res) => {
-          setMaterials(res.data);
-
-          // Update the all files cache
-          const yearTitle =
-            years.find((y) => y._id === selectedYearId)?.title || "";
-          const subjectName =
-            subjects.find((s) => s._id === selectedSubjectId)?.name || "";
-          const chapterTitle =
-            chapters.find((c) => c._id === selectedChapterId)?.title || "";
-
-          updateAllFilesCache(
-            selectedChapterId,
-            res.data,
-            yearTitle,
-            subjectName,
-            chapterTitle,
-            selectedYearId,
-            selectedSubjectId
-          );
-        })
-        .catch((err) => {
-          console.error("Error fetching materials:", err);
-          setError("Failed to load materials");
-        })
-        .finally(() => {
-          // setLoading(false) ;
-          setFileLoading(false);
-        });
-    }
-  }, [
-    selectedChapterId,
-    selectedYearId,
-    selectedSubjectId,
-    years,
-    subjects,
-    chapters,
-  ]);
-
   // Updated search function that uses allFiles
   const searchAllFiles = (searchTerm) => {
     if (!searchTerm.trim()) return [];
@@ -1263,70 +1183,6 @@ console.log("User ID:", userId);
     }
     return searchAllFiles(searchTerm);
   };
-  const loadChapterAndOpenFile = async (file) => {
-    try {
-      // If we're not in the right chapter context, navigate there first
-      if (selectedChapterId !== file.chapterId) {
-        // Set the hierarchy
-        setSelectedYearId(file.yearId);
-        setSelectedYear(file.yearTitle);
-        setSelectedSubjectId(file.subjectId);
-        setSelectedSubject(file.subjectName);
-        setSelectedChapterId(file.chapterId);
-        setSelectedChapter(file.chapterTitle);
-
-        // Wait a bit for the materials to load, then open the file
-        setTimeout(() => {
-          handleFileClick(file);
-        }, 300);
-      } else {
-        // Already in the right context, just open the file
-        handleFileClick(file);
-      }
-    } catch (err) {
-      console.error("Failed to navigate to file:", err);
-    }
-  };
-
-  // Functions to update cache when files are created/deleted/renamed
-  // const addFileToCache = (newFile, type) => {
-  //   const yearTitle = years.find(y => y._id === selectedYearId)?.title || '';
-  //   const subjectName = subjects.find(s => s._id === selectedSubjectId)?.name || '';
-  //   const chapterTitle = chapters.find(c => c._id === selectedChapterId)?.title || '';
-
-  //   const fileWithContext = {
-  //     ...newFile,
-  //     type,
-  //     yearId: selectedYearId,
-  //     yearTitle,
-  //     subjectId: selectedSubjectId,
-  //     subjectName,
-  //     chapterId: selectedChapterId,
-  //     chapterTitle,
-  //     fullPath: `${yearTitle} / ${subjectName} / ${chapterTitle}`,
-  //     searchableText: (type === 'notebook' ? newFile.name : newFile.title).toLowerCase()
-  //   };
-
-  //   setAllFiles(prev => [...prev, fileWithContext]);
-  // };
-
-  // const removeFileFromCache = (fileId) => {
-  //   setAllFiles(prev => prev.filter(file => file._id !== fileId));
-  // };
-
-  // const updateFileInCache = (fileId, updates) => {
-  //   setAllFiles(prev => prev.map(file => {
-  //     if (file._id === fileId) {
-  //       const updatedFile = { ...file, ...updates };
-  //       // Update searchable text if name/title changed
-  //       if (updates.name || updates.title) {
-  //         updatedFile.searchableText = (updates.name || updates.title).toLowerCase();
-  //       }
-  //       return updatedFile;
-  //     }
-  //     return file;
-  //   }));
-  // };
 
   // Upload purpose
   const handleUploadFile = async (file, title) => {
@@ -1433,7 +1289,7 @@ console.log("User ID:", userId);
     setActiveTab(tabId);
   };
   return (
-   <div
+    <div
       className={`ao-container ${sidebarOpen ? "" : "collapsed"}`}
       onClick={handleCloseContextMenu}
     >
@@ -1965,7 +1821,8 @@ console.log("User ID:", userId);
                                         setNewItemName("");
                                       }}
                                     >
-                                      <FaPlus /> New Chapter
+                                      <FaPlus />
+                                      Chapter
                                     </button>
                                   )}
                                 </div>
@@ -2083,6 +1940,7 @@ console.log("User ID:", userId);
                   }));
                 }}
                 selectedChapterId={selectedChapterId}
+                passSetShowNewModal = {setShowNewModal}
               />
             )}
             {uploading && (
@@ -2158,7 +2016,7 @@ console.log("User ID:", userId);
 
                         {file.type === "image" && <FaImage />}
                       </div>
-                      <button
+                      {/* <button
                         className="ao-file-action-btn active"
                         onClick={(e) => {
                           e.stopPropagation();
@@ -2166,7 +2024,7 @@ console.log("User ID:", userId);
                         }}
                       >
                         <FaStar />
-                      </button>
+                      </button> */}
                     </div>
                     <div className="ao-file-name">
                       {file.type === "notebook"
@@ -2215,7 +2073,12 @@ console.log("User ID:", userId);
                     className="shared-notebook-card"
                   >
                     <div className="shared-card-header">
-                      <div className="ao-file-icon-container">
+                      <div className="ao-file-icon-container-share">
+                                           {sharedItem.isActive && (
+                          <div className="share-indicator">
+                            <FaGlobe />
+                          </div>
+                        )}
                         <div className="file-icon-1">
                           {sharedItem.type === "notebook" ? (
                             <FaStickyNote />
@@ -2226,11 +2089,7 @@ console.log("User ID:", userId);
                           )}
                         </div>
                         {/* Show globe icon only if isActive */}
-                        {sharedItem.isActive && (
-                          <div className="share-indicator">
-                            <FaGlobe />
-                          </div>
-                        )}
+     
                       </div>
 
                       <div className="shared-actions">
@@ -2252,7 +2111,7 @@ console.log("User ID:", userId);
                     </div>
 
                     <div className="shared-card-content">
-                      <div className="shared-file-name">
+                      <div className="shared-file-name-2">
                         {sharedItem.title || "Untitled"}
                       </div>
 
@@ -2407,12 +2266,7 @@ console.log("User ID:", userId);
                             type: "notebook",
                           })
                         }
-                      >
-                        <div className="ao-file-icon-container">
-                          <div className="ao-file-icon">
-                            <FaStickyNote />
-                          </div>
-                          <button
+                      > <button
                             className={`ao-file-action-btn ${
                               notebook.important ? "active" : ""
                             }`}
@@ -2428,6 +2282,11 @@ console.log("User ID:", userId);
                           >
                             <FaStar />
                           </button>
+                        <div className="ao-file-icon-container">
+                          <div className="ao-file-icon">
+                            <FaStickyNote />
+                          </div>
+                         
                         </div>
 
                         <div className="file-details">
@@ -2483,15 +2342,7 @@ console.log("User ID:", userId);
                           })
                         }
                       >
-                        <div className="ao-file-icon-container">
-                          <div className="ao-file-icon">
-                            {note.fileType === "pdf" ? (
-                              <FaFilePdf />
-                            ) : (
-                              <FaImage />
-                            )}
-                          </div>
-                          <button
+                            <button
                             className={`ao-file-action-btn ${
                               note.important ? "active" : ""
                             }`}
@@ -2507,6 +2358,15 @@ console.log("User ID:", userId);
                           >
                             <FaStar />
                           </button>
+                        <div className="ao-file-icon-container">
+                          <div className="ao-file-icon">
+                            {note.fileType === "pdf" ? (
+                              <FaFilePdf />
+                            ) : (
+                              <FaImage />
+                            )}
+                          </div>
+                      
                         </div>
 
                         <div className="file-details">
@@ -2760,5 +2620,3 @@ console.log("User ID:", userId);
 };
 
 export default AcademicOrganizer;
-
-
