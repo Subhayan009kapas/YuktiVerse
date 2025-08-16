@@ -29,13 +29,19 @@ import CodingContest from "./features/coding_contest/CodingContest";
 // new mobile page
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isLoading, setIsLoading] = useState(window.innerWidth >= 768);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const checkDevice = () => setIsMobile(window.innerWidth < 768);
-    checkDevice();
+    const checkDevice = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+
+      // Skip loader on mobile
+      if (mobile) setIsLoading(false);
+      else setIsLoading(true); // optional: reset loader on desktop resize
+    };
     window.addEventListener("resize", checkDevice);
     return () => window.removeEventListener("resize", checkDevice);
   }, []);
@@ -48,16 +54,13 @@ function App() {
     if (!isMobile) {
       const timer = setTimeout(() => setIsLoading(false), 3000);
       return () => clearTimeout(timer);
-    } else {
-      setIsLoading(false); // skip loader on mobile
     }
   }, [isMobile]);
+
   if (isLoading) return <SplashScreen onLoaded={() => setIsLoading(false)} />;
 
-  // If mobile/tablet, show only MobileNotSupported page
   if (isMobile) return <MobileNotSupported />;
 
-  // Desktop routes (unchanged)
   return (
     <Router>
       <Routes>
