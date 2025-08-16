@@ -52,6 +52,7 @@ app.use("/api/resume", resumeRoutes);
 
 import testRoutes from "./routes/testRoutes.js"; // <-- Path must be correct
 
+
 // ... after app = express()
 app.use("/api", testRoutes);
 
@@ -69,3 +70,6 @@ app.use("/api/share", shareRoutes);
 
 // genini routes
 app.use("/api/ai-help", geminiRoutes);
+
+import codingContestRoutes from "./routes/codingContest.js";
+app.use("/api/contest", codingContestRoutes);
