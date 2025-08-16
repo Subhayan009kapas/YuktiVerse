@@ -26,7 +26,7 @@ import ErrorPage from "../Error Page/ErrorPage";
 import MobileNotSupported from "./pages/MobileNotSupported";
 import CodingContest from "./features/coding_contest/CodingContest";
 
- // new mobile page
+// new mobile page
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -44,10 +44,14 @@ function App() {
     const token = localStorage.getItem("token");
     if (token) setIsAuthenticated(true);
 
-    const timer = setTimeout(() => setIsLoading(false), 3000);
-    return () => clearTimeout(timer);
-  }, []);
-
+    // Only run loader timer if NOT mobile
+    if (!isMobile) {
+      const timer = setTimeout(() => setIsLoading(false), 3000);
+      return () => clearTimeout(timer);
+    } else {
+      setIsLoading(false); // skip loader on mobile
+    }
+  }, [isMobile]);
   if (isLoading) return <SplashScreen onLoaded={() => setIsLoading(false)} />;
 
   // If mobile/tablet, show only MobileNotSupported page
@@ -57,8 +61,14 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LandingPage isAuthenticated={isAuthenticated} />} />
-        <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
+        <Route
+          path="/"
+          element={<LandingPage isAuthenticated={isAuthenticated} />}
+        />
+        <Route
+          path="/login"
+          element={<Login setIsAuthenticated={setIsAuthenticated} />}
+        />
         <Route path="/register" element={<Register />} />
         <Route
           path="/feature"
@@ -79,7 +89,5 @@ function App() {
     </Router>
   );
 }
-
-
 
 export default App;

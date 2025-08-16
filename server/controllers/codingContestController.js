@@ -57,7 +57,7 @@ const getTopicVariations = (topic) => {
 
 export const generateCodingQuestion = async (req, res) => {
   try {
-    const { topic, difficulty } = req.body;
+    const { topic, difficulty, language = 'javascript' } = req.body;
 
     if (!topic || !difficulty) {
       return res.status(400).json({ error: "Topic and difficulty are required" });
@@ -69,12 +69,22 @@ export const generateCodingQuestion = async (req, res) => {
     const timestamp = Date.now();
     const randomSeed = Math.floor(Math.random() * 1000);
 
-    // Enhanced prompt with test cases like LeetCode
+    // Language-specific function signature templates
+    const languageTemplates = {
+      javascript: "function solution(params) {\n    // Your code here\n    return result;\n}",
+      python: "def solution(params):\n    # Your code here\n    return result",
+      java: "public class Solution {\n    public ReturnType solution(ParamType params) {\n        // Your code here\n        return result;\n    }\n}",
+      cpp: "#include <vector>\n#include <iostream>\nusing namespace std;\n\nclass Solution {\npublic:\n    ReturnType solution(ParamType params) {\n        // Your code here\n        return result;\n    }\n};",
+      c: "#include <stdio.h>\n#include <stdlib.h>\n\nReturnType solution(ParamType params) {\n    // Your code here\n    return result;\n}"
+    };
+
+    // Enhanced prompt with test cases and language-specific requirements
     const prompt = `
-You are a coding question generator AI similar to LeetCode. Create a UNIQUE and ORIGINAL coding question with multiple test cases.
+You are a coding question generator AI similar to LeetCode. Create a UNIQUE and ORIGINAL coding question with multiple test cases for ${language}.
 
 Topic: ${topic}
 Difficulty: ${difficulty}
+Programming Language: ${language}
 Focus Area: ${topicVariation}
 Question Style: ${style}
 Context: ${context}
@@ -88,6 +98,7 @@ STRICT REQUIREMENTS:
 3. Make the question creative and interesting
 4. The question should be ${difficulty} level difficulty
 5. MUST include exactly 2 test cases with different scenarios
+6. Provide proper function signature for ${language}
 
 RESPONSE FORMAT (exactly as shown):
 
@@ -97,8 +108,8 @@ Problem Title:
 Problem Description:
 [Write a clear, detailed problem statement that involves ${topic} and ${topicVariation}]
 
-Function Signature:
-[Provide the function signature like: def solution(nums): or function solution(nums) { ]
+Function Signature (${language}):
+${languageTemplates[language] || languageTemplates.javascript}
 
 Example 1:
 Input: [specific input]
@@ -120,9 +131,12 @@ IMPORTANT: Make this question unique, creative, and include 2 diverse test cases
 
     res.json({
       question: questionText,
+      language,
+      template: languageTemplates[language] || languageTemplates.javascript,
       metadata: {
         topic,
         difficulty,
+        language,
         topicVariation,
         generatedAt: new Date().toISOString()
       }
@@ -135,39 +149,49 @@ IMPORTANT: Make this question unique, creative, and include 2 diverse test cases
 
 export const verifyCode = async (req, res) => {
   try {
-    const { code, question } = req.body;
+    const { code, question, language = 'javascript' } = req.body;
 
     if (!code || !question) {
       return res.status(400).json({ error: "Code and question are required" });
     }
 
-    // Enhanced verification prompt for test cases
+    // Enhanced verification prompt with syntax checking
     const prompt = `
-You are an expert code evaluator AI like LeetCode's judge system. Analyze the student's code against the given problem with test cases.
+You are an expert code evaluator AI like LeetCode's judge system with advanced syntax checking capabilities. Analyze the student's ${language} code against the given problem with comprehensive error detection.
 
 Original Question:
 ${question}
 
-Student's Code:
+Student's Code (${language}):
 ${code}
 
 EVALUATION PROCESS:
-1. Extract both test cases (Example 1 and Example 2) from the question
-2. Simulate running the code on both test cases
-3. Check if the logic handles both scenarios correctly
-4. Provide individual results for each test case
-5.Check the Syntax of code according to the coding Language
+1. FIRST: Check for syntax errors in ${language}:
+   - Missing semicolons, brackets, parentheses
+   - Invalid variable declarations
+   - Incorrect function syntax
+   - Type mismatches (for typed languages)
+   - Indentation issues (for Python)
+   - Any compilation/parsing errors
+
+2. IF NO SYNTAX ERRORS: Extract both test cases (Example 1 and Example 2) from the question
+3. Simulate running the code on both test cases
+4. Check if the logic handles both scenarios correctly
 
 RESPONSE FORMAT (EXACTLY as shown):
-Test Case 1: [PASSED/FAILED] - [Brief reason]
-Test Case 2: [PASSED/FAILED] - [Brief reason]
-Overall Result: [ACCEPTED/WRONG ANSWER/RUNTIME ERROR] - [Overall assessment]
 
-Rules:
-- If both test cases pass: "ACCEPTED"
-- If any test case fails: "WRONG ANSWER"  
-- If code has syntax/logic errors: "RUNTIME ERROR"
-- Keep explanations brief and specific
+Syntax Check: [PASSED/FAILED] - [Brief description of syntax issues if any]
+Test Case 1: [PASSED/FAILED/SKIPPED] - [Brief reason]
+Test Case 2: [PASSED/FAILED/SKIPPED] - [Brief reason]
+Overall Result: [ACCEPTED/WRONG ANSWER/COMPILATION ERROR/RUNTIME ERROR] - [Overall assessment]
+
+RULES:
+- If syntax errors found: "COMPILATION ERROR", skip test cases (mark as SKIPPED)
+- If syntax is correct but logic fails: "WRONG ANSWER"
+- If both syntax and logic are correct: "ACCEPTED"
+- If code runs but crashes: "RUNTIME ERROR"
+- For ${language}, check language-specific syntax rules strictly
+- Be very strict about syntax - even missing semicolons should be caught
 
 Provide only the evaluation result in the specified format, nothing else.`;
     
@@ -175,6 +199,7 @@ Provide only the evaluation result in the specified format, nothing else.`;
 
     res.json({ 
       result: result.trim(),
+      language,
       evaluatedAt: new Date().toISOString()
     });
   } catch (error) {
