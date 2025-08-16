@@ -22,6 +22,7 @@ import Register from "./Authentication/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LandingPage from "./LandingPage/LandingPage";
 import SplashScreen from "./components/SplashScreen";
+import ErrorPage from "../Error Page/ErrorPage";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -68,9 +69,10 @@ function App() {
 
         {/* Public Share Route */}
         <Route path="/share/notebook/:shareId" element={<SharedNotebook />} />
+         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </Router>
-  );
+  );  
 }
 
 
