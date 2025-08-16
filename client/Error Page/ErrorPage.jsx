@@ -397,7 +397,7 @@ const ErrorPage = () => {
           </div>
         </div>
 
-        <Link to={import.meta.env.VITE_FRONTENED_URL} className="home-button">
+        <Link to="https://yukti-verse-beryl.vercel.app/" className="home-button">
           <span>🏠</span>
           <span>Return to Yuktiverse</span>
         </Link>
