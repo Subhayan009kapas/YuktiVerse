@@ -23,37 +23,42 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import LandingPage from "./LandingPage/LandingPage";
 import SplashScreen from "./components/SplashScreen";
 import ErrorPage from "../Error Page/ErrorPage";
+import MobileNotSupported from "./pages/MobileNotSupported";
+
+ // new mobile page
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Track login status
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("token"); // Or however you store auth
-    if (token) setIsAuthenticated(true);
-    
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
+    const checkDevice = () => setIsMobile(window.innerWidth < 768);
+    checkDevice();
+    window.addEventListener("resize", checkDevice);
+    return () => window.removeEventListener("resize", checkDevice);
+  }, []);
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) setIsAuthenticated(true);
+
+    const timer = setTimeout(() => setIsLoading(false), 3000);
     return () => clearTimeout(timer);
   }, []);
 
-  if (isLoading) {
-    return <SplashScreen onLoaded={() => setIsLoading(false)} />;
-  }
+  if (isLoading) return <SplashScreen onLoaded={() => setIsLoading(false)} />;
 
+  // If mobile/tablet, show only MobileNotSupported page
+  if (isMobile) return <MobileNotSupported />;
+
+  // Desktop routes (unchanged)
   return (
     <Router>
       <Routes>
-        {/* Landing Page */}
         <Route path="/" element={<LandingPage isAuthenticated={isAuthenticated} />} />
-
-        {/* Auth Routes */}
         <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
         <Route path="/register" element={<Register />} />
-
-        {/* Feature Routes */}
         <Route
           path="/feature"
           element={
@@ -66,14 +71,13 @@ function App() {
           <Route path="resume-analyzer" element={<ResumeAnalyzer />} />
           <Route path="pdf-summarizer" element={<Pdf_main />} />
         </Route>
-
-        {/* Public Share Route */}
         <Route path="/share/notebook/:shareId" element={<SharedNotebook />} />
-         <Route path="*" element={<ErrorPage />} />
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
     </Router>
-  );  
+  );
 }
+
 
 
 export default App;
