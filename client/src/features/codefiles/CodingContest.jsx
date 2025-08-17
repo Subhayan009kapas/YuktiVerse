@@ -75,7 +75,7 @@ ReturnType solution(ParamType params) {
       const token = localStorage.getItem("token");
 
       const res = await axios.post(
-        `${back}/api/codefiles/coding`,
+        `${backendURL}/api/codefiles/coding`,
         { topic: topic.trim(), difficulty, language },
         {
           headers: {
