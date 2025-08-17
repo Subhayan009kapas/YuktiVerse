@@ -1,6 +1,8 @@
 import { useState, useMemo, useCallback, useRef } from "react";
 import axios from "axios";
 
+const backendURL = import.meta.env.VITE_BACKEND_URL;
+
 export default function CodingContest() {
   const [topic, setTopic] = useState("");
   const [difficulty, setDifficulty] = useState("easy");
@@ -73,7 +75,7 @@ ReturnType solution(ParamType params) {
       const token = localStorage.getItem("token");
 
       const res = await axios.post(
-        "/api/codefiles/coding",
+        `${back}/api/codefiles/coding`,
         { topic: topic.trim(), difficulty, language },
         {
           headers: {
@@ -113,7 +115,7 @@ ReturnType solution(ParamType params) {
       const token = localStorage.getItem("token");
 
       const res = await axios.post(
-        "/api/codefiles/verify-code",
+       `${backendURL}/api/codefiles/verify-code`,
         {
           code: code.trim(),
           question: question,
