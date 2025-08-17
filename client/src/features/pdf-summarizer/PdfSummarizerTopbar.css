@@ -13,6 +13,10 @@
   font-size: 22px;
   font-weight: bold;
   margin-left: 3.5vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 }
 
 .pdf-summarizer-avatar {

@@ -124,6 +124,8 @@ font-family: 'Plus Jakarta Sans', sans-serif; */
     inset -2px -2px 4px rgba(255, 255, 255, 0.03);
   overflow: hidden;
   margin-bottom: 2px;
+  position: relative;
+  left: 6vw;
 
 }
 

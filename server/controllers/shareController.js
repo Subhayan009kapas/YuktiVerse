@@ -126,19 +126,26 @@ export const revokeShareLink = async (req, res) => {
 }
 
 // Get all shared notebooks by user
+import mongoose from "mongoose";
+
 export const getUserSharedNotebooks = async (req, res) => {
   try {
-    const userId = req.params.userId;
-    // console.log(userId);
+    const { userId } = req.params;
+
+    if (!userId) {
+      return res.status(400).json({ error: "userId is required in URL params" });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ error: "Invalid userId format" });
+    }
 
     const sharedNotebooks = await SharedNotebook.find({
       userId,
-      isActive: true
-    })
-      // .populate('notebookId', 'title createdAt updatedAt')
-      // .sort({ createdAt: -1 });
+      isActive: true,
+    });
 
-    const formattedShares = sharedNotebooks.map(share => ({
+    const formattedShares = sharedNotebooks.map((share) => ({
       shareId: share.shareId,
       shareUrl: `${process.env.CLIENT_URL}/share/notebook/${share.shareId}`,
       isActive: share.isActive,
@@ -147,16 +154,16 @@ export const getUserSharedNotebooks = async (req, res) => {
       viewCount: share.viewCount,
       title: share.title,
       type: share.type,
-      lastViewedAt: share.lastViewedAt
+      lastViewedAt: share.lastViewedAt,
     }));
 
     res.status(200).json(formattedShares);
-
   } catch (error) {
-    console.error('Error fetching user shared notebooks:', error);
-    res.status(500).json({ message: 'Failed to fetch shared notebooks' });
+    console.error("Error fetching user shared notebooks:", error);
+    res.status(500).json({ message: "Failed to fetch shared notebooks" });
   }
-}
+};
+
 
 
 // public access  ✨

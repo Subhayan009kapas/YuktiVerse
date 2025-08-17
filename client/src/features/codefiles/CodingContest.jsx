@@ -73,7 +73,7 @@ ReturnType solution(ParamType params) {
       const token = localStorage.getItem("token");
 
       const res = await axios.post(
-        "/api/contest/coding",
+        "/api/codefiles/coding",
         { topic: topic.trim(), difficulty, language },
         {
           headers: {
@@ -113,7 +113,7 @@ ReturnType solution(ParamType params) {
       const token = localStorage.getItem("token");
 
       const res = await axios.post(
-        "/api/contest/verify-code",
+        "/api/codefiles/verify-code",
         {
           code: code.trim(),
           question: question,
@@ -831,20 +831,20 @@ ReturnType solution(ParamType params) {
                 placeholder={`// Write your ${languageInfo[language].name} solution here...\n// Use the provided function signature`}
                 style={{
                   flex: 1,
-                  padding: '20px',
-                  backgroundColor: 'var(--card-bg)',
-                  color: 'var(--text-primary)',
-                  fontSize: '15px',
-                  fontFamily: 'var(--font-mono)',
-                  resize: 'none',
-                  outline: 'none',
-                  border: 'none',
-                  lineHeight: 1.5,
-                  tabSize: 4,
-                  overflow: 'auto',
-                  whiteSpace: 'pre',
-                  fontFamily:'jetbrains mono, monospace',
-                  fontWeight: 500,
+    padding: "16px",
+    backgroundColor: "var(--editor-bg)", // dark editor theme
+    color: "var(--editor-fg, #d4d4d4)",
+    fontSize: "14px",
+    fontFamily: "'Fira Code', 'JetBrains Mono', monospace",
+    fontWeight: 400,
+    resize: "none",
+    outline: "none",
+    border: "none",
+    lineHeight: 1.6,
+    tabSize: 4,
+    overflow: "auto",
+    whiteSpace: "pre",
+    caretColor: "#00ffcc", // bright cursor
                 }}
                 spellCheck="false"
               />

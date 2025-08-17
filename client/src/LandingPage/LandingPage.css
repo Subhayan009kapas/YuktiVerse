@@ -355,18 +355,18 @@ top: 1vh; */
 
 .landingpage-feature-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(4, 1fr); /* force 4 columns */
+  gap: 1.5rem; /* a bit smaller gap */
   max-width: 1200px;
   margin: 0 auto;
   position: relative;
-  top:5vh;
+  top: 5vh;
 }
 
 .landingpage-feature-card {
   background: rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
-  padding: 2.2rem;
+  border-radius: 14px; /* slightly smaller radius */
+  padding: 1.6rem;     /* less padding */
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease;
@@ -375,7 +375,6 @@ top: 1vh; */
   position: relative;
   overflow: hidden;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  
 }
 
 .landingpage-feature-card:hover {
@@ -1091,7 +1090,7 @@ top: 1vh; */
     padding: 4rem 0;
   }
 
-  .section-header h2 {
+  .landing-section-header h2 {
     font-size: 2rem;
   }
 
@@ -1183,12 +1182,296 @@ top: 1vh; */
 }
 
 /* Entrance animations */
-.section-header {
+.landing-section-header {
   overflow: hidden;
+  
 }
 
 /* Button hover effects */
 .landingpage-btn-primary:hover, 
 .landingpage-btn-outline:hover {
   transform: translateY(-2px);
+}
+
+.landing-section-header{
+  padding: 2rem 0;
+  text-align: center;
+}
+
+
+
+
+
+
+
+/* Orbit Hero Styles */
+.orbit-hero-container {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px;
+}
+
+.central-globe {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(0, 240, 255, 0.8),
+    rgba(0, 100, 255, 0.6) 40%,
+    rgba(40, 20, 100, 0.8) 70%,
+    rgba(10, 10, 40, 1)
+  );
+  box-shadow: 
+    0 0 60px rgba(0, 240, 255, 0.4),
+    0 0 100px rgba(255, 0, 212, 0.2);
+  z-index: 5;
+  transform-style: preserve-3d;
+}
+
+.globe-surface {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.globe-grid-line {
+  position: absolute;
+  background: rgba(0, 240, 255, 0.15);
+  width: 100%;
+  height: 1px;
+  top: 50%;
+}
+
+.globe-grid-line:nth-child(1) {
+  transform: rotate(45deg);
+}
+
+.globe-grid-line:nth-child(2) {
+  transform: rotate(90deg);
+}
+
+.globe-grid-line:nth-child(3) {
+  transform: rotate(135deg);
+}
+
+.globe-highlight {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  top: 30px;
+  left: 30px;
+  filter: blur(15px);
+}
+
+.globe-core {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.8);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  filter: blur(10px);
+}
+
+.globe-glow {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(0, 240, 255, 0.3) 0%,
+    rgba(0, 240, 255, 0) 70%
+  );
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+}
+
+.orbit-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.orbit-ring-1 {
+  width: 360px;
+  height: 360px;
+}
+
+.orbit-ring-2 {
+  width: 420px;
+  height: 420px;
+}
+
+.feature-orbit-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+}
+
+.feature-icon-wrapper {
+  width: 70px;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(30, 30, 60, 0.7);
+  border-radius: 50%;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.feature-icon-wrapper:hover {
+  background: rgba(0, 240, 255, 0.2);
+  box-shadow: 0 0 30px rgba(0, 240, 255, 0.4);
+  border-color: rgba(255, 0, 212, 0.5);
+}
+
+.feature-icon-halo {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(0, 240, 255, 0.3) 0%,
+    rgba(0, 240, 255, 0) 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.feature-icon-wrapper:hover .feature-icon-halo {
+  opacity: 1;
+}
+
+.feature-tooltip {
+  position: absolute;
+  bottom: calc(100% + 15px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(20, 25, 40, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 15px;
+  border-radius: 12px;
+  width: 180px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  z-index: 20;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.feature-tooltip h4 {
+  margin: 0 0 8px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: linear-gradient(90deg, #00f0ff, #ff00d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.feature-tooltip p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #bbbbbb;
+  line-height: 1.4;
+}
+
+.floating-particle {
+  position: absolute;
+  background: rgba(0, 240, 255, 0.6);
+  border-radius: 50%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+
+.globe-name {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  pointer-events: none;
+}
+
+
+.orbit-ring {
+  position: absolute;
+  border: 1px dashed rgba(255,255,255,0.2);
+  border-radius: 50%;
+}
+
+.orbit-ring-1 { width: 300px; height: 300px; }
+.orbit-ring-2 { width: 400px; height: 400px; }
+.orbit-ring-3 { width: 500px; height: 500px; }
+.orbit-ring-4 { width: 600px; height: 600px; }
+
+
+
+.globe-surface {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: url('/textures/earth.jpg') no-repeat center/cover;
+  box-shadow: inset -15px -15px 30px rgba(0,0,0,0.5),
+              0 0 40px rgba(0, 150, 255, 0.6);
+  position: relative;
+}
+.globe-glow {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,150,255,0.3), transparent 70%);
+  position: absolute;
+  top: -10px;
+  left: -10px;
+}
+
+.globe-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.globe-name {
+  display: flex;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 10px rgba(0,0,0,0.6);
+  pointer-events: none; /* so it doesn’t block hover events */
+  opacity: 1;
+  justify-items: center;
+  align-items: center;
+}
+.globe-name img{
+  height: 2rem;
 }

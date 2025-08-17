@@ -71,5 +71,9 @@ app.use("/api/share", shareRoutes);
 // genini routes
 app.use("/api/ai-help", geminiRoutes);
 
-import codingContestRoutes from "./routes/codingContest.js";
-app.use("/api/contest", codingContestRoutes);
+// import codingContestRoutes from "./routes/codingContest.js";
+// app.use("/api/codefiles", codingContestRoutes);
+
+import codeFiles from "./routes/codeFiles.js";
+app.use("/api/codefiles" ,codeFiles );
+

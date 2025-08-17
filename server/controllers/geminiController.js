@@ -302,3 +302,306 @@ export const simpleChat = createGeminiHandler("please tell ");
 // export const detailedExplainCacheable = createCacheableGeminiHandler(
 //   "Explain this topic in detail with examples."
 // );
+
+
+// Get code correction assistance
+export const askCodeCorrection = async (req, res) => {
+  try {
+    const { code, language, error, description } = req.body;
+
+    if (!code || code.trim().length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Code content is required'
+      });
+    }
+
+const prompt = `
+You are an AI code assistant.
+
+Task: Correct the following ${language} code.
+
+Original Code:
+\`\`\`${language}
+${code}
+\`\`\`
+
+${error ? `Error Message: ${error}` : ''}
+${description ? `Additional Context: ${description}` : ''}
+
+When you answer:
+1. First, output ONLY the corrected code in a fenced code block (\`\`\`${language} ... \`\`\`).
+   - Do NOT add comments or explanations inside the code itself.
+   - Do NOT add multiple unrelated examples.
+2. After the code block, provide:
+   - A short explanation of what was wrong and how it was fixed.
+   - Tips to avoid similar mistakes.
+
+Keep code and explanation **separate**.
+`;
+
+
+    const response = await getGeminiResponse(prompt, code);
+
+    res.json({
+      success: true,
+      data: {
+        language,
+        response,
+        timestamp: new Date().toISOString()
+      }
+    });
+
+  } catch (error) {
+    console.error('Error generating correction:', error);
+    res.status(500).json({
+      success: false,
+      message: 'AI correction service temporarily unavailable',
+      error: error.message
+    });
+  }
+};
+
+// Code optimization assistance
+export const askCodeOptimization = async (req, res) => {
+  try {
+    const { code, language, description } = req.body;
+
+    if (!code || code.trim().length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Code content is required'
+      });
+    }
+
+    const prompt = `Analyze this ${language} code and suggest optimizations for better performance, readability, and maintainability:
+
+Code:
+\`\`\`${language}
+${code}
+\`\`\`
+
+${description ? `Context: ${description}` : ''}
+
+Please provide:
+1. Performance improvements
+2. Code readability enhancements
+3. Memory optimization suggestions
+4. Time complexity analysis if applicable
+5. Optimized version of the code`;
+
+    const response = await getGeminiResponse(prompt, code);
+
+    res.json({
+      success: true,
+      data: {
+        action: 'optimize',
+        language,
+        response,
+        timestamp: new Date().toISOString()
+      }
+    });
+
+  } catch (error) {
+    console.error('Error generating optimization suggestions:', error);
+    res.status(500).json({
+      success: false,
+      message: 'AI optimization service temporarily unavailable',
+      error: error.message
+    });
+  }
+};
+
+// Code explanation assistance
+export const askCodeExplain = async (req, res) => {
+  try {
+    const { code, language, description } = req.body;
+
+    if (!code || code.trim().length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Code content is required'
+      });
+    }
+
+    const prompt = `Explain this ${language} code in detail, breaking down its functionality and logic:
+
+Code:
+\`\`\`${language}
+${code}
+\`\`\`
+
+${description ? `Context: ${description}` : ''}
+
+Please provide:
+1. Overall purpose and functionality
+2. Step-by-step explanation of the logic
+3. Explanation of key concepts used
+4. Input/Output behavior
+5. Any design patterns or algorithms used`;
+
+    const response = await getGeminiResponse(prompt, code);
+
+    res.json({
+      success: true,
+      data: {
+        action: 'explain',
+        language,
+        response,
+        timestamp: new Date().toISOString()
+      }
+    });
+
+  } catch (error) {
+    console.error('Error generating code explanation:', error);
+    res.status(500).json({
+      success: false,
+      message: 'AI explanation service temporarily unavailable',
+      error: error.message
+    });
+  }
+};
+
+// Code improvement assistance
+export const askCodeImprove = async (req, res) => {
+  try {
+    const { code, language, description } = req.body;
+
+    if (!code || code.trim().length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Code content is required'
+      });
+    }
+
+    const prompt = `Review this ${language} code and suggest general improvements following best practices:
+
+Code:
+\`\`\`${language}
+${code}
+\`\`\`
+
+${description ? `Context: ${description}` : ''}
+
+Please provide:
+1. Code quality improvements
+2. Best practices recommendations
+3. Naming conventions suggestions
+4. Code structure improvements
+5. Documentation suggestions
+6. Error handling improvements`;
+
+    const response = await getGeminiResponse(prompt, code);
+
+    res.json({
+      success: true,
+      data: {
+        action: 'improve',
+        language,
+        response,
+        timestamp: new Date().toISOString()
+      }
+    });
+
+  } catch (error) {
+    console.error('Error generating improvement suggestions:', error);
+    res.status(500).json({
+      success: false,
+      message: 'AI improvement service temporarily unavailable',
+      error: error.message
+    });
+  }
+};
+
+// General AI help
+export const getAiHelp = async (req, res) => {
+  try {
+    const { query, code, language } = req.body;
+
+    if (!query || query.trim().length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Query is required'
+      });
+    }
+
+    let prompt = `Answer this programming question: ${query}`;
+
+    if (code) {
+      prompt += `\n\nRelated code:\n\`\`\`${language || 'text'}\n${code}\n\`\`\``;
+    }
+
+    const response = await getGeminiResponse(prompt, code || query);
+
+    res.json({
+      success: true,
+      data: {
+        query,
+        response,
+        timestamp: new Date().toISOString()
+      }
+    });
+
+  } catch (error) {
+    console.error('Error getting AI help:', error);
+    res.status(500).json({
+      success: false,
+      message: 'AI help service temporarily unavailable',
+      error: error.message
+    });
+  }
+};
+
+
+export const askCodeGeneration = async (req, res) => {
+  try {
+    const { code, language, action, description } = req.body;
+
+    if (!action || action.trim().length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Action (e.g., generate, extend, refactor) is required'
+      });
+    }
+
+    // Build prompt
+    const prompt = `
+You are an AI coding assistant.
+
+Task: **${action}** in ${language}.
+
+${code && code.trim().length > 0 ? 
+  `Here is the starting code:
+\`\`\`${language}
+${code}
+\`\`\`` : ''}
+
+${description ? `Additional Instructions: ${description}` : ''}
+
+Important:
+- First, output ONLY the final corrected/generated code inside a fenced code block (\`\`\`${language} ... \`\`\`).
+- Then, after the code block, provide a plain text explanation of the changes, improvements, or reasoning.
+- Do not mix explanation into the code itself (no teaching comments inside the code).
+`;
+
+    const response = await getGeminiResponse(prompt, code);
+
+    res.json({
+      success: true,
+      data: {
+        action,
+        language,
+        response, // this will have both code + explanation (separated)
+        timestamp: new Date().toISOString()
+      }
+    });
+
+  } catch (error) {
+    console.error('Error generating AI response:', error);
+    res.status(500).json({
+      success: false,
+      message: 'AI service temporarily unavailable',
+      error: error.message
+    });
+  }
+};

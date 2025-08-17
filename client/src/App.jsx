@@ -24,7 +24,9 @@ import LandingPage from "./LandingPage/LandingPage";
 import SplashScreen from "./components/SplashScreen";
 import ErrorPage from "../Error Page/ErrorPage";
 import MobileNotSupported from "./pages/MobileNotSupported";
-import CodingContest from "./features/coding_contest/CodingContest";
+import CodingContest from "./features/codefiles/CodingContest";
+import CodeFilesDashboard from "./features/codefiles/CodeFilesDashboard";
+
 
 // new mobile page
 
@@ -84,7 +86,8 @@ function App() {
           <Route path="academic-org" element={<AcademicOrganizer />} />
           <Route path="resume-analyzer" element={<ResumeAnalyzer />} />
           <Route path="pdf-summarizer" element={<Pdf_main />} />
-          <Route path="coding" element={<CodingContest />} />
+          <Route path="code-contest" element={<CodingContest />} />
+          <Route path="code-editor" element={<CodeFilesDashboard />} />
         </Route>
         <Route path="/share/notebook/:shareId" element={<SharedNotebook />} />
         <Route path="*" element={<ErrorPage />} />
