@@ -37,7 +37,7 @@ router.post("/login", async (req, res) => {
     
     if (!match) return res.status(401).json({ error: "Invalid credentials" });
 
-    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "7d" });
+    const token = jwt.sign({ id: user._id }, JWT_SECRET );
     console.log("toke is heer " , token);
     
     res.json({ token, user });
@@ -73,7 +73,7 @@ router.post("/google", async (req, res) => {
       await user.save();
     }
 
-    const jwtToken = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: "7d" });
+    const jwtToken = jwt.sign({ _id: user._id }, JWT_SECRET );
     res.json({ token: jwtToken, user });
   } catch (err) {
     res.status(400).json({ error: err.message });

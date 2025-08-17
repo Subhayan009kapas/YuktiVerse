@@ -45,7 +45,7 @@ public:
 ReturnType solution(ParamType params) {
     // Your code here
     return result;
-}`
+}`,
   };
 
   const languageInfo = {
@@ -53,7 +53,7 @@ ReturnType solution(ParamType params) {
     python: { name: "Python", icon: "PY", extension: ".py" },
     java: { name: "Java", icon: "JA", extension: ".java" },
     cpp: { name: "C++", icon: "C++", extension: ".cpp" },
-    c: { name: "C", icon: "C", extension: ".c" }
+    c: { name: "C", icon: "C", extension: ".c" },
   };
 
   // Generate coding question
@@ -117,7 +117,7 @@ ReturnType solution(ParamType params) {
         {
           code: code.trim(),
           question: question,
-          language: language
+          language: language,
         },
         {
           headers: {
@@ -151,20 +151,22 @@ ReturnType solution(ParamType params) {
     if (!result) return null;
 
     const lines = result.split("\n");
-    const syntaxCheck = lines.find((line) => line.includes("Syntax Check:")) || "";
+    const syntaxCheck =
+      lines.find((line) => line.includes("Syntax Check:")) || "";
     const testCases = lines.filter((line) => line.includes("Test Case"));
-    const overallResult = lines.find((line) => line.includes("Overall Result:")) || "";
+    const overallResult =
+      lines.find((line) => line.includes("Overall Result:")) || "";
 
     return {
       syntaxCheck: {
         text: syntaxCheck,
-        passed: syntaxCheck.includes("PASSED")
+        passed: syntaxCheck.includes("PASSED"),
       },
       testCases: testCases.map((line, index) => ({
         id: index + 1,
         text: line,
         passed: line.includes("PASSED"),
-        skipped: line.includes("SKIPPED")
+        skipped: line.includes("SKIPPED"),
       })),
       overallResult,
       status: overallResult.includes("ACCEPTED")
@@ -255,7 +257,7 @@ ReturnType solution(ParamType params) {
             letterSpacing: "0.5px",
           }}
         >
-          Yuktiverse Coding Contest 
+          Yuktiverse Coding Contest
         </h1>
 
         <div
@@ -754,7 +756,9 @@ ReturnType solution(ParamType params) {
                     background: verifying
                       ? "var(--color-surface)"
                       : "var(--bg-submit-gradient)",
-                    color: verifying ? "var(--text-secondary)" : "var(--text-dark)",
+                    color: verifying
+                      ? "var(--text-secondary)"
+                      : "var(--text-dark)",
                     border: "none",
                     borderRadius: "6px",
                     cursor: verifying ? "not-allowed" : "pointer",
@@ -793,35 +797,37 @@ ReturnType solution(ParamType params) {
             </div>
 
             {/* Editor with line numbers */}
-            <div style={{
-              position: 'relative',
-              flex: 1,
-              display: 'flex',
-              backgroundColor: 'var(--card-bg)',
-              overflow: 'hidden'
-            }}>
+            <div
+              style={{
+                position: "relative",
+                flex: 1,
+                display: "flex",
+                backgroundColor: "var(--card-bg)",
+                overflow: "hidden",
+              }}
+            >
               {/* Line numbers column */}
               <div
                 ref={lineNumbersRef}
                 style={{
-                  width: '40px',
-                  padding: '20px 8px',
-                  backgroundColor: 'var(--color-surface)',
-                  borderRight: '1px solid var(--color-border-primary)',
-                  fontFamily: 'var(--font-mono)',
-                  color: 'var(--text-secondary)',
-                  fontSize: '15px',
+                  width: "40px",
+                  padding: "20px 8px",
+                  backgroundColor: "var(--color-surface)",
+                  borderRight: "1px solid var(--color-border-primary)",
+                  fontFamily: "var(--font-mono)",
+                  color: "var(--text-secondary)",
+                  fontSize: "15px",
                   lineHeight: 1.5,
-                  textAlign: 'right',
-                  userSelect: 'none',
-                  overflowY: 'hidden'
+                  textAlign: "right",
+                  userSelect: "none",
+                  overflowY: "hidden",
                 }}
               >
-                {Array.from({ length: code.split('\n').length }, (_, i) => (
+                {Array.from({ length: code.split("\n").length }, (_, i) => (
                   <div key={i + 1}>{i + 1}</div>
                 ))}
               </div>
-              
+
               {/* Textarea */}
               <textarea
                 ref={textareaRef}
@@ -831,20 +837,20 @@ ReturnType solution(ParamType params) {
                 placeholder={`// Write your ${languageInfo[language].name} solution here...\n// Use the provided function signature`}
                 style={{
                   flex: 1,
-    padding: "16px",
-    backgroundColor: "var(--editor-bg)", // dark editor theme
-    color: "var(--editor-fg, #d4d4d4)",
-    fontSize: "14px",
-    fontFamily: "'Fira Code', 'JetBrains Mono', monospace",
-    fontWeight: 400,
-    resize: "none",
-    outline: "none",
-    border: "none",
-    lineHeight: 1.6,
-    tabSize: 4,
-    overflow: "auto",
-    whiteSpace: "pre",
-    caretColor: "#00ffcc", // bright cursor
+                  padding: "16px",
+                  backgroundColor: "var(--editor-bg)", // dark editor theme
+                  color: "var(--editor-fg, #d4d4d4)",
+                  fontSize: "14px",
+                  fontFamily: "'Fira Code', 'JetBrains Mono', monospace",
+                  fontWeight: 400,
+                  resize: "none",
+                  outline: "none",
+                  border: "none",
+                  lineHeight: 1.6,
+                  tabSize: 4,
+                  overflow: "auto",
+                  whiteSpace: "pre",
+                  caretColor: "#00ffcc", // bright cursor
                 }}
                 spellCheck="false"
               />
@@ -861,7 +867,9 @@ ReturnType solution(ParamType params) {
                 justifyContent: "space-between",
               }}
             >
-              <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <span
+                style={{ display: "flex", alignItems: "center", gap: "8px" }}
+              >
                 <span
                   style={{
                     fontSize: "10px",
@@ -948,9 +956,9 @@ ReturnType solution(ParamType params) {
               marginBottom: "24px",
             }}
           >
-            Enter a programming topic, select a difficulty level and programming language to generate
-            a coding challenge. Test your skills and improve your
-            problem-solving abilities.
+            Enter a programming topic, select a difficulty level and programming
+            language to generate a coding challenge. Test your skills and
+            improve your problem-solving abilities.
           </p>
           <div style={{ display: "flex", gap: "12px", marginBottom: "20px" }}>
             <div
@@ -990,7 +998,14 @@ ReturnType solution(ParamType params) {
               dynamic programming
             </div>
           </div>
-          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", justifyContent: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: "8px",
+              flexWrap: "wrap",
+              justifyContent: "center",
+            }}
+          >
             {Object.entries(languageInfo).map(([key, info]) => (
               <div
                 key={key}
@@ -1133,7 +1148,9 @@ ReturnType solution(ParamType params) {
                 padding: "16px",
                 borderRadius: "8px",
                 border: `1px solid ${
-                  parsedResult.syntaxCheck.passed ? "var(--success)" : "var(--danger)"
+                  parsedResult.syntaxCheck.passed
+                    ? "var(--success)"
+                    : "var(--danger)"
                 }`,
                 boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
                 marginBottom: "20px",
@@ -1204,7 +1221,8 @@ ReturnType solution(ParamType params) {
                       : "var(--danger)",
                   }}
                 >
-                  Syntax Check - {parsedResult.syntaxCheck.passed ? "Passed" : "Failed"}
+                  Syntax Check -{" "}
+                  {parsedResult.syntaxCheck.passed ? "Passed" : "Failed"}
                 </h4>
               </div>
               <div
@@ -1238,10 +1256,10 @@ ReturnType solution(ParamType params) {
                     padding: "16px",
                     borderRadius: "8px",
                     border: `1px solid ${
-                      testCase.skipped 
+                      testCase.skipped
                         ? "var(--text-secondary)"
-                        : testCase.passed 
-                        ? "var(--success)" 
+                        : testCase.passed
+                        ? "var(--success)"
                         : "var(--danger)"
                     }`,
                     boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
@@ -1334,10 +1352,10 @@ ReturnType solution(ParamType params) {
                       }}
                     >
                       Test Case {testCase.id} -{" "}
-                      {testCase.skipped 
-                        ? "Skipped" 
-                        : testCase.passed 
-                        ? "Passed" 
+                      {testCase.skipped
+                        ? "Skipped"
+                        : testCase.passed
+                        ? "Passed"
                         : "Failed"}
                     </h4>
                   </div>
@@ -1429,7 +1447,7 @@ ReturnType solution(ParamType params) {
                       <path
                         d="M10 14L12 12M12 12L14 10M12 12L10 10M12 12L14 14M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
                         stroke={
-                          parsedResult.status === "compilation-error" || 
+                          parsedResult.status === "compilation-error" ||
                           parsedResult.status === "runtime-error"
                             ? "var(--danger)"
                             : "var(--issues-color)"
