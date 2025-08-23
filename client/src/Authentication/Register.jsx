@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import {User, Mail, Lock, ArrowRight, UserPlus, Eye, EyeOff, Upload, X} from "lucide-react";
 
+const backendURL = import.meta.env.VITE_BACKEND_URL;
+
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Register.css";
@@ -124,7 +126,7 @@ const navigate = useNavigate();
     e.preventDefault();
 
     try {
-      const res = await axios.post("/api/auth/register", formData);
+      const res = await axios.post(`${backendURL}/api/auth/register`, formData);
 
       if (res.status === 201 || res.status === 200) {
         toast.success("Registration successful! Please log in.", {
